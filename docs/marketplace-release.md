@@ -1,17 +1,20 @@
 # Marketplace release preparation
 
-**Beta release preparation — `0.1.0-beta.1`.** The [source repository](https://github.com/SocraNext/socranext-statamic) is public. Check [GitHub releases](https://github.com/SocraNext/socranext-statamic/releases) and [Packagist](https://packagist.org/packages/socranext/statamic) for current release and package availability. The checklist below records verified preparation on 9 September 2026; unchecked publication steps still require confirmation. The companion platform code is deployed with both Statamic feature flags disabled, and the connected service is not generally available.
+**Beta release preparation — `0.1.0-beta.2`.** The [source repository](https://github.com/SocraNext/socranext-statamic) is public. Check [GitHub releases](https://github.com/SocraNext/socranext-statamic/releases) and [Packagist](https://packagist.org/packages/socranext/statamic) for current release and package availability. The checklist below records verified preparation on 9 September 2026; unchecked publication steps still require confirmation. The companion platform code is deployed with both Statamic feature flags disabled, and the connected service is not generally available.
 
 ## Public beta checklist
+
+The first beta is published on GitHub and Packagist, with release synchronization configured and anonymous installation verified. This checklist now tracks the `0.1.0-beta.2` translation correction; its exact release and installation still need verification.
 
 - [x] Owner authorized public connector distribution, subject to passing validation and release requirements. The platform repository remains private.
 - [x] Publish the connector source repository following explicit owner approval.
 - [x] Add [LICENSE](../LICENSE) and the [Statamic service terms](statamic-service-terms.md). Software rights and a separate service subscription are distinct.
 - [x] Complete Packagist account access through GitHub OAuth.
 - [ ] Approve the final beta release notes and verify CI on the exact release commit.
-- [ ] Create `v0.1.0-beta.1` and its GitHub prerelease.
+- [ ] Create `v0.1.0-beta.2` and its GitHub prerelease.
 - [ ] Verify the public GitHub tag installs without credentials in a clean Statamic project.
-- [ ] Publish `socranext/statamic` on Packagist, configure release synchronization and verify installation without private GitHub access.
+- [x] Publish `socranext/statamic` on Packagist and configure release synchronization.
+- [ ] Verify the beta.2 package installs without private GitHub access.
 - [ ] Record completed publication steps and verify the release/package links. Do not mark a Marketplace listing or general activation complete based on package publication.
 
 The beta can be distributed for installation and evaluation while the hosted acceptance work continues. Keep both production Statamic flags disabled until the hosted pilot has passed. Do not create the stable `v0.1.0` tag or offer general activation based only on package publication.
@@ -27,7 +30,7 @@ The beta can be distributed for installation and evaluation while the hosted acc
 - [ ] Create a **Free** Marketplace product linked to the package and public repository. Disclose the required separate SocraNext subscription, add real screenshots and preview the listing.
 - [ ] Follow the actual submission/publication step shown in the creator dashboard. Do not promise a review timeline or certification.
 
-Verified during beta preparation on 9 September 2026: the migration and companion platform code are deployed, with Statamic still disabled. Platform regression tests, normal production deployment and public health checks passed. The previous development build passed all six PHP/Laravel CI combinations. A native Composer update published addon assets without changing any of the test site's 33 configuration files. Public source/history review found no confirmed secrets or unintended customer data. The connector repository is public, the license and service terms are included, and Packagist account access is complete. Public HTTPS onboarding, scheduled delivery and the final beta's anonymous installation remain unverified. Exact-release CI, the beta tag, package publication, Statamic creator onboarding and Marketplace submission remain checklist items until individually confirmed.
+Verified during beta preparation on 9 September 2026: the migration and companion platform code are deployed, with Statamic still disabled. Platform regression tests, normal production deployment and public health checks passed. The previous development build passed all six PHP/Laravel CI combinations. A native Composer update published addon assets without changing any of the test site's 33 configuration files. Public source/history review found no confirmed secrets or unintended customer data. The connector repository is public and includes the license and service terms. Packagist publication and release synchronization are complete; the first beta installs anonymously. Hosted Control Panel testing identified the native translation collision addressed in beta.2. Full connected HTTPS onboarding, scheduled delivery and beta.2 anonymous installation remain acceptance items. Exact-release CI, the beta.2 tag, Statamic creator onboarding and Marketplace submission remain checklist items until individually confirmed.
 
 The official route requires a [Packagist package and Statamic seller account](https://statamic.dev/addons/building-an-addon#publishing-to-the-marketplace). Packagist requires a [public repository URL](https://packagist.org/about). Statamic's [creator page](https://statamic.com/creator/begin) supports free products; a [current connector listing](https://statamic.com/addons/html2img/auto-open-graph-images) demonstrates free code with external paid service plans. This supports the proposed billing model but does not establish individual approval or waive additional creator terms. No mandatory review duration was found in the public documentation.
 
@@ -37,7 +40,7 @@ Use **SocraNext for Statamic** with SocraNext branding. Statamic's [brand guidel
 
 - **Name:** SocraNext for Statamic
 - **Creator:** SocraNext; account/shop name subject to availability.
-- **Package/version:** `socranext/statamic`, target beta `0.1.0-beta.1`; confirm its availability on [Packagist](https://packagist.org/packages/socranext/statamic).
+- **Package/version:** `socranext/statamic`, target beta `0.1.0-beta.2`; confirm its availability on [Packagist](https://packagist.org/packages/socranext/statamic).
 - **Price:** Free
 - **Suggested categories:** Integration, AI, SEO
 - **Compatibility:** Statamic 6 Pro; Laravel 12 or 13; PHP 8.3, 8.4 or 8.5.
@@ -65,4 +68,4 @@ The supported profile uses native Statamic templates. FAQ placement and integrat
 
 After connection, SocraNext can read content configured for the integration and send publication, FAQ, metadata and styling changes to the website. See the documentation for permissions, supported content, backups and disconnection behavior. Use the issue tracker for addon issues and SocraNext for account or subscription support.
 
-Once the beta is available on Packagist, its installation command is `composer require socranext/statamic:0.1.0-beta.1`. If GitHub already has the public `v0.1.0-beta.1` tag while Packagist does not list that version, use the README's VCS repository instruction with that same exact beta version. Verify availability through the release/package links before using either command. Reserve the unversioned `composer require socranext/statamic` instruction for an available stable release. Do not invent a Marketplace URL before the creator dashboard assigns one.
+Once the beta is available on Packagist, its installation command is `composer require socranext/statamic:0.1.0-beta.2`. If GitHub already has the public `v0.1.0-beta.2` tag while Packagist does not list that version, use the README's VCS repository instruction with that same exact beta version. Verify availability through the release/package links before using either command. Reserve the unversioned `composer require socranext/statamic` instruction for an available stable release. Do not invent a Marketplace URL before the creator dashboard assigns one.

@@ -15,10 +15,13 @@ use Statamic\Statamic;
 
 class ServiceProvider extends AddonServiceProvider
 {
-    public const VERSION = '0.1.0-beta.1';
+    public const VERSION = '0.1.0-beta.2';
     public const API_PREFIX = 'api/socranext/v1';
     protected $viewNamespace = 'socranext';
     protected $config = false;
+    // The Composer basename is "statamic"; automatic registration would replace
+    // Statamic's core translation namespace. Register our own namespace below.
+    protected $translations = false;
     protected $commands = [\SocraNext\Statamic\Console\InstallCommand::class, \SocraNext\Statamic\Console\DoctorCommand::class];
 
     public function register()

@@ -2,7 +2,7 @@
 
 A Statamic 6 addon that connects a website to the existing SocraNext workspace. The connector uses the same article, FAQ and styling workflows as the platform's other CMS integrations. The SocraNext subscription remains billed by SocraNext.
 
-**Beta evaluation — `0.1.0-beta.1`.** The [source repository](https://github.com/SocraNext/socranext-statamic) is public. This prerelease is intended for evaluation on development and pilot sites. Check [GitHub releases](https://github.com/SocraNext/socranext-statamic/releases) for published versions and [Packagist](https://packagist.org/packages/socranext/statamic) for package availability. Source availability does not establish Marketplace availability or general activation of the connected service.
+**Beta evaluation — `0.1.0-beta.2`.** The [source repository](https://github.com/SocraNext/socranext-statamic) is public. This prerelease is intended for evaluation on development and pilot sites. Check [GitHub releases](https://github.com/SocraNext/socranext-statamic/releases) for published versions and [Packagist](https://packagist.org/packages/socranext/statamic) for package availability. Source availability does not establish Marketplace availability or general activation of the connected service.
 
 The companion platform code and database migration were deployed on 9 September 2026, with both Statamic feature flags disabled. Connecting requires a SocraNext pilot environment with those flags enabled. Installing the addon does not enable the platform integration. Public HTTPS onboarding and scheduled delivery must pass before general activation.
 
@@ -10,18 +10,20 @@ The companion platform code and database migration were deployed on 9 September 
 
 Requirements: Statamic 6 Pro, PHP 8.3–8.5 with Sodium, cURL, DOM, Fileinfo and Mbstring, and persistent writable content and Laravel storage. The beta targets native Statamic rendering. A separate headless/static frontend needs its own rendering and deployment integration.
 
-From your website's project directory, install the exact beta below once `0.1.0-beta.1` is available on [Packagist](https://packagist.org/packages/socranext/statamic):
+From your website's project directory, install the exact beta below once `0.1.0-beta.2` is available on [Packagist](https://packagist.org/packages/socranext/statamic):
 
 ```sh
-composer require socranext/statamic:0.1.0-beta.1
+composer require socranext/statamic:0.1.0-beta.2
 ```
 
-If [GitHub releases](https://github.com/SocraNext/socranext-statamic/releases) shows the `v0.1.0-beta.1` tag but Packagist does not yet list that version, install the same tag directly from the public repository:
+If [GitHub releases](https://github.com/SocraNext/socranext-statamic/releases) shows the `v0.1.0-beta.2` tag but Packagist does not yet list that version, install the same tag directly from the public repository:
 
 ```sh
 composer config repositories.socranext vcs https://github.com/SocraNext/socranext-statamic.git
-composer require socranext/statamic:0.1.0-beta.1
+composer require socranext/statamic:0.1.0-beta.2
 ```
+
+Existing beta.1 installations should use the same exact-version Composer command to receive the native dashboard translation fix. No Statamic core update or database migration is required.
 
 Both commands require the corresponding published beta tag; they do not install an unreleased development branch. The exact beta requirement keeps the website's global Composer stability setting unchanged. After installation, publish the configuration and assets:
 

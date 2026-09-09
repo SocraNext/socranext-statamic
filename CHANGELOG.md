@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.0-beta.2
+
+### Fixed
+
+- Preserve Statamic's native translation namespace. The addon's Composer basename previously caused dashboard and licensing messages to display raw translation keys. SocraNext's English and Dutch labels retain their separate namespace, and website-specific Statamic translation overrides continue to work.
+- Add native application regressions covering dashboard/licensing messages, both addon locales and a website translation override. The hosted failure was reproduced from the exact beta.1 artifact before applying this correction.
+
+Update an existing beta.1 installation to the exact `0.1.0-beta.2` version once it is available on GitHub/Packagist. This patch does not change publication, connection, licensing or subscription behavior. Hosted connected-service acceptance remains in progress.
+
 ## 0.1.0-beta.1
 
 First beta scope for Statamic 6 Pro, intended for development and pilot evaluation. The [source repository](https://github.com/SocraNext/socranext-statamic) is public; consult [GitHub releases](https://github.com/SocraNext/socranext-statamic/releases) and [Packagist](https://packagist.org/packages/socranext/statamic) for published versions and installation availability. These release notes do not establish Marketplace publication or general availability of the connected service.
