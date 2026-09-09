@@ -1,0 +1,89 @@
+SocraNext for Statamic — Free Proprietary Software License
+Version 1.0 — 9 September 2026
+
+Copyright (c) 2026 SocraNext B.V. All rights reserved except as expressly
+granted below.
+
+SocraNext B.V., Kallenkoterallee 248, 8331 AK Steenwijk, The Netherlands,
+registered with the Dutch Chamber of Commerce under number 97784427
+("SocraNext"), is the licensor of the SocraNext for Statamic addon
+("Software"). Contact: info@socranext.ai.
+
+1. Free use of the addon
+
+SocraNext grants you a non-exclusive, royalty-free license to download,
+install, configure and run the Software on websites that you own or are
+authorized to develop, operate or maintain for a client. You may make
+private copies needed for development, testing, backups, dependency caches
+and deployment. You may adapt the Software for use on those websites.
+
+Deployment to an authorized client's website is permitted. The website
+owner receives these same rights directly under this license. This does
+not permit offering the Software as a separate product or package.
+
+2. Ownership and permitted distribution
+
+The Software is licensed, not sold. SocraNext and its licensors retain
+their intellectual property rights. Preserve this license and the relevant
+copyright and attribution notices in copies of the Software.
+
+Unless SocraNext gives separate written permission, you may not sell,
+relicense, rent or redistribute the Software, or a modified version, as a
+standalone product or package. You may share links to the official
+SocraNext repository and package. Copies made by hosting and package
+distribution services as part of SocraNext's authorized distribution,
+and rights necessarily granted under those services' terms, are not
+restricted by this clause.
+
+No ownership of SocraNext names or logos is transferred. You may identify
+the Software truthfully as a dependency or integration. Do not imply that
+your own or a modified product is endorsed by SocraNext or Statamic.
+
+3. Separate cloud service and other software
+
+This license has no addon fee. It does not include a SocraNext cloud
+subscription, service credits, a Statamic Pro license, hosting or other
+third-party services. Access to the connected SocraNext service requires
+an appropriate account and subscription under the separately applicable
+service agreement and pricing.
+
+Ending a cloud subscription or disconnecting a website does not, by
+itself, revoke this license to the locally installed Software. It does
+end or restrict access to the connected service as provided in that
+service agreement. This software license does not promise retention of
+website content or change any separately agreed content-removal policy.
+
+Statamic, Composer dependencies and any other separately licensed
+components remain subject to their own licenses. This license does not
+restrict rights granted to you under those separate licenses.
+
+4. Responsibility and support
+
+You are responsible for authorized use, compatible website configuration,
+backups and reviewing changes before using them on a production website.
+The Software is supplied as is, without a separate guarantee of
+availability, suitability for a particular website or error-free operation,
+to the extent permitted by applicable law.
+
+This license does not create an additional support or service-level
+commitment. Any support, warranty or liability obligations agreed in your
+SocraNext service agreement continue to apply. Nothing here excludes or
+limits rights or liabilities that applicable law does not allow the
+parties to exclude or limit.
+
+5. Scope and termination
+
+This license governs use, modification and distribution of the addon.
+It does not transfer ownership of your website content or generated output
+to SocraNext. Separate service and data-processing agreements govern the
+connected service and its handling of that content.
+
+The rights granted by this license apply while you comply with its terms.
+SocraNext may terminate those rights for a material breach. On termination
+you must stop using the Software and remove copies under your control,
+except copies that you must retain by law or for which
+you have another valid license. Termination does not remove rights granted
+to another website owner who remains compliant with this license.
+
+This license is governed by the laws of the Netherlands, subject to any
+mandatory rights that apply to you.
