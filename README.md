@@ -2,7 +2,7 @@
 
 A Statamic 6 addon that connects a website to the existing SocraNext workspace. The connector uses the same article, FAQ and styling workflows as the platform's other CMS integrations. The SocraNext subscription remains billed by SocraNext.
 
-**Public beta preparation — `0.1.0-beta.1`.** Repository publication, the beta tag and Packagist publication are pending. No public beta or Marketplace listing has been released yet. This prerelease is intended for evaluation on development and pilot sites.
+**Beta evaluation — `0.1.0-beta.1`.** The [source repository](https://github.com/SocraNext/socranext-statamic) is public. This prerelease is intended for evaluation on development and pilot sites. Check [GitHub releases](https://github.com/SocraNext/socranext-statamic/releases) for published versions and [Packagist](https://packagist.org/packages/socranext/statamic) for package availability. Source availability does not establish Marketplace availability or general activation of the connected service.
 
 The companion platform code and database migration were deployed on 9 September 2026, with both Statamic feature flags disabled. Connecting requires a SocraNext pilot environment with those flags enabled. Installing the addon does not enable the platform integration. Public HTTPS onboarding and scheduled delivery must pass before general activation.
 
@@ -10,20 +10,20 @@ The companion platform code and database migration were deployed on 9 September 
 
 Requirements: Statamic 6 Pro, PHP 8.3–8.5 with Sodium, cURL, DOM, Fileinfo and Mbstring, and persistent writable content and Laravel storage. The beta targets native Statamic rendering. A separate headless/static frontend needs its own rendering and deployment integration.
 
-The following commands become available after the indicated publication steps. From your website's project directory, **after `0.1.0-beta.1` is tagged and available on Packagist**, install that exact beta:
+From your website's project directory, install the exact beta below once `0.1.0-beta.1` is available on [Packagist](https://packagist.org/packages/socranext/statamic):
 
 ```sh
 composer require socranext/statamic:0.1.0-beta.1
 ```
 
-If the repository and beta tag are public before Packagist registration completes, install the same tag directly from GitHub without private repository access:
+If [GitHub releases](https://github.com/SocraNext/socranext-statamic/releases) shows the `v0.1.0-beta.1` tag but Packagist does not yet list that version, install the same tag directly from the public repository:
 
 ```sh
 composer config repositories.socranext vcs https://github.com/SocraNext/socranext-statamic.git
 composer require socranext/statamic:0.1.0-beta.1
 ```
 
-Neither installation path is available until its publication steps are complete. The exact beta requirement keeps the website's global Composer stability setting unchanged. After installation, publish the configuration and assets:
+Both commands require the corresponding published beta tag; they do not install an unreleased development branch. The exact beta requirement keeps the website's global Composer stability setting unchanged. After installation, publish the configuration and assets:
 
 ```sh
 php artisan vendor:publish --tag=socranext-config
@@ -108,8 +108,8 @@ Tests boot an actual Statamic 6 application through Testbench, with Laravel's re
 
 Connector JSON preserves whitespace and empty strings so code signatures, `llms.txt` and explicit style clearing survive Laravel's global middleware. That exception applies only to the addon's JSON API; native website forms and the Statamic control panel retain their existing input handling. Content conflict detection uses Statamic's persisted representation, including blueprint resolution, root empty-value removal and front-matter parsing. Explicit empty translation overrides remain distinct from inherited values.
 
-Before publishing the beta, finalize the release documents. Once the repository and tag are public, verify installation without private GitHub access. Before a stable release or general activation, test clean installation and upgrade on representative websites, the complete hosted SocraNext workflow, public HTML and scheduled delivery. A beta tag alone does not establish production readiness. A Marketplace listing also requires its own account and publication steps.
+Each release must pass CI on its exact commit and install without private GitHub access. Before a stable release or general activation, test clean installation and upgrade on representative websites, the complete hosted SocraNext workflow, public HTML and scheduled delivery. A beta tag alone does not establish production readiness. A Marketplace listing also requires its own account and publication steps.
 
-The intended distribution is a free addon with a separate SocraNext subscription. Software distribution and use are governed by [LICENSE](LICENSE). The [Statamic service terms](docs/statamic-service-terms.md) concern only the Statamic connected service; they do not change existing WordPress, Shopify or Headless customer agreements.
+The addon is free, with a separate SocraNext subscription for the connected service. Software distribution and use are governed by [LICENSE](LICENSE). The [Statamic service terms](docs/statamic-service-terms.md) concern only the Statamic connected service; they do not change existing WordPress, Shopify or Headless customer agreements.
 
-See the [changelog](CHANGELOG.md) and [Marketplace release checklist and draft](docs/marketplace-release.md). Repository and issue-tracker publication are pending; account and billing questions can go to [info@socranext.ai](mailto:info@socranext.ai).
+See the [changelog](CHANGELOG.md) and [Marketplace release checklist and draft](docs/marketplace-release.md). Report addon issues through the public [issue tracker](https://github.com/SocraNext/socranext-statamic/issues); account and billing questions can go to [info@socranext.ai](mailto:info@socranext.ai).

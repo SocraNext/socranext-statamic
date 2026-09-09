@@ -1,8 +1,10 @@
 # Changelog
 
-## 0.1.0-beta.1 — prepared, not published
+## 0.1.0-beta.1
 
-Intended first public beta for Statamic 6 Pro. Repository publication, the beta tag and Packagist registration are pending; no public beta or Marketplace listing has been released. The companion SocraNext platform integration is deployed with both Statamic flags disabled, pending verification on an isolated HTTPS test site. A stable release requires the hosted pilot and scheduled-delivery checks to pass.
+First beta scope for Statamic 6 Pro, intended for development and pilot evaluation. The [source repository](https://github.com/SocraNext/socranext-statamic) is public; consult [GitHub releases](https://github.com/SocraNext/socranext-statamic/releases) and [Packagist](https://packagist.org/packages/socranext/statamic) for published versions and installation availability. These release notes do not establish Marketplace publication or general availability of the connected service.
+
+The companion SocraNext platform integration is deployed with both Statamic flags disabled, pending verification on an isolated HTTPS test site. A stable release requires the hosted pilot and scheduled-delivery checks to pass.
 
 ### Added
 
@@ -28,4 +30,4 @@ Intended first public beta for Statamic 6 Pro. Repository publication, the beta 
 
 ### Supported profile
 
-Native Statamic templates require initial developer configuration. Automatic FAQ injection into arbitrary templates, universal SEO-addon compatibility, CMS-initiated generation and category slug changes are outside this beta. A separate headless/static frontend needs its own integration. The addon is intended to be free, with SocraNext subscriptions billed separately under the [Statamic service terms](docs/statamic-service-terms.md). See [LICENSE](LICENSE) for software distribution and use rights.
+Native Statamic templates require initial developer configuration. Automatic FAQ injection into arbitrary templates, universal SEO-addon compatibility, CMS-initiated generation and category slug changes are outside this beta. A separate headless/static frontend needs its own integration. The addon is free, with SocraNext subscriptions billed separately under the [Statamic service terms](docs/statamic-service-terms.md). See [LICENSE](LICENSE) for software distribution and use rights.
