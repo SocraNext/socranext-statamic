@@ -166,6 +166,43 @@ class RenderingTest extends TestCase
         $this->assertFalse($cache->hasCachedPage($request));
     }
 
+    public function test_native_term_faq_uses_current_site_in_renderer_and_antlers_tag(): void
+    {
+        \Statamic\Facades\Site::setSites(['default' => ['name' => 'Dutch', 'locale' => 'nl_NL', 'url' => '/'], 'english' => ['name' => 'English', 'locale' => 'en_GB', 'url' => '/en/']]);
+        \Statamic\Facades\Taxonomy::make('topics')->sites(['default', 'english'])->save();
+        $term = \Statamic\Facades\Term::make()->taxonomy('topics')->slug('topic')->data(['title' => 'Topic']);
+        $term->save();
+        $dutchId = app(ContentRepository::class)->identity($term->in('default'));
+        $englishId = app(ContentRepository::class)->identity($term->in('english'));
+        $this->assertNotSame($dutchId, $englishId);
+        app(StateStore::class)->put('frontend_ready', true);
+        app(StateStore::class)->put('faqs', [
+            $dutchId => ['enabled' => true, 'questions' => [['question' => 'Nederlandse vraag?', 'answer' => '<p>Nederlands antwoord</p>']]],
+            $englishId => ['enabled' => true, 'questions' => [['question' => 'English question?', 'answer' => '<p>English answer</p>']]],
+        ]);
+        app(StateStore::class)->put('styles', ['faq' => ['title_text_i18n' => ['nl' => 'Nederlandse FAQ', 'en' => 'English FAQ']]]);
+        $dir = $this->temporaryDirectory.'/faq-views';
+        mkdir($dir);
+        file_put_contents($dir.'/term.antlers.html', '{{ socranext:faq }}');
+        view()->addNamespace('faqtest', $dir);
+
+        foreach (['default', 'english', 'default'] as $site) {
+            \Statamic\Facades\Site::setCurrent($site);
+            $expected = $site === 'default' ? ['Nederlandse vraag?', 'Nederlands antwoord', 'Nederlandse FAQ'] : ['English question?', 'English answer', 'English FAQ'];
+            $otherQuestion = $site === 'default' ? 'English question?' : 'Nederlandse vraag?';
+            $outputs = [
+                app(Renderer::class)->faq($term->id()),
+                \Statamic\View\View::make('faqtest::term')->cascadeContent($term->in($site))->render(),
+            ];
+            foreach ($outputs as $html) {
+                foreach ($expected as $text) $this->assertStringContainsString($text, $html);
+                $this->assertStringNotContainsString($otherQuestion, $html);
+                preg_match('/<script type="application\/ld\+json">(.*?)<\/script>/s', $html, $schema);
+                $this->assertSame($expected[0], json_decode($schema[1], true, 512, JSON_THROW_ON_ERROR)['mainEntity'][0]['name']);
+            }
+        }
+    }
+
     public function test_metadata_overrides_render_for_existing_native_page_and_term(): void
     {
         $page = $this->page();

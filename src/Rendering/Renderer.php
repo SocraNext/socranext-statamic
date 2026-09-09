@@ -46,7 +46,7 @@ class Renderer
     public function faq(int|string $id, bool $preview = false): string
     {
         if (! app(\SocraNext\Statamic\Support\Readiness::class)->ready() && ! $preview) return '';
-        $resource = is_numeric($id) ? null : (Entry::find($id) ?? Term::find($id));
+        $resource = is_numeric($id) ? null : (Entry::find($id) ?? Term::find($id)?->in(Site::current()->handle()));
         if (is_numeric($id) && ($record = $this->content->identities->get($id))) {
             if ($record['deleted'] ?? false) return '';
             $resource = $record['kind'] === 'entry' ? Entry::find($record['native_id']) : Term::find($record['native_id'])?->in($record['site']);
