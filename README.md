@@ -16,6 +16,7 @@ From your website's project directory, using a GitHub account with access to thi
 composer config repositories.socranext vcs https://github.com/SocraNext/socranext-statamic.git
 composer require socranext/statamic:dev-main
 php artisan vendor:publish --tag=socranext-config
+php artisan vendor:publish --tag=socranext-assets --force
 ```
 
 Configure `config/socranext.php` before running the installer:
@@ -47,6 +48,8 @@ php please socranext:doctor --json
 ```
 
 Install and update through the website's normal Composer/test/deploy process. Statamic 6 provides Composer commands in its control panel, rather than executing package installation there.
+
+The standard Statamic installation/update hook publishes the Control Panel assets to `public/vendor/socranext`. If your deployment skips Composer scripts, run `php artisan vendor:publish --tag=socranext-assets --force` when deploying an addon update. This tag updates only SocraNext assets; it does not publish or overwrite Statamic configuration. Logos and fonts are served locally, without third-party font requests. Font license notices are included in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Integration boundaries
 

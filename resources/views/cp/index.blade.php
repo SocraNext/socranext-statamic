@@ -3,19 +3,21 @@
 @section('title', 'SocraNext')
 
 @push('head')
-<style>@include('socranext::cp.styles')</style>
+<style>@include('socranext::cp.styles')
+@include('socranext::cp.space-styles')</style>
 @endpush
 
 @section('content')
 <div class="sncp">
     <header class="sncp-header">
-        <div><p class="sncp-eyebrow">{{ __('socranext::cp.eyebrow') }}</p><h1>SocraNext <span class="sncp-preview">{{ __('socranext::cp.preview') }}</span></h1><p class="sncp-lead">{{ __('socranext::cp.intro') }}</p></div>
+        <div><p class="sncp-eyebrow">{{ __('socranext::cp.eyebrow') }}</p><h1><img class="sncp-logo sncp-logo-light" src="{{ asset('vendor/socranext/brand/socranext-logo.svg') }}" alt="SocraNext"><img class="sncp-logo sncp-logo-dark" src="{{ asset('vendor/socranext/brand/socranext-logo-on-dark.svg') }}" alt="SocraNext"> <span class="sncp-preview">{{ __('socranext::cp.preview') }}</span></h1><p class="sncp-lead">{{ __('socranext::cp.intro') }}</p></div>
         @if($websiteUrl)<a class="sncp-button sncp-button-secondary" href="{{ $websiteUrl }}" target="_blank" rel="noopener noreferrer">{{ __('socranext::cp.visit') }} <span aria-hidden="true">↗</span></a>@endif
     </header>
     @if(session('socranext_message'))<div class="sncp-notice" role="status">{{ session('socranext_message') }}</div>@endif
     @foreach($errors->all() as $error)<div class="sncp-notice sncp-notice-error" role="alert">{{ $error }}</div>@endforeach
 
-    <section class="sncp-hero" aria-labelledby="sncp-heading">
+    <section class="sncp-hero sncp-space" aria-labelledby="sncp-heading">
+        @include('socranext::cp.space')
         <div class="sncp-hero-copy">
             <span class="sncp-connection"><span class="sncp-dot {{ $connected ? 'is-connected' : '' }}" aria-hidden="true"></span>{{ __('socranext::cp.'.($connected ? 'connected' : 'not_connected')) }} <span aria-hidden="true">·</span> {{ $websiteLabel }}</span>
             <h2 id="sncp-heading">{{ __('socranext::cp.'.($connected ? 'connected_title' : 'connect_title')) }}</h2>
@@ -29,7 +31,7 @@
                 @endif
             </div>
         </div>
-        <div class="sncp-visual" aria-hidden="true"><span class="sncp-visual-node">S<span>SocraNext</span></span><span class="sncp-visual-line">{{ $connected ? '✓' : '+' }}</span><span class="sncp-visual-node sncp-visual-statamic">S<span>Statamic</span></span></div>
+        <div class="sncp-visual" aria-hidden="true"><img src="{{ asset('vendor/socranext/brand/socranext-mark.svg') }}" alt=""><span>SocraNext × Statamic</span></div>
     </section>
 
     <div class="sncp-status-grid">

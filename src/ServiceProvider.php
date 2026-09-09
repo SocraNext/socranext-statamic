@@ -11,6 +11,7 @@ use SocraNext\Statamic\Support\StateStore;
 use Statamic\Facades\CP\Nav;
 use Statamic\Facades\Permission;
 use Statamic\Providers\AddonServiceProvider;
+use Statamic\Statamic;
 
 class ServiceProvider extends AddonServiceProvider
 {
@@ -31,6 +32,12 @@ class ServiceProvider extends AddonServiceProvider
     {
         parent::boot();
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'socranext');
+        $this->publishes([__DIR__.'/../resources/assets' => public_path('vendor/socranext')], 'socranext-assets');
+        // Our Composer package basename is "statamic". Use a distinct tag so
+        // publishing addon assets never republishes core Statamic configuration.
+        Statamic::afterInstalled(static function ($command) {
+            $command->call('vendor:publish', ['--tag' => 'socranext-assets', '--force' => true]);
+        });
         $this->publishes([__DIR__.'/../config/socranext.php' => config_path('socranext.php')], 'socranext-config');
         // Global middleware runs before route middleware. Signed code and text files
         // must retain their exact JSON values, including whitespace and empty strings.
