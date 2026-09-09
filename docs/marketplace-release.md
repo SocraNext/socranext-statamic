@@ -5,7 +5,8 @@
 ## Release checklist
 
 - [ ] Decide and document the connector's distribution license. A free price does not imply an open-source license.
-- [ ] Approve public connector distribution, create the release tag and finalize release notes. The SocraNext platform repository can remain private.
+- [x] Owner authorized public connector distribution, subject to passing validation and release requirements. The platform repository remains private.
+- [ ] Create the release tag and finalize release notes after the license and pilot gates pass.
 - [ ] Publish `socranext/statamic` on Packagist, configure release synchronization and verify installation without private GitHub access.
 - [ ] Deploy and verify the companion platform integration, its CMS migration and both opt-in Statamic feature flags before offering the public customer workflow.
 - [ ] Complete a clean installation and public article/FAQ check on representative sites using the [installation sequence](../README.md#installation-for-a-development-or-pilot-site).
@@ -13,6 +14,8 @@
 - [ ] Have an authorized account holder complete or verify the Statamic creator and Packagist accounts, including any additional terms shown during onboarding.
 - [ ] Create a **Free** Marketplace product linked to the package and public repository. Disclose the required separate SocraNext subscription, add real screenshots and preview the listing.
 - [ ] Follow the actual submission/publication step shown in the creator dashboard. Do not promise a review timeline or certification.
+
+Verified on 9 September 2026: the migration and companion platform code are deployed, with Statamic still disabled. Platform regression tests, normal production deployment and public health checks passed. Addon branding follows SocraNext's Agent space widgets; all six PHP/Laravel CI combinations pass. A native Composer update published the addon assets without changing any of the test site's 33 configuration files. Public source/history review found no confirmed secrets or unintended customer data. Public HTTPS onboarding and scheduled delivery remain unverified. Statamic and Packagist account sign-in, the concrete software license and the service-terms correction are still pending; nothing has been submitted.
 
 The official route requires a [Packagist package and Statamic seller account](https://statamic.dev/addons/building-an-addon#publishing-to-the-marketplace). Packagist requires a [public repository URL](https://packagist.org/about). Statamic's [creator page](https://statamic.com/creator/begin) supports free products; a [current connector listing](https://statamic.com/addons/html2img/auto-open-graph-images) demonstrates free code with external paid service plans. This supports the proposed billing model but does not establish individual approval or waive additional creator terms. No mandatory review duration was found in the public documentation.
 

@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-Development preview for Statamic 6 Pro. No public Packagist or Marketplace release has been published. The companion SocraNext platform integration remains an opt-in pilot pending deployment.
+Development preview for Statamic 6 Pro. No public Packagist or Marketplace release has been published. The companion SocraNext platform integration is deployed with both Statamic flags disabled, pending verification on an isolated HTTPS test site.
 
 ### Added
 

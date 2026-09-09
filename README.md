@@ -2,7 +2,7 @@
 
 A Statamic 6 addon that connects a website to the existing SocraNext workspace. The connector uses the same article, FAQ and styling workflows as the platform's other CMS integrations. The SocraNext subscription remains billed by SocraNext.
 
-**Development preview.** This private repository is not yet a Packagist or Marketplace release. Platform integration is developed separately on `SocraNext/SocraNextRebuild` branch `codex/statamic-integration`, with Statamic disabled by default. Do not advertise production parity until the pilot acceptance checks have passed.
+**Development preview.** This private repository is not yet a Packagist or Marketplace release. The companion platform integration was merged and deployed through [platform PR 106](https://github.com/SocraNext/SocraNextRebuild/pull/106) on 9 September 2026. Statamic remains disabled in production. Do not advertise production parity until the pilot acceptance checks have passed.
 
 The companion platform integration has not been deployed for general use. Connecting requires a pilot SocraNext environment with that integration and both Statamic feature flags enabled. Installing this addon alone does not enable Statamic in the platform.
 
@@ -75,6 +75,8 @@ VITE_SOCRANEXT_STATAMIC_ENABLED=false
 ```
 
 Review and test the platform PR before deploying it. Apply its additive CMS constraint migration before allowing Statamic projects to be created. Enable both flags in a pilot environment, create a Statamic project, connect the addon and verify the published output. Disabling the flags stops new platform Statamic actions; existing published native content remains available. The existing WordPress, Shopify and Headless billing and connector routes retain their current behavior.
+
+Rollout status on 9 September 2026: the additive migration and platform code are deployed; both Statamic flags remain off. The normal production migration gate, build, backend restart and health checks passed. A read-only operator verified that the deployed adapter matches the reviewed commit and that the runtime flag is off. General activation still requires an isolated HTTPS Statamic test host and full platform onboarding/publication verification.
 
 ## Durable identities and recovery
 
