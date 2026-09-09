@@ -1,0 +1,1390 @@
+/* SocraNext shared styles: copied from platform replicaBaseCss.generated.js. */
+/* SocraNext FAQ – default styling. Fonts/kleuren van thema. */
+
+/* Defaults: overschrijf in custom CSS op .socranext-frontend-block */
+.socranext-frontend-block {
+  --sn-faq-container-width: 1170px;
+  --sn-faq-container-bg: transparent;
+  --sn-faq-container-radius: 0;
+  --sn-faq-container-margin-top: 0rem;
+  --sn-faq-container-margin-bottom: 0rem;
+  --sn-faq-container-padding: 2rem 2rem;
+  --sn-faq-container-padding-mobile: 1rem;
+  --sn-faq-title-margin-bottom: 1.25rem;
+  --sn-faq-title-text-align: left;
+  --sn-faq-title-font-size: 2rem;
+  --sn-faq-title-line-height: 1.25;
+  --sn-faq-title-color: inherit;
+  --sn-faq-list-margin-top: 1rem;
+  --sn-faq-list-gap: 1rem;
+  --sn-faq-item-bg: transparent;
+  --sn-faq-item-radius: 10px;
+  --sn-faq-item-border-width: 1px;
+  --sn-faq-item-border-color: #eee;
+  --sn-faq-item-padding: 1rem 1.25rem;
+  --sn-faq-toggle-size: 32px;
+  --sn-faq-toggle-bg: #333;
+  --sn-faq-toggle-color: #fff;
+  --sn-faq-toggle-hover-opacity: 0.85;
+  --sn-faq-question-color: inherit;
+  --sn-faq-question-font-size: 1.125rem;
+  --sn-faq-answer-color: inherit;
+  --sn-faq-answer-font-size: 1rem;
+  --sn-faq-answer-margin-top: 0.75rem;
+  --sn-faq-answer-padding-bottom: 1.25rem;
+  --sn-faq-disclaimer-margin-top: 1rem;
+  --sn-faq-disclaimer-font-size: 0.75rem;
+  --sn-faq-disclaimer-color: inherit;
+  --sn-faq-disclaimer-opacity: 0.6;
+}
+
+.socranext-frontend-block {
+  max-width: var(--sn-faq-container-width);
+  margin: var(--sn-faq-container-margin-top) auto var(--sn-faq-container-margin-bottom);
+  padding: var(--sn-faq-container-padding);
+  background: var(--sn-faq-container-bg);
+  border-radius: var(--sn-faq-container-radius);
+  box-sizing: border-box;
+  /* Span alle kolommen wanneer een theme-wrapper (bijv. The7 sidebar-
+     layout) een CSS-grid is; no-op buiten grid-containers. */
+  grid-column: 1 / -1;
+}
+
+.socranext-frontend-block * {
+  box-sizing: border-box;
+}
+
+.socranext-qa-list {
+  list-style: none;
+  padding: 0;
+  margin: var(--sn-faq-list-margin-top) 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sn-faq-list-gap);
+}
+
+.socranext-qa {
+  background: var(--sn-faq-item-bg);
+  border-radius: var(--sn-faq-item-radius);
+  border: var(--sn-faq-item-border-width) solid var(--sn-faq-item-border-color);
+  padding: var(--sn-faq-item-padding);
+  cursor: pointer;
+  user-select: none;
+}
+
+.socranext-q {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.socranext-q strong {
+  font-weight: var(--sn-faq-question-font-weight, 600);
+  font-family: var(--sn-faq-question-font-family, inherit);
+  flex: 1;
+  color: var(--sn-faq-question-color);
+  font-size: var(--sn-faq-question-font-size);
+}
+
+.socranext-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: var(--sn-faq-toggle-size);
+  height: var(--sn-faq-toggle-size);
+  min-width: var(--sn-faq-toggle-size);
+  min-height: var(--sn-faq-toggle-size);
+  border-radius: 50%;
+  background: var(--sn-faq-toggle-bg);
+  color: var(--sn-faq-toggle-color);
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.socranext-toggle:hover {
+  opacity: var(--sn-faq-toggle-hover-opacity);
+}
+
+.socranext-toggle .socranext-icon-collapsed,
+.socranext-toggle .socranext-icon-expanded {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  transform: translate(-50%, -50%);
+  font-size: 0;
+  line-height: 0;
+}
+
+.socranext-toggle .socranext-icon-collapsed::before,
+.socranext-toggle .socranext-icon-collapsed::after,
+.socranext-toggle .socranext-icon-expanded::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  background: currentColor;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+}
+
+.socranext-toggle .socranext-icon-collapsed::before,
+.socranext-toggle .socranext-icon-expanded::before {
+  width: 12px;
+  height: 3px;
+}
+
+.socranext-toggle .socranext-icon-collapsed::after {
+  width: 3px;
+  height: 12px;
+}
+
+.socranext-toggle .socranext-icon-collapsed { display: block; }
+.socranext-toggle .socranext-icon-expanded { display: none; }
+.open > .socranext-toggle .socranext-icon-collapsed,
+.open .socranext-toggle .socranext-icon-collapsed { display: none; }
+.open > .socranext-toggle .socranext-icon-expanded,
+.open .socranext-toggle .socranext-icon-expanded { display: block; }
+
+.socranext-a {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding-top 0.3s ease, padding-bottom 0.3s ease;
+  line-height: 1.6;
+  padding-top: 0;
+  padding-bottom: 0;
+  color: var(--sn-faq-answer-color);
+  font-size: var(--sn-faq-answer-font-size);
+  font-family: var(--sn-faq-answer-font-family, inherit);
+  white-space: pre-wrap;
+}
+
+.socranext-qa.open .socranext-a {
+  padding-top: var(--sn-faq-answer-margin-top);
+  padding-bottom: var(--sn-faq-answer-padding-bottom);
+}
+
+.socranext-a > :first-child {
+  margin-top: 0;
+}
+
+.socranext-a > :last-child {
+  margin-bottom: 0;
+}
+
+.socranext-qalist h2 {
+  margin: 0 0 var(--sn-faq-title-margin-bottom) 0;
+  text-align: var(--sn-faq-title-text-align);
+  font-size: var(--sn-faq-title-font-size);
+  line-height: var(--sn-faq-title-line-height);
+  color: var(--sn-faq-title-color) !important;
+  font-family: var(--sn-faq-title-font-family, inherit);
+  font-weight: var(--sn-faq-title-font-weight, inherit);
+}
+
+.socranext-frontend-block .socranext-disclaimer {
+  font-size: var(--sn-faq-disclaimer-font-size);
+  color: var(--sn-faq-disclaimer-color) !important;
+  opacity: var(--sn-faq-disclaimer-opacity);
+  margin-top: var(--sn-faq-disclaimer-margin-top);
+  font-style: italic;
+}
+
+.socranext-frontend-block .socranext-disclaimer a {
+  color: var(--sn-faq-disclaimer-link-color, inherit) !important;
+  text-decoration: underline;
+}
+
+.socranext-frontend-block .socranext-disclaimer a:hover {
+  text-decoration: underline;
+  opacity: 0.9;
+}
+
+@media (max-width: 600px) {
+  .socranext-frontend-block {
+    padding: var(--sn-faq-container-padding-mobile);
+  }
+}
+
+/* SocraNext Artikel – default styling via CSS variabelen. */
+
+#socranext-artikel {
+  --sn-article-container-width: 1170px;
+  --sn-article-container-bg: transparent;
+  --sn-article-container-radius: 0;
+  --sn-article-container-margin-top: 0rem;
+  --sn-article-container-margin-bottom: 0rem;
+  --sn-article-container-border-width: 0;
+  --sn-article-container-border-color: transparent;
+  --sn-article-container-padding: 2rem 1rem;
+  --sn-article-title-text-align: left;
+  --sn-article-title-font-size: 2.25rem;
+  --sn-article-title-line-height: 1.25;
+  --sn-article-title-color: inherit;
+  --sn-article-title-margin-bottom: 2rem;
+  --sn-article-content-color: inherit;
+  --sn-article-content-link-color: inherit;
+  --sn-article-content-heading-color: inherit;
+  --sn-article-content-font-size: 1rem;
+  --sn-article-content-h2-font-size: 1.5rem;
+  --sn-article-content-h2-line-height: 1.35;
+  --sn-article-content-h3-font-size: 1.25rem;
+  --sn-article-content-h3-line-height: 1.4;
+  --sn-article-page-title-display: block;
+  --sn-article-content-h1-display: none;
+  --sn-article-content-line-height: 1.75;
+  --sn-article-content-paragraph-margin-bottom: 1.25rem;
+  --sn-article-content-h2-margin-top: 2rem;
+  --sn-article-content-h2-margin-bottom: 0.75rem;
+  --sn-article-content-h3-margin-top: 1.5rem;
+  --sn-article-content-h3-margin-bottom: 0.5rem;
+  --sn-article-content-image-radius: 8px;
+  --sn-article-content-quote-border-color: currentColor;
+  --sn-article-content-quote-border-width: 4px;
+  --sn-article-content-quote-padding-y: 0.75rem;
+  --sn-article-content-quote-padding-x: 1.25rem;
+  --sn-article-content-quote-opacity: 0.8;
+  max-width: var(--sn-article-container-width);
+  margin: var(--sn-article-container-margin-top) auto var(--sn-article-container-margin-bottom);
+  padding: var(--sn-article-container-padding);
+  background: var(--sn-article-container-bg);
+  border-radius: var(--sn-article-container-radius);
+  /* Span alle kolommen wanneer een theme-wrapper (bijv. The7 sidebar-
+     layout) een CSS-grid is; no-op buiten grid-containers. */
+  grid-column: 1 / -1;
+  border: var(--sn-article-container-border-width) solid var(--sn-article-container-border-color);
+  box-sizing: border-box;
+}
+
+#socranext-artikel * {
+  box-sizing: border-box;
+}
+
+/* Laat de container-achtergrond overal doorschijnen; thema’s (bv. Avada) zetten vaak #main/.entry-content op wit */
+#socranext-artikel #main,
+#socranext-artikel .entry-content,
+#socranext-artikel article {
+  background: var(--sn-article-container-bg) !important;
+}
+
+#socranext-artikel .entry-header {
+  display: var(--sn-article-page-title-display);
+  margin-bottom: var(--sn-article-title-margin-bottom);
+  text-align: var(--sn-article-title-text-align) !important;
+}
+
+#socranext-artikel .entry-header .entry-title {
+  margin: 0;
+  font-size: var(--sn-article-title-font-size);
+  /* Expliciete line-height: thema's als The7 zetten heading-regelafstand
+     vaak in px, wat bij onze grotere font-size te krap wordt. */
+  line-height: var(--sn-article-title-line-height);
+  color: var(--sn-article-title-color) !important;
+  text-align: var(--sn-article-title-text-align) !important;
+  font-family: var(--sn-article-title-font-family, inherit);
+  font-weight: var(--sn-article-title-font-weight, inherit);
+}
+
+#socranext-artikel .entry-content {
+  color: var(--sn-article-content-color);
+  font-size: var(--sn-article-content-font-size);
+  line-height: var(--sn-article-content-line-height);
+  font-family: var(--sn-article-content-font-family, inherit);
+}
+
+#socranext-artikel .entry-content p {
+  margin-bottom: var(--sn-article-content-paragraph-margin-bottom);
+}
+
+#socranext-artikel .entry-content h1 {
+  display: var(--sn-article-content-h1-display);
+  color: var(--sn-article-title-color) !important;
+  text-align: var(--sn-article-title-text-align) !important;
+}
+
+#socranext-artikel .entry-content h2 {
+  color: var(--sn-article-content-heading-color);
+  font-size: var(--sn-article-content-h2-font-size);
+  line-height: var(--sn-article-content-h2-line-height);
+  margin-top: var(--sn-article-content-h2-margin-top);
+  margin-bottom: var(--sn-article-content-h2-margin-bottom);
+  font-family: var(--sn-article-content-heading-font-family, inherit);
+  font-weight: var(--sn-article-content-heading-font-weight, inherit);
+}
+
+#socranext-artikel .entry-content h3 {
+  color: var(--sn-article-content-heading-color);
+  font-size: var(--sn-article-content-h3-font-size);
+  line-height: var(--sn-article-content-h3-line-height);
+  margin-top: var(--sn-article-content-h3-margin-top);
+  margin-bottom: var(--sn-article-content-h3-margin-bottom);
+  font-family: var(--sn-article-content-heading-font-family, inherit);
+  font-weight: var(--sn-article-content-heading-font-weight, inherit);
+}
+
+#socranext-artikel .entry-content a {
+  color: var(--sn-article-content-link-color);
+}
+
+#socranext-artikel .entry-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--sn-article-content-image-radius);
+  margin: 1rem 0;
+}
+
+#socranext-artikel .entry-content ul,
+#socranext-artikel .entry-content ol {
+  padding-left: 1.5rem;
+  margin-bottom: var(--sn-article-content-paragraph-margin-bottom);
+}
+
+#socranext-artikel .entry-content blockquote {
+  border-left: var(--sn-article-content-quote-border-width) solid
+    var(--sn-article-content-quote-border-color);
+  padding: var(--sn-article-content-quote-padding-y) var(--sn-article-content-quote-padding-x);
+  margin: 1.5rem 0;
+  font-style: italic;
+  opacity: var(--sn-article-content-quote-opacity);
+}
+
+/* SocraNext article layout v2 – reading column with sticky table of contents.
+   Loads on top of artikel_default.css; the Styler overrides the variables. */
+
+/* Defaults live on the plain id selector so the Styler CSS, which is appended
+   after this file with the same specificity, can override them.
+   Design note: the accent is used sparingly and deliberately — category chip,
+   active TOC item, takeaways box, CTA and progress bar. Structure (borders,
+   surfaces, table chrome) stays neutral so one loud brand color cannot turn
+   the whole page monochrome. */
+#socranext-artikel {
+  --sn-article-reading-width: 760px;
+  --sn-article-rail-width: 230px;
+  --sn-article-rail-gap: 3.5rem;
+  --sn-article-layout-width: calc(
+    var(--sn-article-rail-width) + var(--sn-article-rail-gap) +
+      var(--sn-article-reading-width)
+  );
+  --sn-article-rail-top: 6rem;
+  --sn-article-accent: #111827;
+  --sn-article-accent-contrast: #ffffff;
+  /* Reading bar fill: site gradient (--sn-grad / --sn-gradient) when the host
+     page has one, otherwise the accent. The Styler overwrites this for a
+     two-stop brand gradient. */
+  --sn-article-accent-fill: var(
+    --sn-grad,
+    var(--sn-gradient, var(--sn-article-accent))
+  );
+  /* Accent variants for text: contrast-corrected against the page (ink) and
+     against the accent-contrast surface (ink-inverse). The Styler overwrites
+     both; a bright brand color stays a surface color and never becomes
+     unreadable 11px text. */
+  --sn-article-accent-ink: #111827;
+  --sn-article-accent-ink-inverse: #111827;
+  --sn-article-accent-soft: rgba(17, 24, 39, 0.07);
+  --sn-article-surface: rgba(17, 24, 39, 0.035);
+  --sn-article-border: rgba(17, 24, 39, 0.16);
+  --sn-article-muted: rgba(17, 24, 39, 0.66);
+  --sn-article-radius: 12px;
+  --sn-article-hero-radius: 16px;
+  --sn-article-hero-ratio: 16 / 9;
+}
+
+/* ---------- Layout skeleton ---------- */
+
+#socranext-artikel.sn-layout-v2 .sn-article-header {
+  max-width: var(--sn-article-reading-width);
+  margin: 0 auto 3rem;
+}
+
+/* With a rail the header spans the full container (rail + gap + reading
+   column): title and hero sit centered over the whole article and the
+   two-column grid only starts below the hero. Aligning the header with the
+   reading column left it floating at the right of the page. */
+#socranext-artikel.sn-layout-v2 .sn-has-rail .sn-article-header {
+  max-width: var(--sn-article-layout-width);
+}
+
+/* Two columns: rail + reading column. A third "phantom" rail on the right
+   squeezed the reading column inside normal theme containers (1170px left
+   barely 600px for the text). No align-items: grid items must stretch to the
+   row height, otherwise the rail is only as tall as its own content and the
+   sticky TOC has no room to travel. */
+#socranext-artikel.sn-layout-v2 .sn-article-grid {
+  display: grid;
+  grid-template-columns:
+    minmax(0, var(--sn-article-rail-width))
+    minmax(0, var(--sn-article-reading-width));
+  column-gap: var(--sn-article-rail-gap);
+  justify-content: center;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-article-grid--single {
+  grid-template-columns: minmax(0, var(--sn-article-reading-width));
+}
+
+#socranext-artikel.sn-layout-v2 .sn-article-body {
+  min-width: 0;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-article-footer {
+  max-width: var(--sn-article-reading-width);
+  margin: 4.5rem auto 0;
+}
+
+/* Related articles span the same full layout width as the header (rail +
+   gap + reading column). Aligning them with the reading column left empty
+   space under the table of contents. */
+#socranext-artikel.sn-layout-v2 .sn-has-rail .sn-article-footer {
+  max-width: var(--sn-article-layout-width);
+}
+
+/* ---------- Reading progress ---------- */
+
+#socranext-artikel.sn-layout-v2 .sn-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 9999;
+  background: transparent;
+  pointer-events: none;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-progress-bar {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--sn-article-accent-fill);
+  /* Size the gradient to the viewport so both stops stay visible as the bar
+     grows, instead of compressing into a 3px-tall diagonal strip. */
+  background-size: 100vw 100%;
+  background-repeat: no-repeat;
+  transition: width 80ms linear;
+}
+
+/* ---------- Header ---------- */
+
+#socranext-artikel.sn-layout-v2 .sn-breadcrumbs {
+  margin-bottom: 1.25rem;
+  font-size: 0.8125rem;
+  color: var(--sn-article-muted);
+}
+
+#socranext-artikel.sn-layout-v2 .sn-breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-breadcrumbs li {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-breadcrumbs li + li::before {
+  content: "";
+  width: 0.32em;
+  height: 0.32em;
+  flex: 0 0 auto;
+  border-top: 1.5px solid currentColor;
+  border-right: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  opacity: 0.45;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-breadcrumbs a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 120ms ease;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-breadcrumbs a:hover {
+  color: var(--sn-article-accent-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-breadcrumbs [aria-current="page"] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 32ch;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.875rem;
+  margin-bottom: 1rem;
+  font-size: 0.8125rem;
+  color: var(--sn-article-muted);
+}
+
+#socranext-artikel.sn-layout-v2 .sn-article-category {
+  display: inline-block;
+  padding: 0.28rem 0.75rem;
+  border-radius: 999px;
+  background: var(--sn-article-accent-soft);
+  color: var(--sn-article-accent-ink);
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  transition: filter 120ms ease;
+}
+
+#socranext-artikel.sn-layout-v2 a.sn-article-category:hover {
+  filter: brightness(0.92);
+}
+
+#socranext-artikel.sn-layout-v2 .sn-article-updated::before {
+  content: "·";
+  margin-right: 0.875rem;
+  opacity: 0.5;
+}
+
+/* The "hide page title" toggle applies to the heading only; breadcrumbs, meta
+   and the hero image stay visible. min() keeps long titles from overflowing on
+   a phone without ignoring the size chosen in the Styler. */
+#socranext-artikel.sn-layout-v2 .sn-article-title {
+  display: var(--sn-article-page-title-display);
+  margin: 0;
+  font-size: min(var(--sn-article-title-font-size), 9vw);
+  line-height: var(--sn-article-title-line-height);
+  color: var(--sn-article-title-color) !important;
+  text-align: var(--sn-article-title-text-align) !important;
+  font-family: var(--sn-article-title-font-family, inherit);
+  font-weight: var(--sn-article-title-font-weight, inherit);
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-article-hero {
+  margin: 2.25rem 0 0;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-article-hero img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: var(--sn-article-hero-ratio);
+  object-fit: cover;
+  border-radius: var(--sn-article-hero-radius);
+  border: 1px solid var(--sn-article-border);
+  box-shadow: 0 18px 40px -24px rgba(17, 24, 39, 0.35);
+}
+
+/* ---------- Table of contents ---------- */
+
+#socranext-artikel.sn-layout-v2 .sn-toc {
+  position: sticky;
+  top: var(--sn-article-rail-top);
+  max-height: calc(100vh - var(--sn-article-rail-top) - 2rem);
+  /* No overscroll-behavior here: when the TOC fits on screen the wheel must
+     scroll the page, and when it overflows the browser chains to the page
+     once the TOC hits its end. */
+  overflow-y: auto;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  padding-bottom: 0.5rem;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-toc-title {
+  margin: 0 0 0.875rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--sn-article-muted);
+}
+
+#socranext-artikel.sn-layout-v2 .sn-toc-toggle {
+  display: none;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.8rem 1.05rem;
+  border: 1px solid var(--sn-article-border);
+  border-radius: var(--sn-article-radius);
+  background: var(--sn-article-surface);
+  color: inherit;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-toc-toggle::after {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform 150ms ease;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-toc-toggle[aria-expanded="true"]::after {
+  transform: rotate(-135deg) translate(-2px, -2px);
+}
+
+#socranext-artikel.sn-layout-v2 .sn-toc-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-toc-item {
+  margin: 0 0 0.125rem;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-toc-level-3 a {
+  padding-left: 1.6rem;
+  font-size: 0.8125rem;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-toc-list a {
+  position: relative;
+  display: block;
+  padding: 0.4rem 0.75rem 0.4rem 0.9rem;
+  border-radius: 8px;
+  color: var(--sn-article-muted);
+  text-decoration: none;
+  transition: color 120ms ease, background-color 120ms ease;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-toc-list a:hover {
+  color: var(--sn-article-accent-ink);
+  background: var(--sn-article-surface);
+}
+
+#socranext-artikel.sn-layout-v2 .sn-toc-item.is-active > a {
+  color: var(--sn-article-accent-ink);
+  background: var(--sn-article-accent-soft);
+  font-weight: 600;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-toc-item.is-active > a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.45rem;
+  bottom: 0.45rem;
+  width: 3px;
+  border-radius: 3px;
+  background: var(--sn-article-accent);
+}
+
+/* ---------- Key takeaways ---------- */
+
+#socranext-artikel.sn-layout-v2 .sn-takeaways {
+  margin: 0 0 2.5rem;
+  padding: 1.35rem 1.6rem;
+  border: 1px solid var(--sn-article-border);
+  border-left: 3px solid var(--sn-article-accent);
+  border-radius: var(--sn-article-radius);
+  background: var(--sn-article-accent-soft);
+}
+
+#socranext-artikel.sn-layout-v2 .sn-takeaways-title {
+  margin: 0 0 0.75rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--sn-article-muted);
+}
+
+#socranext-artikel.sn-layout-v2 .sn-takeaways ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-takeaways li {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-takeaways li + li {
+  margin-top: 0.55rem;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-takeaways li::before {
+  content: "";
+  position: absolute;
+  left: 0.1rem;
+  top: 0.5em;
+  width: 0.55em;
+  height: 0.3em;
+  border-left: 2px solid var(--sn-article-accent-ink);
+  border-bottom: 2px solid var(--sn-article-accent-ink);
+  transform: rotate(-45deg);
+}
+
+/* ---------- Article content ---------- */
+
+#socranext-artikel.sn-layout-v2 .sn-article-content {
+  font-size: var(--sn-article-content-font-size);
+  line-height: var(--sn-article-content-line-height);
+}
+
+#socranext-artikel.sn-layout-v2 .sn-article-content > h2 {
+  scroll-margin-top: var(--sn-article-rail-top);
+  margin-top: 2.75rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--sn-article-border);
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-article-content > h2:first-child {
+  padding-top: 0;
+  border-top: 0;
+  margin-top: 0;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-article-content > h3 {
+  scroll-margin-top: var(--sn-article-rail-top);
+  margin-top: 2rem;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-article-content > p a,
+#socranext-artikel.sn-layout-v2 .sn-article-content > ul a,
+#socranext-artikel.sn-layout-v2 .sn-article-content > ol a,
+#socranext-artikel.sn-layout-v2 .sn-article-content > blockquote a,
+#socranext-artikel.sn-layout-v2 .sn-article-content .sn-table-wrap a {
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+  transition: text-decoration-color 120ms ease;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-article-content > p a:hover,
+#socranext-artikel.sn-layout-v2 .sn-article-content > ul a:hover,
+#socranext-artikel.sn-layout-v2 .sn-article-content > ol a:hover {
+  text-decoration-color: currentColor;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-article-content > ul,
+#socranext-artikel.sn-layout-v2 .sn-article-content > ol {
+  padding-left: 1.5rem;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-article-content > ul > li + li,
+#socranext-artikel.sn-layout-v2 .sn-article-content > ol > li + li {
+  margin-top: 0.55rem;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-article-content > blockquote {
+  margin: 2rem 0;
+  padding: 1.2rem 1.6rem;
+  border-left: 3px solid var(--sn-article-accent);
+  background: var(--sn-article-surface);
+  border-radius: 0 var(--sn-article-radius) var(--sn-article-radius) 0;
+  font-style: normal;
+  font-size: 1.0625em;
+  opacity: 1;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-article-content > blockquote > :first-child {
+  margin-top: 0;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-article-content > blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- Tables ---------- */
+
+#socranext-artikel.sn-layout-v2 .sn-table-wrap {
+  margin: 2rem 0;
+  overflow-x: auto;
+  border: 1px solid var(--sn-article-border);
+  border-radius: var(--sn-article-radius);
+  -webkit-overflow-scrolling: touch;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-table-wrap > table,
+#socranext-artikel.sn-layout-v2 .sn-article-content > table {
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+/* Fallback for content stored before tables were wrapped server-side. */
+#socranext-artikel.sn-layout-v2 .sn-article-content > table {
+  margin: 2rem 0;
+  border: 1px solid var(--sn-article-border);
+}
+
+#socranext-artikel.sn-layout-v2 .sn-article-content th,
+#socranext-artikel.sn-layout-v2 .sn-article-content td {
+  padding: 0.8rem 1.05rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--sn-article-border);
+}
+
+#socranext-artikel.sn-layout-v2 .sn-article-content thead th {
+  background: var(--sn-article-surface);
+  font-size: 0.8125rem;
+  font-weight: 650;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--sn-article-muted);
+  white-space: nowrap;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-article-content tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-article-content tbody tr:nth-child(even) td {
+  background: var(--sn-article-surface);
+}
+
+/* ---------- CTA ---------- */
+
+#socranext-artikel.sn-layout-v2 .sn-cta {
+  position: relative;
+  overflow: hidden;
+  margin: 3rem 0 0;
+  padding: 2rem 2.1rem;
+  border-radius: calc(var(--sn-article-radius) + 4px);
+  background: var(--sn-article-accent);
+  color: var(--sn-article-accent-contrast);
+}
+
+/* Soft highlight so a flat brand color still has some depth. */
+#socranext-artikel.sn-layout-v2 .sn-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    120% 130% at 0% 0%,
+    rgba(255, 255, 255, 0.14),
+    transparent 55%
+  );
+  pointer-events: none;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-cta--inline {
+  margin: 3rem 0;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-cta-title {
+  position: relative;
+  margin: 0 0 0.5rem;
+  font-size: 1.3125rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: inherit;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-cta-text {
+  position: relative;
+  margin: 0;
+  max-width: 48ch;
+  color: inherit;
+  opacity: 0.88;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-cta-button {
+  position: relative;
+  display: inline-block;
+  margin-top: 1.35rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  background: var(--sn-article-accent-contrast);
+  color: var(--sn-article-accent-ink-inverse);
+  font-weight: 650;
+  text-decoration: none;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-cta-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.45);
+}
+
+/* ---------- Author card ---------- */
+
+#socranext-artikel.sn-layout-v2 .sn-author {
+  display: flex;
+  gap: 1.1rem;
+  align-items: flex-start;
+  margin-top: 3rem;
+  padding: 1.35rem 1.6rem;
+  border: 1px solid var(--sn-article-border);
+  border-radius: var(--sn-article-radius);
+  background: var(--sn-article-surface);
+}
+
+#socranext-artikel.sn-layout-v2 .sn-author-image {
+  flex: 0 0 auto;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(17, 24, 39, 0.18);
+}
+
+#socranext-artikel.sn-layout-v2 .sn-author-name {
+  margin: 0;
+  font-weight: 650;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-author-name a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-author-name a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-author-role,
+#socranext-artikel.sn-layout-v2 .sn-author-bio {
+  margin: 0.3rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--sn-article-muted);
+}
+
+/* ---------- Related articles ---------- */
+
+#socranext-artikel.sn-layout-v2 .sn-related-title {
+  margin: 0 0 1.4rem;
+  font-size: var(--sn-article-content-h2-font-size);
+  line-height: var(--sn-article-content-h2-line-height);
+  color: var(--sn-article-content-heading-color);
+  font-family: var(--sn-article-content-heading-font-family, inherit);
+  letter-spacing: -0.012em;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-related-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1.1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-related-item a {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--sn-article-border);
+  border-radius: var(--sn-article-radius);
+  background: var(--sn-article-surface);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 140ms ease, transform 140ms ease, box-shadow 140ms ease;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-related-item-media {
+  display: block;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--sn-article-border);
+}
+
+#socranext-artikel.sn-layout-v2 .sn-related-item-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-related-item-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 1.1rem 1.35rem 1.25rem;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-related-item a:hover {
+  border-color: var(--sn-article-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px -18px rgba(17, 24, 39, 0.35);
+}
+
+#socranext-artikel.sn-layout-v2 .sn-related-item-title {
+  display: block;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+#socranext-artikel.sn-layout-v2 .sn-related-item a:hover .sn-related-item-title {
+  color: var(--sn-article-accent-ink);
+}
+
+#socranext-artikel.sn-layout-v2 .sn-related-item-excerpt {
+  display: block;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--sn-article-muted);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1023px) {
+  #socranext-artikel.sn-layout-v2 .sn-article-grid {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: var(--sn-article-reading-width);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #socranext-artikel.sn-layout-v2 .sn-has-rail .sn-article-header,
+  #socranext-artikel.sn-layout-v2 .sn-has-rail .sn-article-footer {
+    max-width: var(--sn-article-reading-width);
+  }
+
+  #socranext-artikel.sn-layout-v2 .sn-article-rail {
+    order: -1;
+    margin-bottom: 2rem;
+  }
+
+  #socranext-artikel.sn-layout-v2 .sn-toc {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    padding-bottom: 0;
+  }
+
+  #socranext-artikel.sn-layout-v2 .sn-toc-toggle:not([hidden]) {
+    display: flex;
+  }
+
+  #socranext-artikel.sn-layout-v2 .sn-toc-toggle:not([hidden]) + .sn-toc-title {
+    display: none;
+  }
+
+  #socranext-artikel.sn-layout-v2 .sn-toc[data-collapsed="true"] .sn-toc-list {
+    display: none;
+  }
+
+  #socranext-artikel.sn-layout-v2 .sn-toc-toggle:not([hidden]) ~ .sn-toc-list {
+    margin-top: 0.875rem;
+  }
+}
+
+@media (max-width: 640px) {
+  #socranext-artikel.sn-layout-v2 .sn-cta {
+    padding: 1.5rem 1.35rem;
+  }
+
+  #socranext-artikel.sn-layout-v2 .sn-takeaways {
+    padding: 1.1rem 1.25rem;
+  }
+
+  #socranext-artikel.sn-layout-v2 .sn-author {
+    padding: 1.1rem 1.25rem;
+  }
+
+  #socranext-artikel.sn-layout-v2 .sn-article-content th,
+  #socranext-artikel.sn-layout-v2 .sn-article-content td {
+    padding: 0.65rem 0.8rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #socranext-artikel.sn-layout-v2 * {
+    scroll-behavior: auto;
+    transition-duration: 0ms !important;
+  }
+}
+
+/* SocraNext Artikelverzamelpagina – default styling. */
+
+#socranext-archive {
+  --sn-archive-container-width: 1170px;
+  --sn-archive-container-bg: transparent;
+  --sn-archive-container-radius: 0;
+  --sn-archive-container-margin-top: 0rem;
+  --sn-archive-container-margin-bottom: 0rem;
+  --sn-archive-container-padding: 2rem 1rem;
+  --sn-archive-title-text-align: center;
+  --sn-archive-title-font-size: 2rem;
+  --sn-archive-title-line-height: 1.25;
+  --sn-archive-title-color: inherit;
+  --sn-archive-title-margin-bottom: 2rem;
+  --sn-archive-grid-gap: 1.35rem;
+  --sn-archive-card-bg: #ffffff;
+  --sn-archive-card-radius: 12px;
+  --sn-archive-card-border-width: 1px;
+  --sn-archive-card-border-color: #eee;
+  --sn-archive-card-shadow: none;
+  --sn-archive-card-padding: 1.1rem;
+  --sn-archive-card-title-font-size: 1.25rem;
+  --sn-archive-card-title-line-height: 1.3;
+  --sn-archive-card-title-color: inherit;
+  --sn-archive-card-title-margin-bottom: 0.75rem;
+  --sn-archive-excerpt-color: inherit;
+  --sn-archive-excerpt-font-size: 1rem;
+  --sn-archive-excerpt-margin-bottom: 1.25rem;
+  --sn-archive-btn-bg: #333;
+  --sn-archive-btn-color: #fff;
+  --sn-archive-btn-radius: 8px;
+  --sn-archive-btn-font-size: 0.9rem;
+}
+
+#socranext-archive {
+  max-width: var(--sn-archive-container-width);
+  margin: var(--sn-archive-container-margin-top) auto var(--sn-archive-container-margin-bottom);
+  padding: var(--sn-archive-container-padding);
+  background: var(--sn-archive-container-bg);
+  border-radius: var(--sn-archive-container-radius);
+  box-sizing: border-box;
+  /* Sommige thema's (bijv. The7 met sidebar-layout) maken van de content-
+     wrapper een CSS-grid met kolommen als "content sidebar". Zonder eigen
+     plaatsing wordt deze container in de eerste (smalle) kolom gedrukt;
+     span daarom altijd alle kolommen. No-op buiten grid-containers. */
+  grid-column: 1 / -1;
+}
+
+#socranext-archive * {
+  box-sizing: border-box;
+}
+
+#socranext-archive .socranext-archive-title {
+  text-align: var(--sn-archive-title-text-align);
+  font-size: var(--sn-archive-title-font-size);
+  line-height: var(--sn-archive-title-line-height);
+  color: var(--sn-archive-title-color) !important;
+  margin: 0 0 var(--sn-archive-title-margin-bottom);
+  font-family: var(--sn-archive-title-font-family, inherit);
+  font-weight: var(--sn-archive-title-font-weight, inherit);
+}
+
+.socranext-articles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: stretch;
+  gap: var(--sn-archive-grid-gap);
+}
+
+.socranext-articles article {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--sn-archive-card-bg);
+  border-radius: var(--sn-archive-card-radius);
+  border: var(--sn-archive-card-border-width) solid var(--sn-archive-card-border-color);
+  box-shadow: var(--sn-archive-card-shadow);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  overflow: hidden;
+}
+
+.socranext-articles article .socranext-article-card-link {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  min-height: 100%;
+  padding: var(--sn-archive-card-padding);
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Featured image sits flush with the card border so the radius of the
+   card clips it. Padding on the link would inset the photo and leave a
+   second rounded rectangle that no longer lines up with the border.
+   :has() drops the link padding when a body wrapper or image is present. */
+.socranext-articles article .socranext-article-card-link:has(> .socranext-article-card-body),
+.socranext-articles article .socranext-article-card-link:has(> .socranext-article-card-image) {
+  padding: 0;
+}
+
+.socranext-articles article .socranext-article-card-image {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  flex: 0 0 auto;
+  border-radius: 0;
+  background: rgba(17, 24, 39, 0.04);
+}
+
+.socranext-articles article .socranext-article-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  padding: var(--sn-archive-card-padding);
+}
+
+.socranext-articles article:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.socranext-articles article h2 {
+  font-size: var(--sn-archive-card-title-font-size);
+  line-height: var(--sn-archive-card-title-line-height);
+  color: var(--sn-archive-card-title-color);
+  margin-top: 0;
+  margin-bottom: var(--sn-archive-card-title-margin-bottom);
+  font-family: var(--sn-archive-card-title-font-family, inherit);
+  font-weight: var(--sn-archive-card-title-font-weight, inherit);
+}
+
+.socranext-articles .excerpt {
+  line-height: 1.6;
+  flex: 1;
+  color: var(--sn-archive-excerpt-color);
+  font-size: var(--sn-archive-excerpt-font-size);
+  font-family: var(--sn-archive-excerpt-font-family, inherit);
+  margin-bottom: var(--sn-archive-excerpt-margin-bottom);
+}
+
+.socranext-articles .socranext-read-more {
+  display: inline-block;
+  background: var(--sn-archive-btn-bg);
+  color: var(--sn-archive-btn-color);
+  border-radius: var(--sn-archive-btn-radius);
+  padding: 0.6rem 1.25rem;
+  font-size: var(--sn-archive-btn-font-size);
+  font-family: var(--sn-archive-btn-font-family, inherit);
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+  align-self: flex-start;
+  pointer-events: none;
+}
+
+.socranext-articles .socranext-read-more:hover {
+  opacity: 0.85;
+  text-decoration: none;
+}
+
+/* --- Paginatie ------------------------------------------ */
+#socranext-archive .navigation.pagination {
+  margin-top: 2.5rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+#socranext-archive .nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  flex-wrap: nowrap;
+}
+
+/* Alle paginering-elementen: basis cirkel */
+#socranext-archive .nav-links a.page-numbers,
+#socranext-archive .nav-links span.page-numbers {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  line-height: 1;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease, opacity 0.2s ease;
+  border: 2px solid transparent;
+}
+
+/* Inactieve paginanummers */
+#socranext-archive .nav-links a.page-numbers:not(.prev):not(.next) {
+  background: transparent;
+  color: inherit;
+  border-color: currentColor;
+  opacity: 0.55;
+}
+
+#socranext-archive .nav-links a.page-numbers:not(.prev):not(.next):hover {
+  background: var(--sn-archive-btn-bg);
+  color: var(--sn-archive-btn-color);
+  border-color: var(--sn-archive-btn-bg);
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+/* Huidige pagina */
+#socranext-archive .nav-links span.page-numbers.current {
+  background: var(--sn-archive-btn-bg);
+  color: var(--sn-archive-btn-color);
+  border-color: var(--sn-archive-btn-bg);
+  opacity: 1;
+}
+
+/* Dots (...) */
+#socranext-archive .nav-links .page-numbers.dots {
+  background: transparent;
+  border-color: transparent;
+  opacity: 0.4;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  cursor: default;
+}
+
+/* Pijltjes: zelfde cirkel-stijl als nummers, iets lager in het balletje */
+#socranext-archive .nav-links a.prev.page-numbers,
+#socranext-archive .nav-links a.next.page-numbers {
+  background: var(--sn-archive-btn-bg);
+  color: var(--sn-archive-btn-color);
+  border-color: var(--sn-archive-btn-bg);
+  opacity: 0.8;
+  font-size: 1.1rem;
+  padding-top: 0.2rem;
+}
+
+#socranext-archive .nav-links a.prev.page-numbers:hover,
+#socranext-archive .nav-links a.next.page-numbers:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 900px) {
+  .socranext-articles {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .socranext-articles {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}

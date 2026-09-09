@@ -1,0 +1,7 @@
+/vendor/
+/.phpunit.cache/
+/.phpunit.result.cache
+/tests/tmp/
+/.env
+/.DS_Store
+/composer.lock

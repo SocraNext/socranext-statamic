@@ -1,0 +1,29 @@
+{
+    "name": "socranext/statamic",
+    "description": "Connect Statamic websites to the SocraNext content platform.",
+    "type": "statamic-addon",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.3",
+        "ext-sodium": "*",
+        "ext-curl": "*",
+        "ext-fileinfo": "*",
+        "ext-dom": "*",
+        "ext-mbstring": "*",
+        "statamic/cms": "^6.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^10.8",
+        "phpunit/phpunit": "^11.5"
+    },
+    "autoload": { "psr-4": { "SocraNext\\Statamic\\": "src/" } },
+    "autoload-dev": { "psr-4": { "SocraNext\\Statamic\\Tests\\": "tests/" } },
+    "extra": {
+        "laravel": { "providers": ["SocraNext\\Statamic\\ServiceProvider"] },
+        "statamic": { "name": "SocraNext", "description": "Articles, FAQs and publishing through your SocraNext workspace." }
+    },
+    "scripts": { "test": "phpunit" },
+    "config": { "sort-packages": true, "allow-plugins": false },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

@@ -1,0 +1,3 @@
+<!doctype html>
+<html lang="{{ \Statamic\Facades\Site::current()->lang() }}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{{ $title }}</title>@if($origin)<meta name="robots" content="noindex,nofollow">@endif<style id="socranext-preview-css"></style><style>.socranext-preview-highlight{outline:2px solid #2563eb!important;outline-offset:3px}body{margin:0;padding:24px;font-family:system-ui,sans-serif}</style></head>
+<body data-content-type="{{ $kind }}">{!! $body !!}@if($origin)@include('socranext::public.preview-bridge')@endif</body></html>
