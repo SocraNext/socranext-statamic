@@ -1,21 +1,30 @@
 # Marketplace release preparation
 
-**Internal draft — not submitted, approved or published.** The connector repository is private, its Composer license is still `proprietary`, and the companion platform integration is not deployed for general use. This document does not change the license or authorize publication.
+**Public beta preparation — publication pending.** The target version is `0.1.0-beta.1`. The repository is still private, the beta tag has not been created, and no package or Marketplace listing has been published. The companion platform code is deployed with both Statamic feature flags disabled. This document records preparation; it does not establish completion of the publication steps.
 
-## Release checklist
+## Public beta checklist
 
-- [ ] Decide and document the connector's distribution license. A free price does not imply an open-source license.
 - [x] Owner authorized public connector distribution, subject to passing validation and release requirements. The platform repository remains private.
-- [ ] Create the release tag and finalize release notes after the license and pilot gates pass.
+- [ ] Finalize [LICENSE](../LICENSE), the [Statamic service terms](statamic-service-terms.md) and beta release notes. Software rights and a separate service subscription are distinct.
+- [ ] Verify CI on the exact release commit, publish the connector repository, and create `v0.1.0-beta.1` as a GitHub prerelease.
+- [ ] Verify the public GitHub tag installs without credentials in a clean Statamic project.
 - [ ] Publish `socranext/statamic` on Packagist, configure release synchronization and verify installation without private GitHub access.
-- [ ] Deploy and verify the companion platform integration, its CMS migration and both opt-in Statamic feature flags before offering the public customer workflow.
-- [ ] Complete a clean installation and public article/FAQ check on representative sites using the [installation sequence](../README.md#installation-for-a-development-or-pilot-site).
-- [ ] Update the public SocraNext service description/terms to cover Statamic accurately; the current terms describe the WordPress plugin. Confirm the privacy disclosure matches the exchanged content.
+- [ ] Update the README and changelog to record actual publication status only after each publication step succeeds.
+
+The beta can be distributed for installation and evaluation while the hosted acceptance work continues. Keep both production Statamic flags disabled until the hosted pilot has passed. Do not create the stable `v0.1.0` tag or offer general activation based only on package publication.
+
+## Hosted acceptance and Marketplace checklist
+
+- [x] Deploy the companion platform code and additive CMS migration; verify the normal production deployment and existing CMS regressions.
+- [ ] Verify the complete HTTPS pilot: project creation, connection, native permissions, article and FAQ publication, public output, translations, styling, scheduled delivery and lifecycle recovery.
+- [ ] Complete clean installation and upgrade on representative sites using the [installation sequence](../README.md#installation-for-a-development-or-pilot-site).
+- [ ] Enable both Statamic feature flags for the intended customer workflow only after acceptance; record the active production status.
+- [ ] Publish the Statamic-specific service description and terms through the applicable customer flow, with an accurate privacy disclosure. Existing WordPress, Shopify and Headless customer agreements remain unchanged.
 - [ ] Have an authorized account holder complete or verify the Statamic creator and Packagist accounts, including any additional terms shown during onboarding.
 - [ ] Create a **Free** Marketplace product linked to the package and public repository. Disclose the required separate SocraNext subscription, add real screenshots and preview the listing.
 - [ ] Follow the actual submission/publication step shown in the creator dashboard. Do not promise a review timeline or certification.
 
-Verified on 9 September 2026: the migration and companion platform code are deployed, with Statamic still disabled. Platform regression tests, normal production deployment and public health checks passed. Addon branding follows SocraNext's Agent space widgets; all six PHP/Laravel CI combinations pass. A native Composer update published the addon assets without changing any of the test site's 33 configuration files. Public source/history review found no confirmed secrets or unintended customer data. Public HTTPS onboarding and scheduled delivery remain unverified. Statamic and Packagist account sign-in, the concrete software license and the service-terms correction are still pending; nothing has been submitted.
+Verified before beta preparation on 9 September 2026: the migration and companion platform code are deployed, with Statamic still disabled. Platform regression tests, normal production deployment and public health checks passed. The previous development build passed all six PHP/Laravel CI combinations. A native Composer update published addon assets without changing any of the test site's 33 configuration files. Public source/history review found no confirmed secrets or unintended customer data. Public HTTPS onboarding, scheduled delivery and the final beta's anonymous installation remain unverified. Statamic and Packagist account steps and Marketplace submission are pending.
 
 The official route requires a [Packagist package and Statamic seller account](https://statamic.dev/addons/building-an-addon#publishing-to-the-marketplace). Packagist requires a [public repository URL](https://packagist.org/about). Statamic's [creator page](https://statamic.com/creator/begin) supports free products; a [current connector listing](https://statamic.com/addons/html2img/auto-open-graph-images) demonstrates free code with external paid service plans. This supports the proposed billing model but does not establish individual approval or waive additional creator terms. No mandatory review duration was found in the public documentation.
 
@@ -25,7 +34,7 @@ Use **SocraNext for Statamic** with SocraNext branding. Statamic's [brand guidel
 
 - **Name:** SocraNext for Statamic
 - **Creator:** SocraNext; account/shop name subject to availability.
-- **Package:** `socranext/statamic`; not yet on Packagist.
+- **Package/version:** `socranext/statamic`, intended beta `0.1.0-beta.1`; not yet on Packagist.
 - **Price:** Free
 - **Suggested categories:** Integration, AI, SEO
 - **Compatibility:** Statamic 6 Pro; Laravel 12 or 13; PHP 8.3, 8.4 or 8.5.
@@ -33,9 +42,11 @@ Use **SocraNext for Statamic** with SocraNext branding. Statamic's [brand guidel
 - **Repository/documentation:** [SocraNext/socranext-statamic](https://github.com/SocraNext/socranext-statamic#readme); currently private.
 - **Addon support:** [GitHub issues](https://github.com/SocraNext/socranext-statamic/issues); available publicly only after repository publication.
 - **Account/billing contact:** [info@socranext.ai](mailto:info@socranext.ai)
-- **Service links:** [Pricing](https://socranext.ai/prijzen/), [terms](https://socranext.ai/algemene-voorwaarden/), [privacy](https://socranext.ai/privacybeleid/). Finalize the terms before linking them from a published listing.
+- **Service links:** [Pricing](https://socranext.ai/prijzen/), [Statamic service terms](statamic-service-terms.md), [privacy](https://socranext.ai/privacybeleid/). Confirm the Statamic terms are available in the applicable customer flow before publishing the listing; do not rewrite existing CMS customer agreements.
 
 ## Public listing copy — draft
+
+The following copy is for the connected customer workflow after the hosted acceptance checks and activation. While publication or activation is pending, display that status prominently and direct testing users to the beta instructions.
 
 **Publish articles, FAQs and metadata from your SocraNext workspace to your Statamic website.**
 
@@ -51,4 +62,4 @@ The supported profile uses native Statamic templates. FAQ placement and integrat
 
 After connection, SocraNext can read content configured for the integration and send publication, FAQ, metadata and styling changes to the website. See the documentation for permissions, supported content, backups and disconnection behavior. Use the issue tracker for addon issues and SocraNext for account or subscription support.
 
-Once a stable release is available on Packagist, the installation command can be `composer require socranext/statamic`. Until then, follow the private pilot instructions in the README. Do not invent a Marketplace URL before the creator dashboard assigns one.
+After the beta tag is published on Packagist, its installation command is `composer require socranext/statamic:0.1.0-beta.1`. If the repository and tag become public first, use the README's VCS repository instruction with that same exact beta version. Neither command is a claim that publication has already happened. Reserve the unversioned `composer require socranext/statamic` instruction for an available stable release. Do not invent a Marketplace URL before the creator dashboard assigns one.

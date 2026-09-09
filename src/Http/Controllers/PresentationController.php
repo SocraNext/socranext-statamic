@@ -5,6 +5,7 @@ namespace SocraNext\Statamic\Http\Controllers;
 use Illuminate\Http\Request;
 use SocraNext\Statamic\Content\ContentRepository;
 use SocraNext\Statamic\Rendering\{SafeMarkup, CodeSignature, PreviewSession};
+use SocraNext\Statamic\ServiceProvider;
 use SocraNext\Statamic\Support\StateStore;
 
 class PresentationController
@@ -86,7 +87,7 @@ class PresentationController
         $session = $this->previews->issue($data['origin']);
         $session['urls'] = [];
         foreach (['faq','article','articles'] as $kind) $session['urls'][$kind] = url('/socranext/preview/'.$kind).'?token='.rawurlencode($session['token']);
-        return response()->json($session + ['success' => true, 'version' => '0.1.0']);
+        return response()->json($session + ['success' => true, 'version' => ServiceProvider::VERSION]);
     }
 
     public function renderMode(Request $request)

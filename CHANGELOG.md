@@ -1,8 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.1.0-beta.1 — prepared, not published
 
-Development preview for Statamic 6 Pro. No public Packagist or Marketplace release has been published. The companion SocraNext platform integration is deployed with both Statamic flags disabled, pending verification on an isolated HTTPS test site.
+Intended first public beta for Statamic 6 Pro. Repository publication, the beta tag and Packagist registration are pending; no public beta or Marketplace listing has been released. The companion SocraNext platform integration is deployed with both Statamic flags disabled, pending verification on an isolated HTTPS test site. A stable release requires the hosted pilot and scheduled-delivery checks to pass.
 
 ### Added
 
@@ -24,7 +24,8 @@ Development preview for Statamic 6 Pro. No public Packagist or Marketplace relea
 - Multisite configuration is validated before exposing additional sites. Public image downloads are restricted and validated before storage.
 - Native application tests cover Laravel 12 and 13 on PHP 8.3, 8.4 and 8.5 through the CI matrix.
 - A dedicated asset publishing tag updates only the addon assets and preserves the host website's Statamic configuration.
+- Status, diagnostics, the Control Panel and preview responses report the same beta version.
 
 ### Supported profile
 
-Native Statamic templates require initial developer configuration. Automatic FAQ injection into arbitrary templates, universal SEO-addon compatibility, CMS-initiated generation and category slug changes are outside this preview. A separate headless/static frontend needs its own integration. The addon is intended to be free, with SocraNext subscriptions billed separately; the current software license remains `proprietary` pending a distribution decision.
+Native Statamic templates require initial developer configuration. Automatic FAQ injection into arbitrary templates, universal SEO-addon compatibility, CMS-initiated generation and category slug changes are outside this beta. A separate headless/static frontend needs its own integration. The addon is intended to be free, with SocraNext subscriptions billed separately under the [Statamic service terms](docs/statamic-service-terms.md). See [LICENSE](LICENSE) for software distribution and use rights.
