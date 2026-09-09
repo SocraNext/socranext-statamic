@@ -30,6 +30,7 @@ class ServiceProvider extends AddonServiceProvider
     public function boot()
     {
         parent::boot();
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'socranext');
         $this->publishes([__DIR__.'/../config/socranext.php' => config_path('socranext.php')], 'socranext-config');
         // Global middleware runs before route middleware. Signed code and text files
         // must retain their exact JSON values, including whitespace and empty strings.

@@ -4,6 +4,8 @@ A Statamic 6 addon that connects a website to the existing SocraNext workspace. 
 
 **Development preview.** This private repository is not yet a Packagist or Marketplace release. Platform integration is developed separately on `SocraNext/SocraNextRebuild` branch `codex/statamic-integration`, with Statamic disabled by default. Do not advertise production parity until the pilot acceptance checks have passed.
 
+The companion platform integration has not been deployed for general use. Connecting requires a pilot SocraNext environment with that integration and both Statamic feature flags enabled. Installing this addon alone does not enable Statamic in the platform.
+
 ## Installation for a development or pilot site
 
 Requirements: Statamic 6 Pro, PHP 8.3 or newer with Sodium, cURL, DOM, Fileinfo and Mbstring, and persistent writable content and Laravel storage. The initial release targets native Statamic rendering. A separate headless/static frontend needs its own rendering and deployment integration.
@@ -31,7 +33,14 @@ php please socranext:install
 
 Add `{{ socranext:faq }}` to the intended place in templates for existing pages. The managed article template includes its own FAQ. Use `{{ socranext:metadata }}` in the site's `<head>` for article and page metadata, or map these fields into the existing SEO addon; avoid duplicate metadata output. The managed collection and archive use the website layout.
 
-Open **Tools → SocraNext** in the Statamic control panel. Select **Connect with SocraNext** after creating the corresponding SocraNext project. Only a superuser or a user with `configure socranext` may connect, disconnect or approve website readiness. Verify a public article and a FAQ, then mark the frontend as checked. Connection and readiness are reported separately.
+Open **Tools → SocraNext** in the native Statamic control panel. The screen follows the user's English or Dutch Control Panel language preference and shows connection, configuration checks and website readiness separately. Only a superuser or a user with `configure socranext` may connect, disconnect or approve website readiness.
+
+Complete the first installation in this order:
+
+1. Create the corresponding Statamic project in the enabled SocraNext pilot environment, using the same website address, then select **Connect with SocraNext** in Statamic.
+2. Finish the configuration checks. Inspect the website's templates and the SocraNext styling previews, including FAQ placement, metadata integration, links and mobile layout. Previews can show sample content before the first article is published.
+3. Confirm website readiness using the checkbox and save the website status. This enables the publication actions that require a prepared website.
+4. Publish a test article and enable a test FAQ from SocraNext. Check their actual public output before continuing with regular publishing. If the website setup needs more work, clear the readiness checkbox while correcting it.
 
 ```sh
 php please socranext:doctor --json
@@ -84,3 +93,5 @@ Tests boot an actual Statamic 6 application through Testbench, with Laravel's re
 Connector JSON preserves whitespace and empty strings so code signatures, `llms.txt` and explicit style clearing survive Laravel's global middleware. That exception applies only to the addon's JSON API; native website forms and the Statamic control panel retain their existing input handling. Content conflict detection uses Statamic's persisted representation, including blueprint resolution, root empty-value removal and front-matter parsing. Explicit empty translation overrides remain distinct from inherited values.
 
 Before release, test a clean install and upgrade on representative websites, verify the full SocraNext screen workflow and public HTML, and check the Marketplace's applicable creator terms. The intended listing is a free addon requiring a separate SocraNext subscription. The distribution license and public release must be finalized before publishing beyond this private development repository.
+
+See the [changelog](CHANGELOG.md) and [Marketplace release checklist and draft](docs/marketplace-release.md). The repository and issue tracker currently require private repository access; account and billing questions can go to [info@socranext.ai](mailto:info@socranext.ai).

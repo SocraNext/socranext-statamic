@@ -3,6 +3,15 @@
     "description": "Connect Statamic websites to the SocraNext content platform.",
     "type": "statamic-addon",
     "license": "proprietary",
+    "homepage": "https://socranext.ai/",
+    "keywords": ["statamic", "socranext", "cms", "faq", "articles", "seo", "integration"],
+    "authors": [{ "name": "SocraNext", "homepage": "https://socranext.ai/" }],
+    "support": {
+        "email": "info@socranext.ai",
+        "source": "https://github.com/SocraNext/socranext-statamic",
+        "issues": "https://github.com/SocraNext/socranext-statamic/issues",
+        "docs": "https://github.com/SocraNext/socranext-statamic#readme"
+    },
     "require": {
         "php": "^8.3",
         "ext-sodium": "*",

@@ -1,20 +1,69 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SocraNext — Statamic</title>
-<style>body{font:16px/1.6 system-ui,sans-serif;color:#182222;background:#f6f8f8;margin:0}main{max-width:760px;margin:48px auto;padding:32px;background:white}h1{font-size:32px}h2{font-size:21px;margin-top:30px}a{color:#126c64}button{font:inherit;border:0;background:#126c64;color:white;padding:10px 18px;cursor:pointer}section{border-top:1px solid #dce3e3;margin-top:24px;padding-top:8px}.message{padding:12px;background:#eff8f5}.error{padding:12px;background:#fff0ed}code{font-size:14px;overflow-wrap:anywhere}</style>
-</head><body><main>
-<a href="{{ cp_route('dashboard') }}">← Statamic</a><h1>SocraNext</h1>
-<p>Connect this website to your SocraNext workspace. An active SocraNext subscription is required.</p>
-@if(session('socranext_message'))<p class="message" role="status">{{ session('socranext_message') }}</p>@endif
-@foreach($errors->all() as $error)<p class="error" role="alert">{{ $error }}</p>@endforeach
-<section><h2>{{ $connected ? 'Connected' : 'Connect your website' }}</h2>
-<p>Website: <strong>{{ config('socranext.site_url') }}</strong></p>
-<form method="post" action="{{ cp_route('socranext.connect') }}">@csrf<button>{{ $connected ? 'Reconnect SocraNext' : 'Connect with SocraNext' }}</button></form>
-<p><a href="{{ config('socranext.platform_url') }}" target="_blank" rel="noopener">Open SocraNext</a></p>
-</section>
-<section><h2>Website setup</h2><p>Have your website developer configure the collections, assets and templates, then check a published article and FAQ on the public website. Connection and website readiness are separate.</p>
-<p>Configuration: <code>config/socranext.php</code>. Run <code>php please socranext:install</code> to prepare the managed article collection.</p>
-<form method="post" action="{{ cp_route('socranext.readiness') }}">@csrf<input type="hidden" name="frontend_ready" value="0"><label><input type="checkbox" name="frontend_ready" value="1" @checked($ready)> Public article and FAQ output has been checked</label><p><button>Save website status</button></p></form>
-</section>
-@if($connected)<section><h2>Disconnect</h2><p>This revokes the connection and keeps your published content.</p><form method="post" action="{{ cp_route('socranext.disconnect') }}">@csrf<button>Disconnect</button></form></section>@endif
-<p><small>SocraNext {{ $version }} · Development preview</small></p>
-</main></body></html>
+@extends('statamic::layout')
+@php use function Statamic\trans as __; @endphp
+@section('title', 'SocraNext')
+
+@push('head')
+<style>@include('socranext::cp.styles')</style>
+@endpush
+
+@section('content')
+<div class="sncp">
+    <header class="sncp-header">
+        <div><p class="sncp-eyebrow">{{ __('socranext::cp.eyebrow') }}</p><h1>SocraNext <span class="sncp-preview">{{ __('socranext::cp.preview') }}</span></h1><p class="sncp-lead">{{ __('socranext::cp.intro') }}</p></div>
+        @if($websiteUrl)<a class="sncp-button sncp-button-secondary" href="{{ $websiteUrl }}" target="_blank" rel="noopener noreferrer">{{ __('socranext::cp.visit') }} <span aria-hidden="true">↗</span></a>@endif
+    </header>
+    @if(session('socranext_message'))<div class="sncp-notice" role="status">{{ session('socranext_message') }}</div>@endif
+    @foreach($errors->all() as $error)<div class="sncp-notice sncp-notice-error" role="alert">{{ $error }}</div>@endforeach
+
+    <section class="sncp-hero" aria-labelledby="sncp-heading">
+        <div class="sncp-hero-copy">
+            <span class="sncp-connection"><span class="sncp-dot {{ $connected ? 'is-connected' : '' }}" aria-hidden="true"></span>{{ __('socranext::cp.'.($connected ? 'connected' : 'not_connected')) }} <span aria-hidden="true">·</span> {{ $websiteLabel }}</span>
+            <h2 id="sncp-heading">{{ __('socranext::cp.'.($connected ? 'connected_title' : 'connect_title')) }}</h2>
+            <p>{{ __('socranext::cp.'.($connected ? 'connected_intro' : 'connect_intro')) }}</p>
+            <div class="sncp-actions">
+                @if($connected)
+                    <a class="sncp-button sncp-button-primary" href="{{ config('socranext.platform_url') }}" target="_blank" rel="noopener noreferrer">{{ __('socranext::cp.open') }} <span aria-hidden="true">↗</span></a>
+                @else
+                    <form method="post" action="{{ cp_route('socranext.connect') }}">@csrf<button class="sncp-button sncp-button-primary" type="submit">{{ __('socranext::cp.connect') }} <span aria-hidden="true">→</span></button></form>
+                    <a class="sncp-hero-link" href="{{ config('socranext.platform_url') }}" target="_blank" rel="noopener noreferrer">{{ __('socranext::cp.open') }} ↗</a>
+                @endif
+            </div>
+        </div>
+        <div class="sncp-visual" aria-hidden="true"><span class="sncp-visual-node">S<span>SocraNext</span></span><span class="sncp-visual-line">{{ $connected ? '✓' : '+' }}</span><span class="sncp-visual-node sncp-visual-statamic">S<span>Statamic</span></span></div>
+    </section>
+
+    <div class="sncp-status-grid">
+        <section class="sncp-status"><span class="sncp-status-icon {{ $connected ? 'is-good' : '' }}" aria-hidden="true">{{ $connected ? '✓' : '↗' }}</span><div><h2>{{ __('socranext::cp.connection') }} <span class="sncp-pill {{ $connected ? 'is-good' : '' }}">{{ __('socranext::cp.'.($connected ? 'connected' : 'not_connected')) }}</span></h2><p>{{ __('socranext::cp.'.($connected ? 'connected_detail' : 'connect_detail')) }}</p></div></section>
+        <section class="sncp-status"><span class="sncp-status-icon {{ $ready ? 'is-good' : '' }}" aria-hidden="true">{{ $ready ? '✓' : '3' }}</span><div><h2>{{ __('socranext::cp.website_output') }} <span class="sncp-pill {{ $ready ? 'is-good' : '' }}">{{ __('socranext::cp.'.($ready ? 'checked' : 'review_needed')) }}</span></h2><p>{{ __('socranext::cp.'.($ready ? 'output_detail' : 'review_detail')) }}</p></div></section>
+    </div>
+
+    <section class="sncp-panel" aria-labelledby="sncp-setup-title">
+        <div class="sncp-panel-heading"><h2 id="sncp-setup-title">{{ __('socranext::cp.setup') }}</h2><p>{{ __('socranext::cp.setup_intro') }}</p></div>
+        <ol class="sncp-steps">
+            <li><span class="sncp-step-number {{ $connected ? 'is-good' : '' }}" aria-hidden="true">{{ $connected ? '✓' : '1' }}</span><div class="sncp-step-copy"><h3>{{ __('socranext::cp.step_connect') }}</h3><p>{{ __('socranext::cp.step_connect_detail') }}</p><span class="sncp-domain">{{ $websiteUrl ?: $websiteLabel }}</span></div></li>
+            <li><span class="sncp-step-number {{ $setupComplete ? 'is-good' : '' }}" aria-hidden="true">{{ $setupComplete ? '✓' : '2' }}</span><div class="sncp-step-copy"><h3>{{ __('socranext::cp.step_prepare') }}</h3><p>{{ __('socranext::cp.step_prepare_detail') }}</p><p class="sncp-check-summary {{ $setupComplete ? 'is-good' : '' }}">{{ __('socranext::cp.'.($setupComplete ? 'setup_checked' : 'setup_pending')) }}</p>
+                <details class="sncp-details"><summary>{{ __('socranext::cp.technical_details') }}</summary><div class="sncp-details-body">
+                    <ul class="sncp-checks">@foreach($setupChecks as $key => $ok)<li><span>{{ __('socranext::cp.'.$key) }}</span><strong class="{{ $ok ? 'is-good' : 'sncp-needs-attention' }}">{{ __('socranext::cp.'.($ok ? 'pass' : 'todo')) }}</strong></li>@endforeach</ul>
+                    @if($siteNames)<p class="sncp-language-list">{{ implode(' · ', $siteNames) }}</p>@endif
+                    <p>{{ __('socranext::cp.developer_help') }}</p><pre><code>php please socranext:install</code></pre><p>{{ __('socranext::cp.faq_help') }}</p>
+                    <pre v-pre><code>@{{ socranext:faq }}
+@{{ socranext:metadata }}</code></pre>
+                    <p>{{ __('socranext::cp.diagnostics') }}</p><pre><code>php please socranext:doctor --json</code></pre>
+                    <a class="sncp-text-link" href="https://github.com/SocraNext/socranext-statamic#installation-for-a-development-or-pilot-site" target="_blank" rel="noopener noreferrer">{{ __('socranext::cp.guide') }} ↗</a>
+                </div></details>
+            </div></li>
+            <li><span class="sncp-step-number {{ $ready ? 'is-good' : '' }}" aria-hidden="true">{{ $ready ? '✓' : '3' }}</span><div class="sncp-step-copy"><h3>{{ __('socranext::cp.step_check') }}</h3><p>{{ __('socranext::cp.step_check_detail') }}</p>
+                <form method="post" action="{{ cp_route('socranext.readiness') }}" class="sncp-readiness-form">@csrf<input type="hidden" name="frontend_ready" value="0"><label class="sncp-checkbox"><input type="checkbox" name="frontend_ready" value="1" @checked($frontendChecked)><span>{{ __('socranext::cp.frontend_label') }}</span></label><button class="sncp-button sncp-button-secondary" type="submit">{{ __('socranext::cp.save') }}</button></form>
+            </div></li>
+        </ol>
+    </section>
+
+    @if($connected)
+        <details class="sncp-panel sncp-settings"><summary>{{ __('socranext::cp.connection_settings') }}</summary><div class="sncp-settings-body">
+            <div><div><h3>{{ __('socranext::cp.reconnect_title') }}</h3><p>{{ __('socranext::cp.reconnect_detail') }}</p></div><form method="post" action="{{ cp_route('socranext.connect') }}">@csrf<button class="sncp-button sncp-button-secondary" type="submit">{{ __('socranext::cp.reconnect') }}</button></form></div>
+            <div><div><h3>{{ __('socranext::cp.disconnect_title') }}</h3><p>{{ __('socranext::cp.disconnect_detail') }}</p></div><form method="post" action="{{ cp_route('socranext.disconnect') }}">@csrf<button class="sncp-button sncp-button-danger" type="submit">{{ __('socranext::cp.disconnect_title') }}</button></form></div>
+        </div></details>
+    @endif
+    <footer class="sncp-footer"><p><strong>{{ __('socranext::cp.free') }}</strong> <span aria-hidden="true">·</span> {{ __('socranext::cp.subscription') }}</p><span>SocraNext {{ $version }}</span></footer>
+</div>
+@endsection
