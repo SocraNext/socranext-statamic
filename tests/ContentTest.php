@@ -55,6 +55,30 @@ class ContentTest extends TestCase
         $this->assertSame('Human edit', Entry::find($first['native_id'])->get('title'));
     }
 
+    public function test_publication_and_metadata_retries_survive_native_file_reload(): void
+    {
+        $payload = $this->payload(['tekst' => " \n<p>Native file content</p>\n", 'featuredImageUrl' => '']);
+        $first = $this->postJson('/api/socranext/v1/blog', $payload)->assertOk()->json();
+        $reload = function () use ($first) {
+            \Statamic\Facades\Stache::store('entries')->store('socranext_articles')->forgetItem($first['native_id']);
+            \Statamic\Facades\Blink::flush();
+            return Entry::find($first['native_id']);
+        };
+        $this->assertSame($first['revision'], app(ContentRepository::class)->fingerprint($reload()));
+        $this->postJson('/api/socranext/v1/blog', $payload)->assertOk()->assertJsonPath('id', $first['id']);
+        $payload['titel'] = 'Updated across requests';
+        $this->postJson('/api/socranext/v1/blog', $payload)->assertOk();
+        $reload();
+        $this->postJson('/api/socranext/v1/blog', $payload)->assertOk()->assertJsonPath('id', $first['id']);
+        $this->patchJson('/api/socranext/v1/blog/meta/'.$first['id'], ['metaDescription' => 'Updated metadata'])->assertOk();
+        $reload();
+        $this->patchJson('/api/socranext/v1/blog/meta/'.$first['id'], ['metaDescription' => 'Updated metadata'])->assertOk();
+        $reload()->set('title', 'Human edit after reload')->save();
+        $reload();
+        $this->postJson('/api/socranext/v1/blog', $payload)->assertConflict();
+        $this->assertSame('Human edit after reload', $reload()->get('title'));
+    }
+
     public function test_draft_uses_native_working_copy_without_modifying_live_entry(): void
     {
         $published = $this->postJson('/api/socranext/v1/blog', $this->payload())->assertOk()->json();
@@ -216,5 +240,67 @@ class ContentTest extends TestCase
         $newUrl = Entry::find($article['native_id'])->absoluteUrl();
         $this->assertStringEndsWith('/artikelen-sn/new-name', $newUrl);
         $this->assertSame($newUrl, app(StateStore::class)->get('redirects')[$article['url']]);
+    }
+
+    public function test_foreign_sites_are_rejected_before_setup_or_publication_when_multisite_is_disabled(): void
+    {
+        \Statamic\Facades\Site::setSites([
+            'default' => ['name' => 'Nederlands', 'locale' => 'nl_NL', 'url' => 'https://example.com/'],
+            'english' => ['name' => 'English', 'locale' => 'en_US', 'url' => 'https://example.com/en/'],
+        ]);
+        config(['statamic.system.multisite' => false, 'socranext.frontend_ready' => true]);
+        $before = file_get_contents(config('socranext.state_path'));
+
+        foreach ([['default', 'english'], ['english']] as $sites) {
+            config(['socranext.content.sites' => $sites]);
+            $this->getJson('/api/socranext/v1/languages')->assertUnprocessable()
+                ->assertJsonPath('message', 'Statamic multisite is disabled. Run php please multisite to convert the website before connecting non-default sites, or configure SocraNext content.sites with only the default site.');
+            $this->getJson('/api/socranext/v1/status')->assertOk()->assertJsonPath('frontend_ready', false);
+            $this->postJson('/api/socranext/v1/blog', $this->payload(['language' => 'en']))->assertUnprocessable();
+            $this->postJson('/api/socranext/v1/blog-category', ['name' => 'News', 'language' => 'en'])->assertUnprocessable();
+            $this->postJson('/api/socranext/v1/purge')->assertUnprocessable();
+            try {
+                app(ArticlePublisher::class)->prepare();
+                $this->fail('Installation accepted foreign sites while native multisite was disabled.');
+            } catch (\Symfony\Component\HttpKernel\Exception\HttpException $error) {
+                $this->assertSame(422, $error->getStatusCode());
+            }
+            $this->assertSame($before, file_get_contents(config('socranext.state_path')));
+            $this->assertSame(0, Entry::query()->count());
+            $this->assertNull(Collection::find('socranext_articles'));
+            $this->assertNull(\Statamic\Facades\Taxonomy::find('socranext_categories'));
+        }
+        $this->assertFalse(\Statamic\Facades\Site::multiEnabled());
+    }
+
+    public function test_default_site_only_remains_supported_with_multisite_disabled(): void
+    {
+        \Statamic\Facades\Site::setSites([
+            'default' => ['name' => 'Nederlands', 'locale' => 'nl_NL', 'url' => 'https://example.com/'],
+            'english' => ['name' => 'English', 'locale' => 'en_US', 'url' => 'https://example.com/en/'],
+        ]);
+        config(['statamic.system.multisite' => false]);
+        foreach ([[], ['default']] as $sites) {
+            config(['socranext.content.sites' => $sites]);
+            $this->getJson('/api/socranext/v1/languages')->assertOk()->assertJsonCount(1)->assertJsonPath('0.site', 'default');
+        }
+        $this->postJson('/api/socranext/v1/blog', $this->payload())->assertOk()->assertJsonPath('site', 'default');
+        $this->assertSame(1, Entry::query()->where('collection', 'socranext_articles')->count());
+        $this->assertFalse(\Statamic\Facades\Site::multiEnabled());
+    }
+
+    public function test_purge_before_install_is_idempotent_and_does_not_create_native_resources(): void
+    {
+        $before = file_get_contents(config('socranext.state_path'));
+        for ($attempt = 0; $attempt < 2; $attempt++) {
+            $this->postJson('/api/socranext/v1/purge')->assertOk()->assertExactJson([
+                'success' => true, 'deleted' => 0, 'deleted_categories' => 0,
+            ]);
+        }
+        $this->assertNull(Collection::find('socranext_articles'));
+        $this->assertNull(Collection::find('socranext_archives'));
+        $this->assertNull(\Statamic\Facades\Taxonomy::find('socranext_categories'));
+        $this->assertSame(0, Entry::query()->count());
+        $this->assertSame($before, file_get_contents(config('socranext.state_path')));
     }
 }

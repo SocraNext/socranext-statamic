@@ -19,6 +19,7 @@ class ArticlePublisher
 
     private function prepareUnlocked(): void
     {
+        $this->content->assertSiteConfiguration();
         $handle = $this->content->managedCollection();
         $taxonomy = $this->content->managedTaxonomy();
         $owned = $this->store->get('managed_resources', []);
@@ -317,7 +318,9 @@ class ArticlePublisher
             }
             $deletedCategories = 0;
             $remaining = Entry::query()->get();
-            foreach (Term::query()->where('taxonomy', $this->content->managedTaxonomy())->get() as $term) {
+            $taxonomy = $this->content->managedTaxonomy();
+            $terms = Taxonomy::find($taxonomy) ? Term::query()->where('taxonomy', $taxonomy)->get() : collect();
+            foreach ($terms as $term) {
                 if ($term instanceof \Statamic\Taxonomies\LocalizedTerm) $term = $term->term();
                 // Native customer content may share this term; keep such categories intact.
                 if ($remaining->contains(fn ($entry) => in_array($term->slug(), (array) $entry->get($this->content->managedTaxonomy(), []), true))) continue;
@@ -384,6 +387,7 @@ class ArticlePublisher
 
     private function mutation(callable $callback): array
     {
+        $this->content->assertSiteConfiguration();
         $result = $this->lock->run($callback);
         if (config('statamic.static_caching.strategy')) \Statamic\Facades\StaticCache::flush();
         return $result;

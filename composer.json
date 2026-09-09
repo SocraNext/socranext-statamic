@@ -13,8 +13,8 @@
         "statamic/cms": "^6.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^10.8",
-        "phpunit/phpunit": "^11.5"
+        "orchestra/testbench": "^10.8 || ^11.0",
+        "phpunit/phpunit": "^11.5 || ^12.0"
     },
     "autoload": { "psr-4": { "SocraNext\\Statamic\\": "src/" } },
     "autoload-dev": { "psr-4": { "SocraNext\\Statamic\\Tests\\": "tests/" } },

@@ -18,11 +18,14 @@ class DoctorCommand extends Command
     {
         $storage = true;
         try { $store->get('token_hash'); } catch (\Throwable) { $storage = false; }
+        $sitesValid = true;
+        try { $content->assertSiteConfiguration(); } catch (\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface) { $sitesValid = false; }
         $checks = [
             'storage_readable' => $storage,
             'public_https_url' => parse_url((string) config('socranext.site_url'), PHP_URL_SCHEME) === 'https',
             'connected' => $storage && $connection->connected(),
             'managed_collection' => Collection::find($content->managedCollection()) !== null,
+            'multisite_configuration' => $sitesValid,
             'asset_container' => AssetContainer::find(config('socranext.content.asset_container')) !== null,
             'signing_key' => $signature->configured(),
             'frontend_checked' => $storage && $readiness->ready(),

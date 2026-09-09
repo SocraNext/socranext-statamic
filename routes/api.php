@@ -6,8 +6,9 @@ use SocraNext\Statamic\Http\Controllers\ContentController;
 use SocraNext\Statamic\Http\Controllers\PresentationController;
 use SocraNext\Statamic\Http\Middleware\ApiResponse;
 use SocraNext\Statamic\Http\Middleware\Authenticate;
+use SocraNext\Statamic\ServiceProvider;
 
-Route::prefix('api/socranext/v1')->name('socranext.api.')->middleware(['api', ApiResponse::class])->group(function () {
+Route::prefix(ServiceProvider::API_PREFIX)->name('socranext.api.')->middleware(['api', ApiResponse::class])->group(function () {
     Route::post('connect/token', [ConnectionController::class, 'receive'])->middleware('throttle:socranext-connect')->name('connect');
     Route::middleware([Authenticate::class, 'throttle:socranext-api'])->group(function () {
         Route::get('status', [ConnectionController::class, 'status'])->name('status');

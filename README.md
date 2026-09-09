@@ -20,6 +20,7 @@ Configure `config/socranext.php` before running the installer:
 
 - Set `site_url` to the canonical public HTTPS website URL used by the SocraNext project.
 - Choose existing collections for pages, posts, products and custom content. Only explicitly exposed collections and sites are accessible to the connector. Empty `content.sites` selects only the default site.
+- Before exposing another site/language, use Statamic's `php please multisite` conversion command and configure the native sites. Declaring site records alone does not enable multisite storage. The connector rejects non-default sites while native multisite is disabled, including during installation and publishing.
 - Set `content.asset_container` to a configured Statamic asset container with a public URL. Images are stored inside its `socranext/` directory.
 - Choose unused handles for the managed article collection and taxonomy. The installer rejects collisions with existing resources.
 - Set `content.article_layout` to the website's Antlers layout. Verify its article, archive and FAQ placement on the actual website.
@@ -78,6 +79,8 @@ composer install
 composer test
 ```
 
-Tests boot an actual Statamic/Laravel application through Testbench. CI resolves dependencies and runs the suite on PHP 8.3, 8.4 and 8.5. Tests cover authentication, native permissions, content identities/publication, conflict handling, FAQ rendering, signed code and previews. Additional platform tests protect the existing CMS branches. No deployment, database migration or production website writes are part of running this suite.
+Tests boot an actual Statamic 6 application through Testbench, with Laravel's real global input normalizers enabled. CI explicitly tests Laravel 12 with Testbench 10/PHPUnit 11 and Laravel 13 with Testbench 11/PHPUnit 12, each on PHP 8.3, 8.4 and 8.5. Every matrix job resolves its own compatible dependencies. Tests cover authentication, native permissions, content identities/publication, cold file reloads and editor conflicts, multisite configuration, FAQ rendering, exact signed code/text payloads and previews. Additional platform tests protect the existing CMS branches. No deployment, shared database migration or production website writes are part of running this suite.
+
+Connector JSON preserves whitespace and empty strings so code signatures, `llms.txt` and explicit style clearing survive Laravel's global middleware. That exception applies only to the addon's JSON API; native website forms and the Statamic control panel retain their existing input handling. Content conflict detection uses Statamic's persisted representation, including blueprint resolution, root empty-value removal and front-matter parsing. Explicit empty translation overrides remain distinct from inherited values.
 
 Before release, test a clean install and upgrade on representative websites, verify the full SocraNext screen workflow and public HTML, and check the Marketplace's applicable creator terms. The intended listing is a free addon requiring a separate SocraNext subscription. The distribution license and public release must be finalized before publishing beyond this private development repository.

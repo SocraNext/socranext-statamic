@@ -8,6 +8,12 @@ class Readiness
 
     public function ready(): bool
     {
-        return (bool) (config('socranext.frontend_ready') || $this->store->get('frontend_ready', false));
+        if (!(config('socranext.frontend_ready') || $this->store->get('frontend_ready', false))) return false;
+        try {
+            app(\SocraNext\Statamic\Content\ContentRepository::class)->assertSiteConfiguration();
+        } catch (\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface) {
+            return false;
+        }
+        return true;
     }
 }

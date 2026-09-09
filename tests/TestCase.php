@@ -11,6 +11,15 @@ abstract class TestCase extends AddonTestCase
     protected string $addonServiceProvider = ServiceProvider::class;
     protected string $temporaryDirectory;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // Match the real Laravel host's global input normalizers for every HTTP test.
+        $kernel = app(\Illuminate\Contracts\Http\Kernel::class);
+        $kernel->pushMiddleware(\Illuminate\Foundation\Http\Middleware\TrimStrings::class);
+        $kernel->pushMiddleware(\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class);
+    }
+
     protected function getEnvironmentSetUp($app)
     {
         parent::getEnvironmentSetUp($app);

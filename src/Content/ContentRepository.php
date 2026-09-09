@@ -26,9 +26,24 @@ class ContentRepository
 
     public function sites(): array
     {
+        $this->assertSiteConfiguration();
         $configured = config('socranext.content.sites', []);
         $handles = $configured ?: [Site::default()->handle()];
-        return array_values(array_filter($handles, fn ($handle) => Site::get($handle) !== null));
+        return array_values(array_unique($handles));
+    }
+
+    /** Declared site records do not enable Statamic's native multisite storage. */
+    public function assertSiteConfiguration(): void
+    {
+        $configured = config('socranext.content.sites', []);
+        abort_unless(is_array($configured), 422, 'SocraNext content.sites must be an array of native Statamic site handles.');
+        $default = Site::default()->handle();
+        $handles = $configured ?: [$default];
+        foreach ($handles as $handle) {
+            abort_unless(is_string($handle) && Site::get($handle) !== null, 422, 'SocraNext content.sites contains an unknown Statamic site handle.');
+        }
+        abort_if(!Site::multiEnabled() && array_diff($handles, [$default]), 422,
+            'Statamic multisite is disabled. Run php please multisite to convert the website before connecting non-default sites, or configure SocraNext content.sites with only the default site.');
     }
 
     public function languageCode(string $site): string
@@ -75,6 +90,7 @@ class ContentRepository
 
     public function identity($resource): int
     {
+        $this->assertSiteConfiguration();
         return $this->identities->id($this->isTerm($resource) ? 'term' : 'entry', (string) $resource->id(), $resource->locale());
     }
 
@@ -85,6 +101,7 @@ class ContentRepository
 
     public function resolve(string $type, int|string $id, ?string $cpt = null)
     {
+        $this->assertSiteConfiguration();
         $record = $this->identities->get($id);
         abort_unless($record && !$record['deleted'] && in_array($record['site'], $this->sites(), true), 404, 'Content not found.');
         if ($record['kind'] === 'term') {
@@ -106,6 +123,7 @@ class ContentRepository
 
     public function managedTerm(int|string $id)
     {
+        $this->assertSiteConfiguration();
         $record = $this->identities->get($id);
         $term = $record && !$record['deleted'] && $record['kind'] === 'term' ? Term::find($record['native_id']) : null;
         abort_unless($term && $term->taxonomyHandle() === $this->managedTaxonomy() && in_array($record['site'], $this->sites(), true), 404, 'Managed category not found.');
@@ -181,6 +199,18 @@ class ContentRepository
     public function fingerprint($entry): string
     {
         $data = $entry->data()->except(['updated_at', 'updated_by', 'socranext_sync_revision'])->all();
+        // Native file loading places the blueprint in data, while newly saved
+        // entries can keep it only as a property. Hash the same resolved value.
+        $data['blueprint'] = $entry->blueprint()->handle();
+        if (!$this->isTerm($entry)) {
+            if ($entry->isRoot()) $data = \Statamic\Support\Arr::removeNullValues($data);
+            // Statamic stores string content after the YAML front matter and
+            // removes its leading whitespace when reading that native file.
+            if (isset($data['content']) && is_string($data['content'])) {
+                $data['content'] = ltrim($data['content']);
+                if (empty($data['content'])) unset($data['content']);
+            }
+        }
         ksort($data);
         return hash('sha256', json_encode([$entry->slug(), $entry->published(), $data], JSON_THROW_ON_ERROR));
     }
