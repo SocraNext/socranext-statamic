@@ -1,6 +1,6 @@
 # SocraNext for Statamic
 
-A Statamic 6 addon that connects a website to the existing SocraNext workspace. The connector uses the same article, FAQ and styling workflows as the platform's other CMS integrations. The SocraNext subscription remains billed by SocraNext.
+**Get found in AI.** SocraNext helps your website become visible in ChatGPT, Gemini and Google AI. Measure your visibility, improve your website and track your progress, all in one platform. This addon connects your Statamic website to SocraNext.
 
 **Beta evaluation — `0.1.0-beta.2`.** The [source repository](https://github.com/SocraNext/socranext-statamic) is public. This prerelease is intended for evaluation on development and pilot sites. Check [GitHub releases](https://github.com/SocraNext/socranext-statamic/releases) for published versions and [Packagist](https://packagist.org/packages/socranext/statamic) for package availability. Source availability does not establish Marketplace availability or general activation of the connected service.
 

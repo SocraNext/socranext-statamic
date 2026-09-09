@@ -19,6 +19,8 @@ The first beta is published on GitHub and Packagist, with release synchronizatio
 
 The beta can be distributed for installation and evaluation while the hosted acceptance work continues. Keep both production Statamic flags disabled until the hosted pilot has passed. Do not create the stable `v0.1.0` tag or offer general activation based only on package publication.
 
+The Marketplace preview generates the unversioned command `composer require socranext/statamic`. Verify that command against an available stable release before general publication. Beta evaluators must use the exact prerelease installation command from the README.
+
 ## Hosted acceptance and Marketplace checklist
 
 - [x] Deploy the companion platform code and additive CMS migration; verify the normal production deployment and existing CMS regressions.
@@ -52,20 +54,10 @@ Use **SocraNext for Statamic** with SocraNext branding. Statamic's [brand guidel
 
 ## Public listing copy — draft
 
-The following copy is for the connected customer workflow after the hosted acceptance checks and activation. While publication or activation is pending, display that status prominently and direct testing users to the beta instructions.
+## Get found in AI.
 
-**Publish articles, FAQs and metadata from your SocraNext workspace to your Statamic website.**
+SocraNext helps your website become visible in ChatGPT, Gemini and Google AI. Measure your visibility, improve your website and track your progress, all in one platform.
 
-Connect your website to SocraNext to publish native articles into a dedicated collection, add FAQs to selected content, update supported metadata, and preview article, archive and FAQ styling. Multilingual articles use Statamic's native sites and translation relationships. The addon also publishes `llms.txt` and `llms-full.txt`.
+Connect your Statamic website and [get started](https://socranext.ai/).
 
-**The addon is free. An active SocraNext account with a suitable subscription is required to use the connected service.** Subscriptions and service usage are billed directly by SocraNext under its own pricing and terms. The addon price does not include a SocraNext subscription or a Statamic Pro license.
-
-Requires Statamic 6 Pro, PHP 8.3–8.5, Laravel 12 or 13, and persistent writable content and storage. PHP extensions Sodium, cURL, DOM, Fileinfo and Mbstring must be available. Enable native multisite before connecting additional sites.
-
-Your developer installs the addon with Composer, configures the exposed collections and asset container, and places the FAQ and metadata tags in the website's Antlers templates. Open **Tools → SocraNext**, connect your project, check templates and styling previews, then save website readiness. Publish a test article and FAQ and verify their public output before regular publishing.
-
-The supported profile uses native Statamic templates. FAQ placement and integration with an existing SEO addon require website setup. A separate headless or static frontend needs its own integration.
-
-After connection, SocraNext can read content configured for the integration and send publication, FAQ, metadata and styling changes to the website. See the documentation for permissions, supported content, backups and disconnection behavior. Use the issue tracker for addon issues and SocraNext for account or subscription support.
-
-Once the beta is available on Packagist, its installation command is `composer require socranext/statamic:0.1.0-beta.2`. If GitHub already has the public `v0.1.0-beta.2` tag while Packagist does not list that version, use the README's VCS repository instruction with that same exact beta version. Verify availability through the release/package links before using either command. Reserve the unversioned `composer require socranext/statamic` instruction for an available stable release. Do not invent a Marketplace URL before the creator dashboard assigns one.
+*Free addon. Paid SocraNext subscription and Statamic 6 Pro required. Beta: developer setup and pilot access required. [Setup guide](https://github.com/SocraNext/socranext-statamic#readme).*
