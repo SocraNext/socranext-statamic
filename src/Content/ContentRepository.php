@@ -152,10 +152,12 @@ class ContentRepository
         $metadata = $this->store->get('metadata', [])[$id] ?? [];
         if (!$term) $resource->getQueryableValue('uri');
         $url = $resource->absoluteUrl();
+        // The platform routes FAQ actions by these canonical post types, not native handles.
+        $postType = ['pages' => 'page', 'blogs' => 'post', 'products' => 'product', 'categories' => 'category'][$type] ?? $cpt;
         return [
             'id' => $id, 'ID' => $id, 'native_id' => (string) $resource->id(), 'site' => $site,
             'title' => (string) $resource->get('title', $resource->slug()), 'slug' => $resource->slug(),
-            'url' => $url, 'link' => $url, 'post_type' => $cpt, 'resource_type' => $type,
+            'url' => $url, 'link' => $url, 'post_type' => $postType, 'resource_type' => $type,
             'type' => $type, 'language' => $this->languageCode($site), 'lang' => $this->languageCode($site),
             'published' => $term || $resource->status() === 'published',
             'status' => $term ? 'published' : $resource->status(),
