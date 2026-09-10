@@ -1,6 +1,6 @@
 # Release and Marketplace checklist
 
-**Target: 0.2.0.** The published stable package is `0.1.0` (commit `776c16f0a4adc5692ffc08a56bea2db66944106a`). Marketplace product 1011 remains a draft while automatic setup is finalized. A published Composer package is separate from a published Marketplace listing.
+**Published: 0.2.0**, on 2026-09-10, from commit `f5d8bb7abd04fbe6ddcbdee05d9fc7895307c4a2`. The stable package is available through Packagist and the [SocraNext Marketplace listing](https://statamic.com/addons/socranext/socranext) is public. The creator dashboard reports **Published**; a separate signed-out browser confirmed version 0.2.0, the Free price and direct SocraNext billing disclosure.
 
 ## Verified 0.1.0 baseline
 
@@ -14,27 +14,33 @@
 - [x] Statamic-only FAQ offboarding and restoration tested through the real platform adapter: three FAQ sets removed and restored; two published articles and seven database article rows preserved.
 - [x] Independent native before/after verification preserves 329 protected files and all non-FAQ connector state. No article write, payment operation, email send or global customer cron was used.
 - [x] Platform regression tests and deployed FAQ-only branch retain the behavior of WordPress, Shopify and Headless. Existing 14-day/28-day cleanup timing is unchanged.
-- [x] Creator account and **Free** Marketplace draft have short AI visibility copy, SocraNext branding and support links.
+- [x] Creator account, free-addon positioning, SocraNext branding and support links prepared for publication.
 
 The platform QA runtime was verified against 1,246 server/shared file hashes from `69e15ff65413cb4367b0fd5bf9fb893ae2461a3f`; subsequent client-only Shopify changes preserve those server files. The native FAQ cleanup/restoration acceptance passed on 2026-09-10 at 10:19 UTC.
 
-## 0.2.0 automatic setup acceptance
+## Verified 0.2.0 release
 
-- [ ] Verify the standard **Connect with SocraNext** flow creates its resources, reports readiness and renders enabled FAQs without tags or a confirmation checkbox.
-- [ ] Verify automatic metadata and FAQ output preserve existing placement, SocraNext styling, unrelated site HTML and structured data.
-- [ ] Verify existing-site upgrade, custom layout/placement and legacy resource ownership, including protected/draft/multisite exclusions and conservative recovery.
-- [ ] Pass every PHP/Laravel CI combination and JavaScript behavior test on the exact final commit.
-- [ ] Publish the new `v0.2.0` tag without moving existing tags; verify anonymous stable Composer installation and the hosted upgrade.
-- [ ] Complete hosted automatic-output and FAQ-only removal/restoration checks against the exact new package.
+- [x] Publish `v0.2.0` from the exact release commit and verify public Packagist synchronization.
+- [x] Pass all six PHP 8.3/8.4/8.5 × Laravel 12/13 CI jobs on that commit. The final local suite passes 144 PHP tests with 1,422 assertions, plus four JavaScript tests.
+- [x] Verify native connect/setup, automatic metadata and FAQ placement, custom layouts, legacy resource ownership, protected/draft/multisite exclusions and recovery in the automated suite.
+- [x] Install through anonymous, unversioned `composer require socranext/statamic`, using fresh Composer home, cache, lock and vendor directories. No published addon configuration or manual readiness confirmation is needed.
+- [x] Verify native setup creates the article resources and public image storage; all six automatic readiness checks pass. Repeating the install command preserves all 52 checked files. Only the account connection remains pending on the intentionally unconnected fresh installation.
+- [x] Verify all 11 addon assets publish automatically through native Composer installation hooks and match the package bytes. Native Dutch/English translations and customer translation overrides pass.
+- [x] Upgrade the existing QA site to the exact public 0.2.0 package, preserving content, configuration, connection, revisions, assets and all 119 other locked packages. Verify all 64 addon runtime files and 14 readiness checks.
+- [x] Verify the fresh native Control Panel shows **Klaar voor gebruik**, SocraNext styling and no manual readiness checkbox or mandatory developer setup steps. The existing Shopify privacy endpoint still returns HTTP 200.
+- [x] Verify automatic FAQ output on the hosted native page without FAQ template tags: exactly one block containing five questions, unchanged FAQ styling, header and footer, and a working expand button. Restore the temporary QA template change and verify all protected files and state remain unchanged.
+- [x] Repeat FAQ-only offboarding and restoration on the exact 0.2.0 runtime: 66 requests cover three FAQ sets, two public articles and seven article rows. FAQ HTML/schema are removed and restored; no article is written. Native verification confirms all 343 protected files and non-FAQ state are unchanged.
 
-## Marketplace submission
+The release CI is [run 34467608938](https://github.com/SocraNext/socranext-statamic/actions/runs/34467608938). The earlier onboarding, scheduled publication and page-editing results above remain identified as baseline evidence; the hosted 0.2.0 checks specifically cover the upgrade, automatic output and FAQ cleanup/restoration.
 
-- [ ] Save the final listing copy below and verify the Free price, subscription disclosure, requirements and links.
-- [ ] Confirm the screenshot still matches the final installed addon.
-- [ ] Submit through the creator dashboard and record its actual review/publication status.
-- [ ] Verify the public listing independently of the signed-in draft preview.
+## Marketplace publication
 
-The existing product is draft 1011. Submission is pending; replace the screenshot with the final simplified native Control Panel before publishing. Do not promise a review timeline or certification.
+- [x] Save the AI visibility copy, minimum version 0.2.0, Free price, direct subscription billing disclosure, requirements and links.
+- [x] Remove the obsolete Control Panel gallery screenshot and retain the SocraNext brand thumbnail.
+- [x] Publish product 1011 through the creator dashboard and confirm **Published** status.
+- [x] Verify the public listing from a separate signed-out browser, including version 0.2.0, Composer installation, Free price, direct billing and Statamic 6 Pro requirements.
+
+A current Control Panel screenshot is available, but its gallery upload did not complete. The optional gallery did not block publication. No review queue was displayed; publication does not imply Statamic certification or endorsement.
 
 Use product name **SocraNext** and SocraNext branding. Do not use the Statamic logo or imply Statamic endorsement. Follow the [brand guidelines](https://statamic.com/branding) and image requirements shown in the creator form. The [publishing documentation](https://statamic.dev/addons/building-an-addon#publishing-to-the-marketplace) describes the package and creator account requirements.
 
@@ -42,7 +48,7 @@ Use product name **SocraNext** and SocraNext branding. Do not use the Statamic l
 
 - **Name:** SocraNext
 - **Creator:** [SocraNext](https://statamic.com/creators/socranext)
-- **Package:** `socranext/statamic`; target stable `0.2.0`
+- **Package:** `socranext/statamic`; current and minimum listed version `0.2.0`
 - **Price:** Free
 - **Categories:** Use the relevant categories available in the creator form.
 - **Compatibility:** Statamic 6 Pro; Laravel 12 or 13; PHP 8.3, 8.4 or 8.5.
@@ -51,7 +57,7 @@ Use product name **SocraNext** and SocraNext branding. Do not use the Statamic l
 - **Support:** [GitHub issues](https://github.com/SocraNext/socranext-statamic/issues); account/billing: [info@socranext.ai](mailto:info@socranext.ai)
 - **Service:** [Pricing](https://socranext.ai/prijzen/), [general terms](https://socranext.ai/algemene-voorwaarden/), [Statamic service description](statamic-service-terms.md), [privacy](https://socranext.ai/privacybeleid/)
 
-## Stable listing copy — ready to save after package verification
+## Stable listing copy
 
 **Get found in AI.**
 
