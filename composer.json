@@ -29,7 +29,7 @@
     "autoload-dev": { "psr-4": { "SocraNext\\Statamic\\Tests\\": "tests/" } },
     "extra": {
         "laravel": { "providers": ["SocraNext\\Statamic\\ServiceProvider"] },
-        "statamic": { "name": "SocraNext", "description": "Articles, FAQs and publishing through your SocraNext workspace." }
+        "statamic": { "name": "SocraNext", "description": "Get found in AI. Connect your Statamic website to SocraNext." }
     },
     "scripts": { "test": "phpunit" },
     "config": { "sort-packages": true, "allow-plugins": false },

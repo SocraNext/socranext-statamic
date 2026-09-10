@@ -1,48 +1,67 @@
 # Marketplace release preparation
 
-**Beta release preparation — `0.1.0-beta.2`.** The [source repository](https://github.com/SocraNext/socranext-statamic) is public. Check [GitHub releases](https://github.com/SocraNext/socranext-statamic/releases) and [Packagist](https://packagist.org/packages/socranext/statamic) for current release and package availability. The checklist below records verified preparation on 9 September 2026; unchecked publication steps still require confirmation. The companion platform code is deployed with both Statamic feature flags disabled, and the connected service is not generally available.
+**Release preparation — updated 10 September 2026.** The [source repository](https://github.com/SocraNext/socranext-statamic) is public and `0.1.0-beta.2` is published on [GitHub](https://github.com/SocraNext/socranext-statamic/releases/tag/v0.1.0-beta.2) and [Packagist](https://packagist.org/packages/socranext/statamic). Main contains unreleased fixes, which are being evaluated as patches on the hosted pilot. Both platform Statamic feature flags are enabled. Full acceptance remains incomplete, no stable release has been created, and the Marketplace product remains a draft.
 
 ## Public beta checklist
 
-The first beta is published on GitHub and Packagist, with release synchronization configured and anonymous installation verified. This checklist now tracks the `0.1.0-beta.2` translation correction; its exact release and installation still need verification.
+The published beta.2 translation correction, anonymous installation and hosted upgrade have been verified. These completed checks apply to beta.2; they do not establish installation or release readiness for the additional fixes on main.
 
 - [x] Owner authorized public connector distribution, subject to passing validation and release requirements. The platform repository remains private.
 - [x] Publish the connector source repository following explicit owner approval.
-- [x] Add [LICENSE](../LICENSE) and the [Statamic service terms](statamic-service-terms.md). Software rights and a separate service subscription are distinct.
+- [x] Add [LICENSE](../LICENSE) and a [Statamic service terms document](statamic-service-terms.md). Reconciliation of the offboarding policy and its customer agreement flow remains open below.
 - [x] Complete Packagist account access through GitHub OAuth.
-- [ ] Approve the final beta release notes and verify CI on the exact release commit.
-- [ ] Create `v0.1.0-beta.2` and its GitHub prerelease.
-- [ ] Verify the public GitHub tag installs without credentials in a clean Statamic project.
+- [x] Verify CI for the published beta.2 correction.
+- [x] Create `v0.1.0-beta.2` and its GitHub prerelease.
 - [x] Publish `socranext/statamic` on Packagist and configure release synchronization.
-- [ ] Verify the beta.2 package installs without private GitHub access.
-- [ ] Record completed publication steps and verify the release/package links. Do not mark a Marketplace listing or general activation complete based on package publication.
+- [x] Verify the beta.2 package installs without private GitHub access.
+- [x] Upgrade the hosted beta.1 installation to beta.2 and verify native translations and asset publishing.
+- [x] Record the published beta tag and package links. Marketplace submission remains separate.
 
-The beta can be distributed for installation and evaluation while the hosted acceptance work continues. Keep both production Statamic flags disabled until the hosted pilot has passed. Do not create the stable `v0.1.0` tag or offer general activation based only on package publication.
+The beta remains available for evaluation while hosted acceptance continues. Enabling the platform flags for the pilot does not close the remaining acceptance gates or establish general release readiness. Keep the Marketplace product in draft until those gates and the final package checks pass.
 
 The Marketplace preview generates the unversioned command `composer require socranext/statamic`. Verify that command against an available stable release before general publication. Beta evaluators must use the exact prerelease installation command from the README.
 
-## Hosted acceptance and Marketplace checklist
+## Hosted acceptance
 
 - [x] Deploy the companion platform code and additive CMS migration; verify the normal production deployment and existing CMS regressions.
-- [ ] Verify the complete HTTPS pilot: project creation, connection, native permissions, article and FAQ publication, public output, translations, styling, scheduled delivery and lifecycle recovery.
-- [ ] Complete clean installation and upgrade on representative sites using the [installation sequence](../README.md#installation-for-a-development-or-pilot-site).
-- [ ] Enable both Statamic feature flags for the intended customer workflow only after acceptance; record the active production status.
-- [ ] Publish the Statamic-specific service description and terms through the applicable customer flow, with an accurate privacy disclosure. Existing WordPress, Shopify and Headless customer agreements remain unchanged.
-- [ ] Have an authorized account holder complete or verify the Statamic creator account, including any additional terms shown during onboarding.
-- [ ] Create a **Free** Marketplace product linked to the package and public repository. Disclose the required separate SocraNext subscription, add real screenshots and preview the listing.
-- [ ] Follow the actual submission/publication step shown in the creator dashboard. Do not promise a review timeline or certification.
+- [x] Enable both Statamic flags and verify the isolated public HTTPS pilot's project identity, connection and native readiness.
+- [x] Complete standard platform onboarding and content generation, including the onboarding tour.
+- [x] Save styling through the platform and verify native synchronization, a fresh preview reload and mobile FAQ rendering.
+- [x] Schedule a main article through the UI and publish that due article using a guarded invocation of the real production worker; verify the platform result, public article and its FAQ.
+- [x] Publish one depth article using the normal **Publish now** UI; verify the public parent link and that the other five depth article dates remain unchanged.
+- [x] Verify adapter/native receiver preview and publication lifecycle checks using isolated fixtures, then remove those fixtures.
+- [x] Resolve existing-page FAQ discovery types and verify the normal UI cycle: enable, edit/restore, lock/unlock, disable/re-enable, reload persistence, and public HTML/schema.
+- [ ] Resolve the Statamic offboarding policy and reconcile the service terms, implementation and applicable customer agreement flow. Do not change existing WordPress, Shopify or Headless agreements through this release.
+- [ ] Complete the final hosted acceptance review, including the supported translation and lifecycle behavior, after the remaining fixes.
 
-Verified during beta preparation on 9 September 2026: the migration and companion platform code are deployed, with Statamic still disabled. Platform regression tests, normal production deployment and public health checks passed. The previous development build passed all six PHP/Laravel CI combinations. A native Composer update published addon assets without changing any of the test site's 33 configuration files. Public source/history review found no confirmed secrets or unintended customer data. The connector repository is public and includes the license and service terms. Packagist publication and release synchronization are complete; the first beta installs anonymously. Hosted Control Panel testing identified the native translation collision addressed in beta.2. Full connected HTTPS onboarding, scheduled delivery and beta.2 anonymous installation remain acceptance items. Exact-release CI, the beta.2 tag, Statamic creator onboarding and Marketplace submission remain checklist items until individually confirmed.
+The main-article check invoked the real worker for exactly one guarded QA article, with deployed runtime source hashes verified before and after. It did not trigger the global publication cron across customer projects. The later existing-page FAQ cycle passed with five questions restored, matching public FAQ schema and purple toggle styling. Page-level regeneration with locked answers was not repeated in that UI cycle.
+
+The hosted addon remains beta.2 with reviewed FAQ, admin-copy, CSS validation and discovery-type patches. The candidate passes 77 PHP tests with 795 assertions, including six discovery/FAQ contract cases. The earlier candidate at `8ac60b4` passed all six PHP/Laravel CI combinations; the next release commit still needs its own CI result and package checks.
+
+## Final package and Marketplace submission
+
+- [ ] After acceptance, prepare the final version and release notes, and pass CI on the exact release commit.
+- [ ] Verify clean installation and beta.2 upgrade of the final artifact on representative sites using the [installation sequence](../README.md#installation-for-a-development-or-pilot-site), including persistence of existing content, configuration and connection.
+- [ ] Publish the stable GitHub release and verify its availability on Packagist.
+- [ ] Verify the Marketplace command `composer require socranext/statamic` installs the stable package without private credentials or a relaxed global stability setting.
+- [ ] Verify the final Statamic service description, terms and accurate privacy disclosure in the applicable customer flow.
+- [x] Complete the Statamic creator account and link the public repository/package.
+- [x] Create the **Free** Marketplace draft, disclose the separate SocraNext subscription, and save the short AI visibility copy, branding and support links.
+- [x] Upload the real native Control Panel screenshot at 1200 × 800 and verify that the product form saves it.
+- [ ] Review the final listing against the released artifact and completed acceptance record.
+- [ ] Complete the actual submission/publication step shown in the creator dashboard and verify its resulting status. Do not promise a review timeline or certification.
+
+The Marketplace product is draft 1011. Its preview and saved screenshot are verified; it has not been submitted. Package availability and creator account setup do not establish Marketplace publication.
 
 The official route requires a [Packagist package and Statamic seller account](https://statamic.dev/addons/building-an-addon#publishing-to-the-marketplace). Packagist requires a [public repository URL](https://packagist.org/about). Statamic's [creator page](https://statamic.com/creator/begin) supports free products; a [current connector listing](https://statamic.com/addons/html2img/auto-open-graph-images) demonstrates free code with external paid service plans. This supports the proposed billing model but does not establish individual approval or waive additional creator terms. No mandatory review duration was found in the public documentation.
 
-Use **SocraNext for Statamic** with SocraNext branding. Statamic's [brand guidelines](https://statamic.com/branding) require clear distinction from its own products and prohibit implied endorsement. Exact image requirements should be checked in the creator form.
+Use the saved product name **SocraNext** and SocraNext branding. Do not use the Statamic brand logo. Statamic's [brand guidelines](https://statamic.com/branding) require clear distinction from its own products and prohibit implied endorsement. Exact image requirements should be checked in the creator form.
 
 ## Listing fields
 
-- **Name:** SocraNext for Statamic
-- **Creator:** SocraNext; account/shop name subject to availability.
-- **Package/version:** `socranext/statamic`, target beta `0.1.0-beta.2`; confirm its availability on [Packagist](https://packagist.org/packages/socranext/statamic).
+- **Name:** SocraNext
+- **Creator:** [SocraNext](https://statamic.com/creators/socranext).
+- **Package/version:** `socranext/statamic`; published beta `0.1.0-beta.2`. A stable package and its unversioned installation check remain prerequisites for submission.
 - **Price:** Free
 - **Suggested categories:** Integration, AI, SEO
 - **Compatibility:** Statamic 6 Pro; Laravel 12 or 13; PHP 8.3, 8.4 or 8.5.
