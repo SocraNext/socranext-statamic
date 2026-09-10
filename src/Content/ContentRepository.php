@@ -3,6 +3,7 @@
 namespace SocraNext\Statamic\Content;
 
 use SocraNext\Statamic\Support\StateStore;
+use Statamic\Auth\Protect\Protection;
 use Statamic\Facades\{Collection, Entry, Site, Taxonomy, Term};
 
 class ContentRepository
@@ -81,11 +82,51 @@ class ContentRepository
         if ($type === 'blogs') $type = 'posts';
         if ($type === 'custom' && $cpt === 'socranext_post') return [$this->managedCollection()];
         if ($type === 'custom') {
-            $handles = config('socranext.content.collections.custom', []);
+            $handles = $this->customCollections();
             return $cpt !== null && in_array($cpt, $handles, true) ? [$cpt] : [];
         }
         if (!in_array($type, ['pages', 'posts', 'products'], true)) return [];
         return config("socranext.content.collections.$type", $type === 'pages' ? ['pages'] : ($type === 'posts' ? ['blog'] : []));
+    }
+
+    /** Native collections keep their configured types; other routed collections are CPTs. */
+    public function customCollections(): array
+    {
+        $handles = config('socranext.content.collections.custom', []);
+        if (config('socranext.content.discovery', 'automatic') !== 'automatic') return $handles;
+        $mapped = array_merge(...array_map(fn ($type) => config("socranext.content.collections.$type", []), ['pages', 'posts', 'products', 'custom']));
+        $excluded = [...$mapped, $this->managedCollection(), config('socranext.content.archive_collection', 'socranext_archives'),
+            // These names select built-in platform routes rather than a custom collection.
+            'page', 'post', 'product', 'category', 'socranext_post'];
+        $sites = $this->sites();
+        foreach (Collection::all() as $collection) {
+            if (in_array($collection->handle(), $excluded, true)) continue;
+            foreach ($sites as $site) {
+                if (in_array($site, $collection->sites()->all(), true) && $collection->route($site)) {
+                    $handles[] = $collection->handle();
+                    break;
+                }
+            }
+        }
+        return array_values(array_unique($handles));
+    }
+
+    /** A public date/status is distinct from Statamic password or member protection. */
+    public function publiclyDiscoverable($resource): bool
+    {
+        return $this->publicResource($resource);
+    }
+
+    private function publicResource($resource, bool $allowDraft = false): bool
+    {
+        if (!$resource || !config('statamic.routes.enabled', true) || !in_array($resource->locale(), $this->sites(), true)) return false;
+        $owner = $this->isTerm($resource) ? $resource->taxonomy() : $resource->collection();
+        if (!in_array($resource->locale(), $owner->sites()->all(), true)) return false;
+        if ($this->isTerm($resource) && $resource->data()->isEmpty()) return false;
+        if ((!$resource->published() && !$allowDraft) || $resource->private()) return false;
+        if (!$this->isTerm($resource) && $resource->status() !== 'published' && !($allowDraft && !$resource->published())) return false;
+        if (!$resource->route() || $resource->get('redirect') || !$resource->absoluteUrl()) return false;
+        return !app(Protection::class)->setData($resource)->scheme();
     }
 
     public function identity($resource): int
@@ -99,7 +140,7 @@ class ContentRepository
         return $resource instanceof \Statamic\Taxonomies\LocalizedTerm || $resource instanceof \Statamic\Taxonomies\Term;
     }
 
-    public function resolve(string $type, int|string $id, ?string $cpt = null)
+    public function resolve(string $type, int|string $id, ?string $cpt = null, bool $publicOnly = true)
     {
         $this->assertSiteConfiguration();
         $record = $this->identities->get($id);
@@ -107,16 +148,32 @@ class ContentRepository
         if ($record['kind'] === 'term') {
             $resource = Term::find($record['native_id']);
             abort_unless($resource && $type === 'categories' && in_array($resource->taxonomyHandle(), $this->taxonomies(), true), 404, 'Category not exposed.');
-            return $resource->in($record['site']);
+            $resource = $resource->in($record['site']);
+            abort_unless(!$publicOnly || $this->publiclyDiscoverable($resource), 404, 'Category is not public.');
+            return $resource;
         }
         $resource = Entry::find($record['native_id']);
         abort_unless($resource && $resource->locale() === $record['site'] && in_array($resource->collectionHandle(), $this->collections($type, $cpt), true), 404, 'Content not exposed.');
+        abort_unless(!$publicOnly || $this->publiclyDiscoverable($resource), 404, 'Content is not public.');
+        return $resource;
+    }
+
+    /** Preserve explicit draft metadata editing without discovering arbitrary drafts. */
+    public function resolveForMetadata(string $type, int|string $id, ?string $cpt = null)
+    {
+        $resource = $this->resolve($type, $id, $cpt, false);
+        $configured = config('socranext.content.collections.'.($type === 'blogs' ? 'posts' : $type), []);
+        $allowDraft = !$this->isTerm($resource) && !$resource->published()
+            && (in_array($resource->collectionHandle(), $configured, true)
+                || ($resource->collectionHandle() === $this->managedCollection() && $resource->get('socranext_owned') === true));
+        abort_unless($this->publicResource($resource, $allowDraft), 404, 'Content is not available for metadata editing.');
         return $resource;
     }
 
     public function managed(int|string $id)
     {
-        $resource = $this->resolve('custom', $id, 'socranext_post');
+        // Publishing and editing our own drafts is separate from public discovery.
+        $resource = $this->resolve('custom', $id, 'socranext_post', false);
         abort_unless($resource->get('socranext_owned') === true, 403, 'Only SocraNext-owned entries may be changed.');
         return $resource;
     }
@@ -184,9 +241,8 @@ class ContentRepository
         } else {
             $handles = array_values(array_filter($this->collections($type, $cpt), fn ($handle) => Collection::find($handle) !== null));
             $items = $handles ? Entry::query()->whereIn('collection', $handles)->where('site', $site)->where('published', true)->get() : collect();
-            $items = $items->filter(fn ($entry) => $entry->status() === 'published' && !$entry->private());
         }
-        $items = $items->filter(fn ($item) => !$item->private() && $item->absoluteUrl());
+        $items = $items->filter(fn ($item) => $this->publiclyDiscoverable($item));
         if ($search !== '') {
             $items = $items->filter(fn ($item) => str_contains(mb_strtolower((string) $item->get('title')), $search)
                 || str_contains(mb_strtolower((string) $item->slug()), $search)

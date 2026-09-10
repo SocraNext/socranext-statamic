@@ -3,18 +3,18 @@
 namespace SocraNext\Statamic\Console;
 
 use Illuminate\Console\Command;
-use SocraNext\Statamic\Content\ArticlePublisher;
+use SocraNext\Statamic\Support\Setup;
 
 class InstallCommand extends Command
 {
     protected $signature = 'socranext:install';
-    protected $description = 'Prepare the managed SocraNext collection and taxonomy without changing existing content.';
+    protected $description = 'Prepare SocraNext article resources and public image storage without changing existing content.';
 
-    public function handle(ArticlePublisher $publisher): int
+    public function handle(Setup $setup): int
     {
-        $publisher->prepare();
-        $this->info('SocraNext content resources are prepared.');
-        $this->line('Configure your asset container and frontend layout in config/socranext.php, then connect from the Statamic control panel.');
+        $setup->prepare();
+        $this->info('SocraNext articles and image storage are prepared.');
+        $this->line('Connect from the SocraNext page in the Statamic control panel.');
         return self::SUCCESS;
     }
 }

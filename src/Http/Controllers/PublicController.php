@@ -24,12 +24,16 @@ class PublicController
         $entries = $this->renderer->publishedEntries();
         $body = match ($kind) { 'faq' => $this->renderer->faq(($entries[0] ?? null)?->id() ?? 0, true), 'article' => $this->renderer->article($entries[0] ?? null, true), default => $this->renderer->articles(true) };
         $data = ['body' => $body, 'title' => 'SocraNext preview', 'kind' => $kind === 'articles' ? 'archive' : $kind, 'origin' => $session['origin']];
-        $layout = config('socranext.content.article_layout', 'layout');
-        if ($layout && view()->exists($layout)) {
+        $originalFinder = view()->getFinder();
+        view()->setFinder(\SocraNext\Statamic\Rendering\SiteViewFinder::forSite(\Statamic\Facades\Site::current()->handle()));
+        try {
+            $layout = \SocraNext\Statamic\Rendering\FrontendLayout::resolve();
             $bridge = view('socranext::public.preview-bridge', $data)->render();
             $html = \Statamic\View\View::make('socranext::public.preview-content', ['title' => $data['title'], 'socranext_preview_content' => new \Illuminate\Support\HtmlString($body.'<style id="socranext-preview-css"></style>'.$bridge)])
                 ->layout($layout)->render();
-        } else $html = view('socranext::public.document', $data)->render();
+        } finally {
+            view()->setFinder($originalFinder);
+        }
         return response($html, 200, ['Cache-Control' => 'private, no-store, max-age=0', 'X-Robots-Tag' => 'noindex, nofollow', 'Referrer-Policy' => 'no-referrer', 'Content-Security-Policy' => "frame-ancestors ".$session['origin'].'; base-uri \'none\'; object-src \'none\'']);
     }
 

@@ -16,7 +16,7 @@ class DiscoveryFaqContractTest extends TestCase
         $connection->receive($connection->begin(), str_repeat('d', 64));
         $this->withHeader('x-socranext-token', str_repeat('d', 64));
         app(StateStore::class)->put('frontend_ready', true);
-        config(['socranext.content.collections' => [
+        config(['socranext.frontend.mode' => 'manual', 'socranext.content.collections' => [
             'pages' => ['pages', 'landing_pages'], 'posts' => ['news'],
             'products' => ['catalog'], 'custom' => ['guides'],
         ], 'socranext.content.taxonomies' => ['topics']]);

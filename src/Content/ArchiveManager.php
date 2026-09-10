@@ -20,7 +20,7 @@ class ArchiveManager
         }
         abort_unless($this->store->get('managed_archive') === $handle, 409, 'Archive collection configuration changed; migrate explicitly.');
         if (!Collection::find($handle)) abort_unless(Collection::make($handle)->title('SocraNext archives')->sites($this->content->sites())
-            ->routes('/{slug}')->template('socranext::public.archive-entry')->layout(config('socranext.content.article_layout', 'layout'))->save(), 422, 'Archive collection could not be created.');
+            ->routes('/{slug}')->template('socranext::public.archive-entry')->layout(\SocraNext\Statamic\Rendering\FrontendLayout::resolve())->save(), 422, 'Archive collection could not be created.');
         $collection = Collection::find($handle);
         $sites = array_values(array_unique([...$collection->sites()->all(), ...$this->content->sites()]));
         if ($sites !== $collection->sites()->all()) abort_unless($collection->sites($sites)->save(), 422, 'Archive site configuration was rejected.');

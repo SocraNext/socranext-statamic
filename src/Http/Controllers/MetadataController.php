@@ -19,14 +19,14 @@ class MetadataController
             'metaDescription' => 'sometimes|string|max:10000', 'expected_revision' => 'sometimes|string|size:64',
         ]);
         $type = $input['type'] === 'blogs' ? 'posts' : $input['type'];
-        $resource = $this->content->resolve($type, $id, $input['cpt'] ?? null);
+        $resource = $this->content->resolveForMetadata($type, $id, $input['cpt'] ?? null);
         if (!$this->content->isTerm($resource) && $resource->collectionHandle() === $this->content->managedCollection()) {
             $payload = array_intersect_key($input, array_flip(['slug', 'metaDescription', 'expected_revision']));
             if (isset($input['title'])) $payload += ['titel' => $input['title'], 'titleTag' => $input['title']];
             return response()->json($this->publisher->update($id, $payload));
         }
         return $this->lock->run(function () use ($type, $id, $input) {
-            $resource = $this->content->resolve($type, $id, $input['cpt'] ?? null);
+            $resource = $this->content->resolveForMetadata($type, $id, $input['cpt'] ?? null);
             $term = $this->content->isTerm($resource);
             $revision = $this->content->fingerprint($resource);
             $expected = $input['expected_revision'] ?? ($this->store->get('metadata', [])[$id]['revision'] ?? null);

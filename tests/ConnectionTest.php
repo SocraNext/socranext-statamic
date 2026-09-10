@@ -67,6 +67,7 @@ class ConnectionTest extends TestCase
 
     public function test_control_panel_can_be_configured_by_a_native_admin(): void
     {
+        config(['socranext.frontend.mode' => 'manual']);
         $user = \Statamic\Facades\User::make()->id('admin')->email('admin@example.com')->set('super', true);
         $this->actingAs($user)->get('/cp/socranext')->assertOk()->assertSee('Connect with SocraNext');
         $this->actingAs($user)->post('/cp/socranext/readiness', ['frontend_ready' => 1])->assertRedirect();

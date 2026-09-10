@@ -9,6 +9,13 @@ use Statamic\Facades\{Collection, Entry};
 
 class RenderingTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // These tests cover the retained explicit-tag/custom-template integration.
+        config(['socranext.frontend.mode' => 'manual']);
+    }
+
     private function authenticate(): void
     {
         $connection = app(Connection::class);

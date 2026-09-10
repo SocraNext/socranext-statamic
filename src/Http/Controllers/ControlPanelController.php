@@ -8,36 +8,22 @@ use SocraNext\Statamic\ServiceProvider;
 use SocraNext\Statamic\Support\Connection;
 use SocraNext\Statamic\Support\StateStore;
 use SocraNext\Statamic\Support\Readiness;
+use SocraNext\Statamic\Support\Setup;
 use SocraNext\Statamic\Content\ContentRepository;
-use Statamic\Facades\{AssetContainer, Collection, Site, Taxonomy};
+use Statamic\Facades\Site;
 use function Statamic\trans as __;
 
 class ControlPanelController
 {
     public function index(Connection $connection, StateStore $store, Readiness $readiness, ContentRepository $content)
     {
-        $sitesValid = true;
-        try { $sites = $content->sites(); } catch (\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface) { $sitesValid = false; $sites = []; }
+        try { $sites = $content->sites(); } catch (\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface) { $sites = []; }
         $siteUrl = trim((string) config('socranext.site_url'));
         $https = parse_url($siteUrl, PHP_URL_SCHEME) === 'https' && (bool) parse_url($siteUrl, PHP_URL_HOST);
-        $collectionHandle = config('socranext.content.managed_collection', 'socranext_articles');
-        $taxonomyHandle = config('socranext.content.managed_taxonomy', 'socranext_categories');
-        $assetHandle = config('socranext.content.asset_container', 'socranext');
-        $managed = $store->get('managed_resources', []);
-        $binding = is_array($managed) && is_string($collectionHandle) ? ($managed[$collectionHandle] ?? null) : null;
-        // Match the installer's ownership contract: existing customer resources
-        // with these handles are a collision, not a completed installation.
-        $owned = is_array($binding) && ($binding['taxonomy'] ?? null) === $taxonomyHandle;
-        $checks = [
-            'website_address' => $https,
-            'article_collection' => $owned && is_string($collectionHandle) && $collectionHandle !== ''
-                && is_string($taxonomyHandle) && $taxonomyHandle !== ''
-                && Collection::find($collectionHandle) !== null && Taxonomy::find($taxonomyHandle) !== null,
-            'image_storage' => is_string($assetHandle) && $assetHandle !== '' && AssetContainer::find($assetHandle) !== null,
-            'languages' => $sitesValid,
-        ];
+        $checks = $readiness->checks();
         return response()->view('socranext::cp.index', [
             'connected' => $connection->connected(), 'ready' => $readiness->ready(),
+            'automatic' => $readiness->automatic(),
             'frontendChecked' => (bool) (config('socranext.frontend_ready') || $store->get('frontend_ready', false)),
             'version' => ServiceProvider::VERSION, 'setupChecks' => $checks,
             'setupComplete' => !in_array(false, $checks, true),
@@ -47,11 +33,17 @@ class ControlPanelController
         ]);
     }
 
-    public function connect(Request $request, Connection $connection)
+    public function connect(Request $request, Connection $connection, Setup $setup, Readiness $readiness)
     {
-        $state = $connection->begin();
         $endpoint = rtrim(config('socranext.platform_api_url'), '/').'/connect-site';
         abort_unless(parse_url($endpoint, PHP_URL_SCHEME) === 'https', 422, 'The platform endpoint must use HTTPS.');
+        try {
+            $setup->prepare();
+            if ($readiness->automatic() && !$readiness->ready()) return back()->withErrors(['setup' => __('socranext::cp.setup_error')]);
+        } catch (\Throwable) {
+            return back()->withErrors(['setup' => __('socranext::cp.setup_error')]);
+        }
+        $state = $connection->begin();
         try {
             $response = Http::asJson()->timeout(30)->withoutRedirecting()->post($endpoint, [
                 'site' => rtrim((string) config('socranext.site_url'), '/'), 'cms' => 'statamic', 'state' => $state, 'locale' => app()->getLocale(),
@@ -71,6 +63,7 @@ class ControlPanelController
 
     public function readiness(Request $request, StateStore $store)
     {
+        abort_unless(config('socranext.frontend.mode', 'automatic') === 'manual', 409, 'Website readiness is checked automatically.');
         $input = $request->validate(['frontend_ready' => 'required|boolean']);
         $store->put('frontend_ready', (bool) $input['frontend_ready']);
         return back()->with('socranext_message', __('socranext::cp.saved_message'));

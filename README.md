@@ -6,65 +6,68 @@ The addon is free. An active [SocraNext subscription](https://socranext.ai/prijz
 
 ## Installation
 
-A website developer completes the initial setup. Requirements: Statamic 6 Pro, PHP 8.3–8.5 with Sodium, cURL, DOM, Fileinfo and Mbstring, and persistent writable content and Laravel storage. The addon supports native Statamic templates. A separate headless/static frontend needs its own rendering and deployment integration.
+Requirements: Statamic 6 Pro, PHP 8.3–8.5 with Sodium, cURL, DOM, Fileinfo and Mbstring, a public HTTPS website address (`APP_URL`), and persistent writable content, Laravel storage and image storage.
 
-From your website's project directory:
+1. Install through your website's normal Composer/deployment process:
+
+   ```sh
+   composer require socranext/statamic
+   ```
+
+2. Create a Statamic project in SocraNext using the same website address.
+3. Open **Tools → SocraNext** in Statamic and select **Connect with SocraNext**.
+
+Connecting automatically prepares the article collection, categories, archive and public image storage. It checks the resulting configuration and enables the supported publication actions. There is no template-editing step or readiness checkbox for a standard native Statamic website. Only a superuser or a user with `configure socranext` may connect or disconnect. The screen follows the user's English or Dutch Control Panel language preference.
+
+Enabled FAQs are added to the native HTML response just before the end of `<main>`, with the end of `<body>` as a fallback. An existing SocraNext FAQ tag or managed-article FAQ keeps its chosen placement and is not duplicated. Explicit SocraNext metadata updates are applied in the page's `<head>`; unrelated structured data is retained. Article, FAQ and archive design comes from SocraNext's own templates and styling editor. The site layout supplies only the surrounding header, navigation and footer; an included standalone layout is used if no compatible native Antlers site layout is available. Template files are never rewritten.
+
+Native public collections are discovered automatically. Protected pages, unpublished entries and collections without public routes are excluded. Empty `content.sites` selects the default site; additional native sites remain an explicit configuration choice. Test the appearance through SocraNext's styling previews and publish a test article when setting up your project, as with your normal website deployment workflow.
+
+### Optional customization
+
+Standard setup does not require a published configuration file or a separate install command. Developers can publish the configuration when choosing different collection handles, image storage, languages or a custom layout:
 
 ```sh
-composer require socranext/statamic
 php artisan vendor:publish --tag=socranext-config
-php artisan vendor:publish --tag=socranext-assets --force
 ```
 
-Configure `config/socranext.php` before running the installer:
+- `site_url` defaults to `APP_URL` and must match the canonical HTTPS address in SocraNext.
+- `content.asset_container` can select an existing public Statamic asset container. Otherwise the addon creates `socranext` on its own `socranext_public` disk at `public/socranext-assets`. Keep this directory persistent across releases, along with content and storage. Existing containers and filesystem configuration are retained.
+- `content.article_layout` selects a native Antlers or Blade layout. The default follows the native Antlers shell from `statamic.system.layout` (normally `layout`). Default Blade shells use the bundled standalone layout because `@yield` and component slots cannot automatically receive an Antlers article. An explicit Blade layout must output `{!! $template_content !!}`. An explicitly configured missing layout is reported as a setup issue.
+- `content.discovery = 'configured'` limits access to the collections explicitly listed in `content.collections`. Automatic discovery classifies other public routed collections as custom content types.
+- `content.sites` selects additional native site handles. Before adding non-default sites, complete Statamic's normal `php please multisite` conversion. The addon does not change native multisite storage automatically.
+- `frontend.mode = 'manual'` disables automatic output for custom placement or a separately hosted frontend. Use `{{ socranext:faq }}` where the FAQ belongs and `{{ socranext:metadata }}` in the site's `<head>`, or integrate these fields into your existing SEO layer. Only this optional mode shows the readiness confirmation under **Installation details**.
 
-- Set `site_url` to the canonical public HTTPS website URL used by the SocraNext project.
-- Choose existing collections for pages, posts, products and custom content. Only explicitly exposed collections and sites are accessible to the connector. Empty `content.sites` selects only the default site.
-- Before exposing another site/language, use Statamic's `php please multisite` conversion command and configure the native sites. Declaring site records alone does not enable multisite storage. The connector rejects non-default sites while native multisite is disabled, including during installation and publishing.
-- Set `content.asset_container` to a configured Statamic asset container with a public URL. Images are stored inside its `socranext/` directory.
-- Choose unused handles for the managed article collection and taxonomy. The installer rejects collisions with existing resources.
-- Set `content.article_layout` to the website's Antlers layout. Verify its article, archive and FAQ placement on the actual website.
+A separate headless/static frontend needs its own rendering and deployment integration: the addon cannot modify HTML served by another application. Native full-page Statamic responses are supported; arbitrary Laravel controllers, response fragments and custom access-control middleware require a project-specific integration.
 
-```sh
-php please socranext:install
-```
-
-Add `{{ socranext:faq }}` to the intended place in templates for existing pages. The managed article template includes its own FAQ. Use `{{ socranext:metadata }}` in the site's `<head>` for article and page metadata, or map these fields into the existing SEO addon; avoid duplicate metadata output. The managed collection and archive use the website layout.
-
-Open **Tools → SocraNext** in the native Statamic control panel. The screen follows the user's English or Dutch Control Panel language preference and shows connection, configuration checks and website readiness separately. Only a superuser or a user with `configure socranext` may connect, disconnect or approve website readiness.
-
-Complete the first installation in this order:
-
-1. Create the corresponding Statamic project in SocraNext, using the same website address, then select **Connect with SocraNext** in Statamic.
-2. Finish the configuration checks. Inspect the website's templates and the SocraNext styling previews, including FAQ placement, metadata integration, links and mobile layout. Previews can show sample content before the first article is published.
-3. Confirm website readiness using the checkbox and save the website status. This enables the publication actions that require a prepared website.
-4. Publish a test article and enable a test FAQ from SocraNext. Check their actual public output before continuing with regular publishing. If the website setup needs more work, clear the readiness checkbox while correcting it.
+For diagnostics or explicit command-line initialization:
 
 ```sh
 php please socranext:doctor --json
+php please socranext:install
 ```
 
-Install and update through the website's normal Composer/test/deploy process. Statamic 6 provides Composer commands in its control panel, rather than executing package installation there.
+The installer rejects collisions and never adopts or replaces existing customer resources. Reconnecting validates completed installations without recreating intentionally removed resources. Resolve a reported conflict or missing write permission through the site's normal development process.
 
-The standard Statamic installation/update hook publishes the Control Panel assets to `public/vendor/socranext`. If your deployment skips Composer scripts, run `php artisan vendor:publish --tag=socranext-assets --force` when deploying an addon update. This tag updates only SocraNext assets; it does not publish or overwrite Statamic configuration. Logos and fonts are served locally, without third-party font requests. Font license notices are included in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Install and update through the website's normal Composer/test/deploy process. Statamic 6 provides Composer commands in its control panel, rather than executing package installation there. The standard installation/update hook publishes only SocraNext Control Panel assets to `public/vendor/socranext`. If deployment skips Composer scripts, run `php artisan vendor:publish --tag=socranext-assets --force`. Logos and fonts are served locally; font license notices are included in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Integration boundaries
 
 API base: `/api/socranext/v1`. Authentication uses `x-socranext-token` or a Bearer token. Conflicting credentials are rejected. Tokens are delivered directly from the trusted SocraNext backend using a short-lived, single-use state created in the authorized control panel; the addon stores only hashes. Disconnect revokes the credential and preserves content.
 
-The addon exposes native content for selection, and writes articles into its owned collection. It preserves unrelated fields and never attempts to flatten arbitrary customer Bard or Replicator structures into article HTML. Existing page FAQ placement is explicit through the template tag. Browser-only installation, automatic injection into arbitrary templates and a universal SEO/page-builder integration are outside this supported profile.
+The addon exposes native content for selection, and writes articles into its owned collection. It preserves unrelated fields and never attempts to flatten arbitrary customer Bard or Replicator structures into article HTML. FAQ placement on native pages is automatic, with optional template tags for custom placement. Browser-only package installation and a universal SEO/page-builder integration are outside this supported profile.
 
 Global custom JavaScript must carry a valid SocraNext Ed25519 signature bound to the website and the slot. Per-page unsigned JavaScript is rejected. Preview sessions are short-lived and restricted to configured platform origins. Only public HTTPS image downloads are allowed, with pinned DNS, no redirects, MIME validation and a size limit.
 
 `GET /status` advertises the contract version, addon version, readiness and supported capabilities. The platform must check those capabilities instead of assuming that every CMS supports every optional action. Native article translations and translated styling are supported, with distinct identities for each Statamic site. The platform worker enables them only after capability and website-readiness checks.
 
-The connector does not support category slug changes, automatic FAQ injection, generation requests initiated from the CMS, and bulk translated archive-slug maps. Category title and description edits, native entry slug changes, native multilingual articles and translated styling are supported. Each site can have its archive slug configured through the API. A rejected operation returns an error; it is never reported as a successful publication.
+The connector does not support category slug changes, generation requests initiated from the CMS, and bulk translated archive-slug maps. Category title and description edits, native entry slug changes, native multilingual articles and translated styling are supported. Each site can have its archive slug configured through the API. A rejected operation returns an error; it is never reported as a successful publication.
 
 ## Subscription and privacy
 
 Your subscription and payments are managed by SocraNext. After the subscription ends, published blog articles remain on your website. SocraNext schedules removal of its FAQs after 14 days; the payment-freeze deadline is 28 days after the freeze. Reconnection and an active subscription allow FAQs to be synchronized again from SocraNext. Disconnecting in Statamic revokes the connection and does not cancel your subscription.
 
-The connection gives SocraNext access to the collections and languages you configure, and permission to manage its supported articles, FAQs, metadata and styling. It does not create a Statamic administrator account. The addon stores connection-token hashes locally; the connected cloud service processes website content to provide SocraNext's features. See the [service description](docs/statamic-service-terms.md), [general terms](https://socranext.ai/algemene-voorwaarden/) and [privacy policy](https://socranext.ai/privacybeleid/).
+The connection gives SocraNext access to native public content in the connected site, or your configured collection allowlist, and permission to manage its supported articles, FAQs, metadata and styling. It does not create a Statamic administrator account. The addon stores connection-token hashes locally; the connected cloud service processes website content to provide SocraNext's features. See the [service description](docs/statamic-service-terms.md), [general terms](https://socranext.ai/algemene-voorwaarden/) and [privacy policy](https://socranext.ai/privacybeleid/).
 
 ## Durable identities and recovery
 

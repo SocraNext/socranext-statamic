@@ -37,7 +37,7 @@ class ArticlePublisher
             $collection = Collection::make($handle)->title('SocraNext articles')->sites($this->content->sites())
                 ->routes('/'.$this->slug(config('socranext.content.articles_slug', 'artikelen-sn')).'/{socranext_path}')
                 ->template(config('socranext.content.article_template', 'socranext::public.entry'))
-                ->layout(config('socranext.content.article_layout', 'layout'))->taxonomies([$taxonomy])
+                ->layout(\SocraNext\Statamic\Rendering\FrontendLayout::resolve())->taxonomies([$taxonomy])
                 ->revisionsEnabled(true)->propagate(false);
             abort_unless($collection->save(), 422, 'Collection creation was rejected.');
         }

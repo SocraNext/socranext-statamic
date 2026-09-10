@@ -24,6 +24,7 @@ class ControlPanelTest extends TestCase
 
     private function configureAssets(): void
     {
+        mkdir($this->temporaryDirectory.'/assets', 0755);
         config(['filesystems.disks.cp_test_assets' => ['driver' => 'local', 'root' => $this->temporaryDirectory.'/assets', 'url' => 'https://example.com/assets']]);
         AssetContainer::make(config('socranext.content.asset_container'))->disk('cp_test_assets')->save();
     }
@@ -53,12 +54,15 @@ class ControlPanelTest extends TestCase
             ->assertViewIs('socranext::cp.index')->assertViewHas('connected', false)->assertViewHas('ready', false)
             ->assertViewHas('setupComplete', false)->assertViewHas('setupChecks', [
                 'website_address' => true, 'article_collection' => false, 'image_storage' => false, 'languages' => true,
-            ])->assertSeeText('Connect with SocraNext')->assertSeeText('Some configuration needs attention');
+                'templates' => false, 'native_routes' => true,
+            ])->assertSeeText('Connect with SocraNext')->assertSeeText('Connecting sets up your articles, images and FAQ placement for you.')
+            ->assertDontSee('name="frontend_ready"', false);
         $dom = $this->dom($response->getContent());
         $this->assertSame(1, $dom->query('//*[@id="statamic" and @data-page]')->length);
         $this->assertSame('en', $dom->query('/html')->item(0)->getAttribute('lang'));
+        $this->assertSame(0, $dom->query('//ol[contains(@class,"sncp-steps")]')->length);
         $forms = $dom->query('//form[translate(@method,"POST","post")="post"]');
-        $this->assertGreaterThanOrEqual(2, $forms->length);
+        $this->assertSame(1, $forms->length);
         foreach ($forms as $form) {
             $tokens = $dom->query('.//input[@name="_token" and @type="hidden"]', $form);
             $this->assertSame(1, $tokens->length);
@@ -66,16 +70,18 @@ class ControlPanelTest extends TestCase
         }
     }
 
-    public function test_connection_and_website_review_are_independent_states(): void
+    public function test_prepared_website_is_ready_automatically_without_confirmation(): void
     {
         $this->configureWebsite();
         $this->connected();
         $this->actingAs($this->admin())->get('/cp/socranext')->assertOk()
-            ->assertViewHas('connected', true)->assertViewHas('ready', false)->assertViewHas('setupComplete', true)
-            ->assertSeeText('Grow your visibility in AI.')->assertSeeText('Review needed')->assertSeeText('Open SocraNext');
-        $this->post('/cp/socranext/readiness', ['frontend_ready' => 1])->assertRedirect();
+            ->assertViewHas('connected', true)->assertViewHas('ready', true)->assertViewHas('setupComplete', true)
+            ->assertSeeText('Grow your visibility in AI.')->assertSeeText('Ready to use')->assertSeeText('Open SocraNext')
+            ->assertDontSee('name="frontend_ready"', false);
+        $this->assertFalse(app(StateStore::class)->get('frontend_ready', false));
+        $this->post('/cp/socranext/readiness', ['frontend_ready' => 1])->assertStatus(409);
         $response = $this->get('/cp/socranext')->assertOk()->assertViewHas('connected', true)->assertViewHas('ready', true);
-        $this->assertGreaterThan(0, $this->dom($response->getContent())->query('//*[not(self::script) and normalize-space(text())="Checked"]')->length);
+        $this->assertGreaterThan(0, $this->dom($response->getContent())->query('//*[not(self::script) and normalize-space(text())="Ready to use"]')->length);
         $this->post('/cp/socranext/disconnect')->assertRedirect();
         $this->get('/cp/socranext')->assertOk()->assertViewHas('connected', false)->assertViewHas('ready', true)
             ->assertSeeText('Connect with SocraNext');
@@ -91,8 +97,7 @@ class ControlPanelTest extends TestCase
         $this->actingAs($this->admin())->get('/cp/socranext')->assertOk()
             ->assertViewHas('setupComplete', false)
             ->assertViewHas('setupChecks', ['website_address' => true, 'article_collection' => false,
-                'image_storage' => true, 'languages' => true])
-            ->assertSeeText('Some configuration needs attention');
+                'image_storage' => true, 'languages' => true, 'templates' => false, 'native_routes' => true]);
         // The visible status must agree with the real installer rejection,
         // while the pre-existing customer's resources remain untouched.
         try {
@@ -125,8 +130,7 @@ class ControlPanelTest extends TestCase
             'socranext.content.managed_taxonomy' => null, 'socranext.content.asset_container' => null]);
         $this->actingAs($this->admin())->get('/cp/socranext')->assertOk()
             ->assertViewHas('setupComplete', false)
-            ->assertViewHas('setupChecks', fn ($checks) => !$checks['article_collection'] && !$checks['image_storage'])
-            ->assertSeeText('Some configuration needs attention');
+            ->assertViewHas('setupChecks', fn ($checks) => !$checks['article_collection'] && !$checks['image_storage']);
     }
 
     public function test_invalid_multisite_does_not_show_ready_despite_previously_saved_review(): void
@@ -143,15 +147,15 @@ class ControlPanelTest extends TestCase
             ->assertViewHas('connected', true)->assertViewHas('frontendChecked', true)->assertViewHas('ready', false)
             ->assertViewHas('setupComplete', false)->assertViewHas('siteNames', [])
             ->assertViewHas('setupChecks', fn ($checks) => $checks['languages'] === false)
-            ->assertSeeText('Review needed')->assertSeeText('Some configuration needs attention');
-        $this->assertSame(0, $this->dom($response->getContent())->query('//*[not(self::script) and normalize-space(text())="Checked"]')->length);
+            ->assertSeeText('Setup needs attention');
+        $this->assertSame(0, $this->dom($response->getContent())->query('//*[not(self::script) and normalize-space(text())="Ready to use"]')->length);
     }
 
     public function test_native_user_locale_selects_dutch_screen_and_flash_messages(): void
     {
         config(['app.locale' => 'en']);
         $response = $this->actingAs($this->admin('nl'))->get('/cp/socranext')->assertOk()
-            ->assertSeeText('Verbinden met SocraNext')->assertSeeText('Maak je website klaar')
+            ->assertSeeText('Verbinden met SocraNext')->assertSeeText('Installatiedetails')
             ->assertSeeText('Gratis koppeling');
         $dom = $this->dom($response->getContent());
         $this->assertSame('nl', $dom->query('/html')->item(0)->getAttribute('lang'));
@@ -159,6 +163,7 @@ class ControlPanelTest extends TestCase
         foreach ($dom->query('//body//*[not(self::script or self::style)]/text()') as $node) $visibleText .= $node->textContent;
         // Native Statamic serializes translation keys for JS too; only visible labels must be translated.
         $this->assertStringNotContainsString('socranext::cp.', $visibleText);
+        config(['socranext.frontend.mode' => 'manual']);
         $this->post('/cp/socranext/readiness', ['frontend_ready' => 0])->assertRedirect()
             ->assertSessionHas('socranext_message', 'De websitestatus is opgeslagen.');
     }
@@ -194,6 +199,7 @@ class ControlPanelTest extends TestCase
 
     public function test_control_panel_posts_still_require_csrf_when_not_running_in_test_bypass(): void
     {
+        config(['socranext.frontend.mode' => 'manual']);
         $this->actingAs($this->admin());
         $environment = app()->environment();
         app()->instance('env', 'local');

@@ -30,6 +30,7 @@ class DoctorCommand extends Command
             'signing_key' => $signature->configured(),
             'frontend_checked' => $storage && $readiness->ready(),
         ];
+        if ($readiness->automatic()) $checks = [...$checks, ...$readiness->checks()];
         $ready = !in_array(false, $checks, true);
         if ($this->option('json')) $this->line(json_encode(['version' => ServiceProvider::VERSION, 'ready' => $ready, 'checks' => $checks], JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT));
         else foreach ($checks as $name => $ok) $this->line(($ok ? 'OK   ' : 'TODO ').$name);

@@ -36,29 +36,21 @@
 
     <div class="sncp-status-grid">
         <section class="sncp-status"><span class="sncp-status-icon {{ $connected ? 'is-good' : '' }}" aria-hidden="true">{{ $connected ? '✓' : '↗' }}</span><div><h2>{{ __('socranext::cp.connection') }} <span class="sncp-pill {{ $connected ? 'is-good' : '' }}">{{ __('socranext::cp.'.($connected ? 'connected' : 'not_connected')) }}</span></h2><p>{{ __('socranext::cp.'.($connected ? 'connected_detail' : 'connect_detail')) }}</p></div></section>
-        <section class="sncp-status"><span class="sncp-status-icon {{ $ready ? 'is-good' : '' }}" aria-hidden="true">{{ $ready ? '✓' : '3' }}</span><div><h2>{{ __('socranext::cp.website_output') }} <span class="sncp-pill {{ $ready ? 'is-good' : '' }}">{{ __('socranext::cp.'.($ready ? 'checked' : 'review_needed')) }}</span></h2><p>{{ __('socranext::cp.'.($ready ? 'output_detail' : 'review_detail')) }}</p></div></section>
+        <section class="sncp-status"><span class="sncp-status-icon {{ $ready ? 'is-good' : '' }}" aria-hidden="true">{{ $ready ? '✓' : '↗' }}</span><div><h2>{{ __('socranext::cp.website_output') }} <span class="sncp-pill {{ $ready ? 'is-good' : '' }}">{{ __('socranext::cp.'.($ready ? 'checked' : ($connected ? 'review_needed' : 'automatic_setup'))) }}</span></h2><p>{{ __('socranext::cp.'.($ready ? ($automatic ? 'output_detail' : 'manual_output_detail') : ($connected ? 'review_detail' : 'automatic_setup_detail'))) }}</p></div></section>
     </div>
 
-    <section class="sncp-panel" aria-labelledby="sncp-setup-title">
-        <div class="sncp-panel-heading"><h2 id="sncp-setup-title">{{ __('socranext::cp.setup') }}</h2><p>{{ __('socranext::cp.setup_intro') }}</p></div>
-        <ol class="sncp-steps">
-            <li><span class="sncp-step-number {{ $connected ? 'is-good' : '' }}" aria-hidden="true">{{ $connected ? '✓' : '1' }}</span><div class="sncp-step-copy"><h3>{{ __('socranext::cp.step_connect') }}</h3><p>{{ __('socranext::cp.step_connect_detail') }}</p><span class="sncp-domain">{{ $websiteUrl ?: $websiteLabel }}</span></div></li>
-            <li><span class="sncp-step-number {{ $setupComplete ? 'is-good' : '' }}" aria-hidden="true">{{ $setupComplete ? '✓' : '2' }}</span><div class="sncp-step-copy"><h3>{{ __('socranext::cp.step_prepare') }}</h3><p>{{ __('socranext::cp.step_prepare_detail') }}</p><p class="sncp-check-summary {{ $setupComplete ? 'is-good' : '' }}">{{ __('socranext::cp.'.($setupComplete ? 'setup_checked' : 'setup_pending')) }}</p>
-                <details class="sncp-details"><summary>{{ __('socranext::cp.technical_details') }}</summary><div class="sncp-details-body">
-                    <ul class="sncp-checks">@foreach($setupChecks as $key => $ok)<li><span>{{ __('socranext::cp.'.$key) }}</span><strong class="{{ $ok ? 'is-good' : 'sncp-needs-attention' }}">{{ __('socranext::cp.'.($ok ? 'pass' : 'todo')) }}</strong></li>@endforeach</ul>
-                    @if($siteNames)<p class="sncp-language-list">{{ implode(' · ', $siteNames) }}</p>@endif
-                    <p>{{ __('socranext::cp.developer_help') }}</p><pre><code>php please socranext:install</code></pre><p>{{ __('socranext::cp.faq_help') }}</p>
-                    <pre v-pre><code>@{{ socranext:faq }}
-@{{ socranext:metadata }}</code></pre>
-                    <p>{{ __('socranext::cp.diagnostics') }}</p><pre><code>php please socranext:doctor --json</code></pre>
-                    <a class="sncp-text-link" href="https://github.com/SocraNext/socranext-statamic#installation" target="_blank" rel="noopener noreferrer">{{ __('socranext::cp.guide') }} ↗</a>
-                </div></details>
-            </div></li>
-            <li><span class="sncp-step-number {{ $ready ? 'is-good' : '' }}" aria-hidden="true">{{ $ready ? '✓' : '3' }}</span><div class="sncp-step-copy"><h3>{{ __('socranext::cp.step_check') }}</h3><p>{{ __('socranext::cp.step_check_detail') }}</p>
+    <details class="sncp-panel sncp-settings">
+        <summary>{{ __('socranext::cp.technical_details') }}</summary>
+        <div class="sncp-details-body">
+            <p>{{ __('socranext::cp.'.($automatic ? 'automatic_details' : 'manual_details')) }}</p>
+            <ul class="sncp-checks">@foreach($setupChecks as $key => $ok)<li><span>{{ __('socranext::cp.'.$key) }}</span><strong class="{{ $ok ? 'is-good' : 'sncp-needs-attention' }}">{{ __('socranext::cp.'.($ok ? 'pass' : 'todo')) }}</strong></li>@endforeach</ul>
+            @if($siteNames)<p class="sncp-language-list">{{ implode(' · ', $siteNames) }}</p>@endif
+            @if(!$automatic)
                 <form method="post" action="{{ cp_route('socranext.readiness') }}" class="sncp-readiness-form">@csrf<input type="hidden" name="frontend_ready" value="0"><label class="sncp-checkbox"><input type="checkbox" name="frontend_ready" value="1" @checked($frontendChecked)><span>{{ __('socranext::cp.frontend_label') }}</span></label><button class="sncp-button sncp-button-secondary" type="submit">{{ __('socranext::cp.save') }}</button></form>
-            </div></li>
-        </ol>
-    </section>
+            @endif
+            <a class="sncp-text-link" href="https://github.com/SocraNext/socranext-statamic#installation" target="_blank" rel="noopener noreferrer">{{ __('socranext::cp.guide') }} ↗</a>
+        </div>
+    </details>
 
     @if($connected)
         <details class="sncp-panel sncp-settings"><summary>{{ __('socranext::cp.connection_settings') }}</summary><div class="sncp-settings-body">

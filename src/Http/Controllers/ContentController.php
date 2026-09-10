@@ -53,7 +53,7 @@ class ContentController
         foreach ($this->content->sites() as $site) {
             $item = $resource->in($site);
             if (!$item || ($kind === 'term' && $item->data()->isEmpty())) continue;
-            if ($kind !== 'term' && ($item->status() !== 'published' || $item->private())) continue;
+            if (!$this->content->publiclyDiscoverable($item)) continue;
             $items[] = [...$this->content->describe($item), 'trid' => $group];
         }
         return response()->json($items);
@@ -63,9 +63,10 @@ class ContentController
     {
         $params = $this->listParameters($request);
         $custom = [];
-        foreach ([...config('socranext.content.collections.custom', []), $this->content->managedCollection()] as $handle) {
+        foreach ([...$this->content->customCollections(), $this->content->managedCollection()] as $handle) {
             $collection = Collection::find($handle);
             if (!$collection) continue;
+            if ($handle !== $this->content->managedCollection() && !$this->content->listing('custom', [...$params, 'per_page' => 1], $handle)['total']) continue;
             $custom[] = ['name' => $handle === $this->content->managedCollection() ? 'socranext_post' : $handle,
                 'label' => $collection->title(), 'singular_name' => $collection->title()];
         }
@@ -79,7 +80,7 @@ class ContentController
         $params = $this->listParameters($request);
         $items = [];
         $types = [['pages', null], ['posts', null], ['products', null], ['categories', null], ['custom', 'socranext_post']];
-        foreach (config('socranext.content.collections.custom', []) as $handle) $types[] = ['custom', $handle];
+        foreach ($this->content->customCollections() as $handle) $types[] = ['custom', $handle];
         foreach ($types as [$type, $cpt]) {
             $page = 1;
             do {

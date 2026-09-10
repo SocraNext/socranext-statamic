@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.2.0 — 2026-09-10
+
+### Added
+
+- Automatic first connection setup for owned article resources and public image storage, with collision checks and preservation of existing configuration.
+- Automatic FAQ and metadata output on native Statamic pages, retaining custom template placements without duplication and preserving unrelated HTML and structured data.
+- Automatic discovery of public native collections; protected content, drafts and unconnected sites remain excluded.
+- A bundled article layout when the standard website layout is unavailable, and an optional manual mode for custom/headless frontends.
+
+### Changed
+
+- Replace mandatory developer instructions and the readiness checkbox with automatic configuration checks. Keep installation details and optional custom integration settings out of the standard connection flow.
+- Preserve existing configured draft-metadata editing and managed draft publication while enforcing public discovery boundaries.
+
+Validation and Marketplace publication remain separate checks in the [release checklist](docs/marketplace-release.md).
+
 ## 0.1.0 — 2026-09-10
 
 First stable package for Statamic 6 Pro.

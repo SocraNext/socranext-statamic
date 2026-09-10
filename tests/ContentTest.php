@@ -95,6 +95,7 @@ class ContentTest extends TestCase
 
     public function test_discovery_paginates_selected_published_entries_and_protects_customer_content(): void
     {
+        config(['socranext.content.discovery' => 'configured']);
         Collection::make('pages')->routes('/{slug}')->save();
         foreach (['a', 'b', 'c'] as $slug) Entry::make()->collection('pages')->id('page-'.$slug)->slug($slug)->set('title', strtoupper($slug))->published($slug !== 'c')->save();
         Collection::make('private')->routes('/private/{slug}')->save();

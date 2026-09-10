@@ -15,19 +15,21 @@ use Statamic\Statamic;
 
 class ServiceProvider extends AddonServiceProvider
 {
-    public const VERSION = '0.1.0';
+    public const VERSION = '0.2.0';
     public const API_PREFIX = 'api/socranext/v1';
     protected $viewNamespace = 'socranext';
     protected $config = false;
     // The Composer basename is "statamic"; automatic registration would replace
     // Statamic's core translation namespace. Register our own namespace below.
     protected $translations = false;
+    protected $listen = [\Statamic\Events\ResponseCreated::class => [\SocraNext\Statamic\Rendering\AutomaticFrontend::class]];
     protected $commands = [\SocraNext\Statamic\Console\InstallCommand::class, \SocraNext\Statamic\Console\DoctorCommand::class];
 
     public function register()
     {
         parent::register();
         $this->mergeConfigFrom(__DIR__.'/../config/socranext.php', 'socranext');
+        \SocraNext\Statamic\Support\Setup::registerDefaultDisk();
         $this->app->singleton(StateStore::class);
     }
 
