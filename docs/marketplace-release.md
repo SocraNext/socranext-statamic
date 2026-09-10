@@ -42,6 +42,8 @@ The release CI is [run 34467608938](https://github.com/SocraNext/socranext-stata
 
 Current Control Panel and FAQ examples are displayed in the README and embedded in the published Marketplace description using image URLs pinned to repository commit `1d8ed26084030eafaad754dd942da069ba0c8db8`. Both images were verified as loaded and visible on the public pages. The obsolete gallery screenshot was removed; no gallery upload is required. No review queue was displayed; publication does not imply Statamic certification or endorsement.
 
+The README also includes a SocraNext platform Agent Control Center example as its first screenshot, showing the agent, progress and content clusters in an example project.
+
 Use product name **SocraNext** and SocraNext branding. Do not use the Statamic logo or imply Statamic endorsement. Follow the [brand guidelines](https://statamic.com/branding) and image requirements shown in the creator form. The [publishing documentation](https://statamic.dev/addons/building-an-addon#publishing-to-the-marketplace) describes the package and creator account requirements.
 
 ## Listing fields

@@ -4,6 +4,10 @@
 
 The addon is free. An active [SocraNext subscription](https://socranext.ai/prijzen/) is required and is billed directly by SocraNext. Statamic 6 Pro and hosting are separate requirements.
 
+![SocraNext Agent Control Center in the SocraNext platform](docs/images/socranext-agent-control-center.png)
+
+*Your SocraNext agent, progress and content clusters in one control center. Example project.*
+
 ![SocraNext connection in the Statamic Control Panel](docs/images/statamic-control-panel.png)
 
 *Example of a connected website in the Statamic Control Panel.*
