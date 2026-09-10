@@ -40,7 +40,7 @@ The release CI is [run 34467608938](https://github.com/SocraNext/socranext-stata
 - [x] Publish product 1011 through the creator dashboard and confirm **Published** status.
 - [x] Verify the public listing from a separate signed-out browser, including version 0.2.0, Composer installation, Free price, direct billing and Statamic 6 Pro requirements.
 
-A current Control Panel screenshot is available, but its gallery upload did not complete. The optional gallery did not block publication. No review queue was displayed; publication does not imply Statamic certification or endorsement.
+Current Control Panel and FAQ examples are displayed in the README and embedded in the published Marketplace description using image URLs pinned to repository commit `1d8ed26084030eafaad754dd942da069ba0c8db8`. Both images were verified as loaded and visible on the public pages. The obsolete gallery screenshot was removed; no gallery upload is required. No review queue was displayed; publication does not imply Statamic certification or endorsement.
 
 Use product name **SocraNext** and SocraNext branding. Do not use the Statamic logo or imply Statamic endorsement. Follow the [brand guidelines](https://statamic.com/branding) and image requirements shown in the creator form. The [publishing documentation](https://statamic.dev/addons/building-an-addon#publishing-to-the-marketplace) describes the package and creator account requirements.
 
