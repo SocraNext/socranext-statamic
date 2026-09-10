@@ -309,6 +309,8 @@ class ArticlePublisher
             $entries = Entry::query()->where('collection', $this->content->managedCollection())->get()
                 ->filter(fn ($entry) => $entry->get('socranext_owned') === true && in_array($entry->locale(), $this->content->sites(), true));
             foreach ($entries as $entry) abort_if($entry->descendants()->contains(fn ($child) => !$entries->contains(fn ($owned) => $owned->id() === $child->id())), 409, 'An unmanaged translation depends on a managed article; detach it before purging.');
+            // Full purge may fail partway through; never retain a prior articles-preserved claim.
+            $this->store->put('last_offboarding', ['mode' => 'full_purge', 'articles_preserved' => false]);
             $deleted = 0;
             foreach ($entries->sortByDesc(fn ($entry) => $entry->ancestors()->count()) as $entry) {
                 $id = $this->content->identity($entry);

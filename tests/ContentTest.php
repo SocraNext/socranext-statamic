@@ -291,16 +291,20 @@ class ContentTest extends TestCase
 
     public function test_purge_before_install_is_idempotent_and_does_not_create_native_resources(): void
     {
-        $before = file_get_contents(config('socranext.state_path'));
+        $before = json_decode(file_get_contents(config('socranext.state_path')), true, 512, JSON_THROW_ON_ERROR);
+        $afterFirst = null;
         for ($attempt = 0; $attempt < 2; $attempt++) {
             $this->postJson('/api/socranext/v1/purge')->assertOk()->assertExactJson([
                 'success' => true, 'deleted' => 0, 'deleted_categories' => 0,
             ]);
+            $after = file_get_contents(config('socranext.state_path'));
+            if ($attempt === 0) $afterFirst = $after;
+            else $this->assertSame($afterFirst, $after);
         }
         $this->assertNull(Collection::find('socranext_articles'));
         $this->assertNull(Collection::find('socranext_archives'));
         $this->assertNull(\Statamic\Facades\Taxonomy::find('socranext_categories'));
         $this->assertSame(0, Entry::query()->count());
-        $this->assertSame($before, file_get_contents(config('socranext.state_path')));
+        $this->assertSame($before + ['last_offboarding' => ['mode' => 'full_purge', 'articles_preserved' => false]], json_decode($after, true, 512, JSON_THROW_ON_ERROR));
     }
 }

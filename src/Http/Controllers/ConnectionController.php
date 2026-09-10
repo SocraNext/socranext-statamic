@@ -17,13 +17,14 @@ class ConnectionController
         return response()->json(['ok' => true]);
     }
 
-    public function status(Readiness $readiness)
+    public function status(Readiness $readiness, StateStore $store)
     {
         return response()->json([
             'cms_type' => 'statamic', 'contract_version' => 1, 'addon_version' => ServiceProvider::VERSION,
             'frontend_ready' => $readiness->ready(),
+            'last_offboarding' => $store->get('last_offboarding'),
             'capabilities' => [
-                'articles' => true, 'faq' => true, 'styling' => true, 'collection_slugs' => true,
+                'articles' => true, 'faq' => true, 'faq_only_offboarding' => true, 'styling' => true, 'collection_slugs' => true,
                 'llms_txt' => true, 'translations' => true, 'article_translations' => true,
                 'entry_metadata' => true, 'styling_i18n' => true, 'category_slug_update' => false,
                 'cms_generation_requests' => false, 'collection_slugs_i18n' => false,

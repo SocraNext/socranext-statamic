@@ -1,8 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.1.0 — 2026-09-10
 
-These changes are on the main branch and are being evaluated on the hosted pilot. They are not included in the published `0.1.0-beta.2` package. No stable version has been assigned.
+First stable package for Statamic 6 Pro.
 
 ### Fixed
 
@@ -12,12 +12,11 @@ These changes are on the main branch and are being evaluated on the hosted pilot
 
 ### Changed
 
+- Add authenticated FAQ-only subscription cleanup with durable cache invalidation and a confirmed status marker. Articles, translations, URLs, assets, styling and connection data remain intact.
 - Focus English and Dutch Control Panel copy and package descriptions on SocraNext's AI visibility purpose.
-- Update installation and Marketplace preparation documentation to distinguish the published beta, the patched pilot and the remaining release gates.
+- Clarify installation, external subscription billing and privacy. The Statamic service description follows the general terms: published blogs remain, and automatic offboarding removes only FAQs.
 
-### Acceptance status — 10 September 2026
-
-Hosted connection, readiness, standard onboarding, styling, scheduled main-article publication and the normal **Publish now** UI have passed. Existing-page FAQs now pass enable, edit, lock, disable and re-enable checks with public HTML and schema verification. The candidate passes 77 PHP tests with 795 assertions. Offboarding remains unresolved; the final package still needs CI on its exact commit, clean installation and upgrade checks, and verification of the Marketplace installation command before submission.
+Final offboarding, package installation/upgrade, exact-commit CI and Marketplace submission checks are tracked in the [release checklist](docs/marketplace-release.md).
 
 ## 0.1.0-beta.2
 
@@ -32,7 +31,7 @@ The exact `0.1.0-beta.2` version is published on GitHub/Packagist, with anonymou
 
 First beta scope for Statamic 6 Pro, intended for development and pilot evaluation. The [source repository](https://github.com/SocraNext/socranext-statamic) is public; consult [GitHub releases](https://github.com/SocraNext/socranext-statamic/releases) and [Packagist](https://packagist.org/packages/socranext/statamic) for published versions and installation availability. These release notes do not establish Marketplace publication or general availability of the connected service.
 
-At the time of beta.1, the companion SocraNext platform integration was deployed with both Statamic flags disabled, pending verification on an isolated HTTPS test site. See the Unreleased acceptance status above for subsequent pilot progress.
+At the time of beta.1, the companion SocraNext platform integration was deployed with both Statamic flags disabled, pending verification on an isolated HTTPS test site. See the release checklist for subsequent verification.
 
 ### Added
 

@@ -2,32 +2,16 @@
 
 **Get found in AI.** SocraNext helps your website become visible in ChatGPT, Gemini and Google AI. Measure your visibility, improve your website and track your progress, all in one platform. This addon connects your Statamic website to SocraNext.
 
-**Beta evaluation — `0.1.0-beta.2`.** This prerelease is published on [GitHub](https://github.com/SocraNext/socranext-statamic/releases/tag/v0.1.0-beta.2) and [Packagist](https://packagist.org/packages/socranext/statamic), and its anonymous installation has been verified. It is intended for development and pilot sites. The main branch contains additional unreleased fixes; installing beta.2 does not include those fixes. No stable release or public Marketplace listing has been completed.
+The addon is free. An active [SocraNext subscription](https://socranext.ai/prijzen/) is required and is billed directly by SocraNext. Statamic 6 Pro and hosting are separate requirements.
 
-As of 10 September 2026, the companion platform code and database migration are deployed and both Statamic feature flags are enabled for hosted pilot verification. Connection, onboarding, styling, article publication and existing-page FAQ synchronization have passed on the isolated HTTPS pilot. The Statamic offboarding policy and final package verification remain open. Installing the addon does not enable the platform integration or establish general release readiness.
+## Installation
 
-## Installation for a development or pilot site
+A website developer completes the initial setup. Requirements: Statamic 6 Pro, PHP 8.3–8.5 with Sodium, cURL, DOM, Fileinfo and Mbstring, and persistent writable content and Laravel storage. The addon supports native Statamic templates. A separate headless/static frontend needs its own rendering and deployment integration.
 
-Requirements: Statamic 6 Pro, PHP 8.3–8.5 with Sodium, cURL, DOM, Fileinfo and Mbstring, and persistent writable content and Laravel storage. The beta targets native Statamic rendering. A separate headless/static frontend needs its own rendering and deployment integration.
-
-From your website's project directory, install the published beta from [Packagist](https://packagist.org/packages/socranext/statamic):
+From your website's project directory:
 
 ```sh
-composer require socranext/statamic:0.1.0-beta.2
-```
-
-If your Composer environment needs a direct repository source, the same published tag can be installed from the public repository:
-
-```sh
-composer config repositories.socranext vcs https://github.com/SocraNext/socranext-statamic.git
-composer require socranext/statamic:0.1.0-beta.2
-```
-
-Existing beta.1 installations should use the same exact-version Composer command to receive the native dashboard translation fix. No Statamic core update or database migration is required.
-
-Both commands install the published beta tag. The exact beta requirement keeps the website's global Composer stability setting unchanged. The Marketplace's unversioned installation command still needs an available stable release and verification before public submission. After installation, publish the configuration and assets:
-
-```sh
+composer require socranext/statamic
 php artisan vendor:publish --tag=socranext-config
 php artisan vendor:publish --tag=socranext-assets --force
 ```
@@ -51,7 +35,7 @@ Open **Tools → SocraNext** in the native Statamic control panel. The screen fo
 
 Complete the first installation in this order:
 
-1. Create the corresponding Statamic project in the enabled SocraNext pilot environment, using the same website address, then select **Connect with SocraNext** in Statamic.
+1. Create the corresponding Statamic project in SocraNext, using the same website address, then select **Connect with SocraNext** in Statamic.
 2. Finish the configuration checks. Inspect the website's templates and the SocraNext styling previews, including FAQ placement, metadata integration, links and mobile layout. Previews can show sample content before the first article is published.
 3. Confirm website readiness using the checkbox and save the website status. This enables the publication actions that require a prepared website.
 4. Publish a test article and enable a test FAQ from SocraNext. Check their actual public output before continuing with regular publishing. If the website setup needs more work, clear the readiness checkbox while correcting it.
@@ -74,24 +58,13 @@ Global custom JavaScript must carry a valid SocraNext Ed25519 signature bound to
 
 `GET /status` advertises the contract version, addon version, readiness and supported capabilities. The platform must check those capabilities instead of assuming that every CMS supports every optional action. Native article translations and translated styling are supported, with distinct identities for each Statamic site. The platform worker enables them only after capability and website-readiness checks.
 
-The pilot explicitly rejects category slug changes, automatic FAQ injection, generation requests initiated from the CMS, and bulk translated archive-slug maps. Category title and description edits, native entry slug changes, native multilingual articles and translated styling are supported. Each site can have its archive slug configured through the API. A rejected operation returns an error; it is never reported as a successful publication.
+The connector does not support category slug changes, automatic FAQ injection, generation requests initiated from the CMS, and bulk translated archive-slug maps. Category title and description edits, native entry slug changes, native multilingual articles and translated styling are supported. Each site can have its archive slug configured through the API. A rejected operation returns an error; it is never reported as a successful publication.
 
-## Platform rollout
+## Subscription and privacy
 
-The companion platform adds a `statamic` CMS value and a separate adapter. Its flags default to disabled; the hosted pilot currently has both enabled:
+Your subscription and payments are managed by SocraNext. After the subscription ends, published blog articles remain on your website. SocraNext schedules removal of its FAQs after 14 days; the payment-freeze deadline is 28 days after the freeze. Reconnection and an active subscription allow FAQs to be synchronized again from SocraNext. Disconnecting in Statamic revokes the connection and does not cancel your subscription.
 
-```dotenv
-# Backend, evaluated at runtime
-SOCRANEXT_STATAMIC_ENABLED=false
-# Frontend, evaluated at build time
-VITE_SOCRANEXT_STATAMIC_ENABLED=false
-```
-
-The platform code and additive CMS constraint migration are deployed. For a new environment, enable both flags, create a Statamic project, connect the addon and verify the published output. Disabling the flags stops new platform Statamic actions; existing published native content remains available. The existing WordPress, Shopify and Headless billing and connector routes retain their current behavior.
-
-Pilot status on 10 September 2026: native connection and readiness, standard platform onboarding, saved styling with fresh preview rendering, and public article output have passed. A main article scheduled through the UI was published by a guarded invocation of the real production publication worker. A depth article also passed **Publish now** through the normal UI, including its link from the parent article. The worker check targeted only that pilot article; it did not invoke the global cron across customer projects.
-
-Existing-page FAQs now pass the normal UI cycle: enable, edit and restore, lock and unlock, disable and re-enable, with public HTML and FAQ schema verified. The hosted addon remains beta.2 with reviewed FAQ, admin-copy, CSS validation and discovery-type patches. The candidate passes 77 PHP tests with 795 assertions. Resolve the offboarding policy, reconcile the service terms, and verify the final packaged artifact before stable release and Marketplace submission. See the [release checklist](docs/marketplace-release.md) for the remaining work.
+The connection gives SocraNext access to the collections and languages you configure, and permission to manage its supported articles, FAQs, metadata and styling. It does not create a Statamic administrator account. The addon stores connection-token hashes locally; the connected cloud service processes website content to provide SocraNext's features. See the [service description](docs/statamic-service-terms.md), [general terms](https://socranext.ai/algemene-voorwaarden/) and [privacy policy](https://socranext.ai/privacybeleid/).
 
 ## Durable identities and recovery
 
@@ -106,14 +79,15 @@ Publication uses a stable `blogId` and a journal to avoid duplicate native entri
 ```sh
 composer install
 composer test
+node --test tests/JavaScript/*.test.mjs
 ```
 
 Tests boot an actual Statamic 6 application through Testbench, with Laravel's real global input normalizers enabled. CI explicitly tests Laravel 12 with Testbench 10/PHPUnit 11 and Laravel 13 with Testbench 11/PHPUnit 12, each on PHP 8.3, 8.4 and 8.5. Every matrix job resolves its own compatible dependencies. Tests cover authentication, native permissions, content identities/publication, cold file reloads and editor conflicts, multisite configuration, FAQ rendering, exact signed code/text payloads and previews. Additional platform tests protect the existing CMS branches. No deployment, shared database migration or production website writes are part of running this suite.
 
 Connector JSON preserves whitespace and empty strings so code signatures, `llms.txt` and explicit style clearing survive Laravel's global middleware. That exception applies only to the addon's JSON API; native website forms and the Statamic control panel retain their existing input handling. Content conflict detection uses Statamic's persisted representation, including blueprint resolution, root empty-value removal and front-matter parsing. Explicit empty translation overrides remain distinct from inherited values.
 
-Each release must pass CI on its exact commit and install without private GitHub access. Before a stable release or general activation, test clean installation and upgrade on representative websites, the complete hosted SocraNext workflow, public HTML and scheduled delivery. A beta tag alone does not establish production readiness. A Marketplace listing also requires its own account and publication steps.
+Release validation covers CI on the exact commit, anonymous installation, upgrades, the hosted SocraNext workflow and public output. The [release checklist](docs/marketplace-release.md) records package verification and Marketplace submission separately.
 
-The addon is free, with a separate SocraNext subscription for the connected service. Software distribution and use are governed by [LICENSE](LICENSE). The repository's [Statamic service terms](docs/statamic-service-terms.md) still require reconciliation with the pending offboarding decision and the applicable customer agreement flow before general release. They do not automatically change existing customer agreements, including WordPress, Shopify or Headless agreements.
+Software distribution and use are governed by [LICENSE](LICENSE). The [Statamic service description](docs/statamic-service-terms.md) explains the connection and offboarding behavior under the applicable SocraNext agreement.
 
 See the [changelog](CHANGELOG.md) and [Marketplace release checklist and draft](docs/marketplace-release.md). Report addon issues through the public [issue tracker](https://github.com/SocraNext/socranext-statamic/issues); account and billing questions can go to [info@socranext.ai](mailto:info@socranext.ai).

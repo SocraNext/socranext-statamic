@@ -15,7 +15,7 @@ use Statamic\Statamic;
 
 class ServiceProvider extends AddonServiceProvider
 {
-    public const VERSION = '0.1.0-beta.2';
+    public const VERSION = '0.1.0';
     public const API_PREFIX = 'api/socranext/v1';
     protected $viewNamespace = 'socranext';
     protected $config = false;

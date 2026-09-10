@@ -10,7 +10,7 @@
 @section('content')
 <div class="sncp">
     <header class="sncp-header">
-        <div><p class="sncp-eyebrow">{{ __('socranext::cp.eyebrow') }}</p><h1><img class="sncp-logo sncp-logo-light" src="{{ asset('vendor/socranext/brand/socranext-logo.svg') }}" alt="SocraNext"><img class="sncp-logo sncp-logo-dark" src="{{ asset('vendor/socranext/brand/socranext-logo-on-dark.svg') }}" alt="SocraNext"> <span class="sncp-preview">{{ __('socranext::cp.preview') }}</span></h1><p class="sncp-lead">{{ __('socranext::cp.intro') }}</p></div>
+        <div><p class="sncp-eyebrow">{{ __('socranext::cp.eyebrow') }}</p><h1><img class="sncp-logo sncp-logo-light" src="{{ asset('vendor/socranext/brand/socranext-logo.svg') }}" alt="SocraNext"><img class="sncp-logo sncp-logo-dark" src="{{ asset('vendor/socranext/brand/socranext-logo-on-dark.svg') }}" alt="SocraNext"></h1><p class="sncp-lead">{{ __('socranext::cp.intro') }}</p></div>
         @if($websiteUrl)<a class="sncp-button sncp-button-secondary" href="{{ $websiteUrl }}" target="_blank" rel="noopener noreferrer">{{ __('socranext::cp.visit') }} <span aria-hidden="true">↗</span></a>@endif
     </header>
     @if(session('socranext_message'))<div class="sncp-notice" role="status">{{ session('socranext_message') }}</div>@endif
@@ -51,7 +51,7 @@
                     <pre v-pre><code>@{{ socranext:faq }}
 @{{ socranext:metadata }}</code></pre>
                     <p>{{ __('socranext::cp.diagnostics') }}</p><pre><code>php please socranext:doctor --json</code></pre>
-                    <a class="sncp-text-link" href="https://github.com/SocraNext/socranext-statamic#installation-for-a-development-or-pilot-site" target="_blank" rel="noopener noreferrer">{{ __('socranext::cp.guide') }} ↗</a>
+                    <a class="sncp-text-link" href="https://github.com/SocraNext/socranext-statamic#installation" target="_blank" rel="noopener noreferrer">{{ __('socranext::cp.guide') }} ↗</a>
                 </div></details>
             </div></li>
             <li><span class="sncp-step-number {{ $ready ? 'is-good' : '' }}" aria-hidden="true">{{ $ready ? '✓' : '3' }}</span><div class="sncp-step-copy"><h3>{{ __('socranext::cp.step_check') }}</h3><p>{{ __('socranext::cp.step_check_detail') }}</p>

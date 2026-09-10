@@ -23,6 +23,7 @@ Route::prefix(ServiceProvider::API_PREFIX)->name('socranext.api.')->middleware([
         Route::post('blog-category', [ContentController::class, 'createCategory']);
         Route::delete('blog-category/{id}', [ContentController::class, 'deleteCategory']);
         Route::post('purge', [ContentController::class, 'purge']);
+        Route::post('offboard-faqs', [PresentationController::class, 'offboardFaqs']);
         Route::post('collection-slugs', [ContentController::class, 'collectionSlugs']);
 
         foreach (['pages' => '', 'posts' => 'post-', 'products' => 'product-', 'categories' => 'category-'] as $type => $prefix) {

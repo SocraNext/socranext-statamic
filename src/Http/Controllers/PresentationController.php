@@ -3,7 +3,7 @@
 namespace SocraNext\Statamic\Http\Controllers;
 
 use Illuminate\Http\Request;
-use SocraNext\Statamic\Content\ContentRepository;
+use SocraNext\Statamic\Content\{ContentRepository, MutationLock};
 use SocraNext\Statamic\Rendering\{SafeMarkup, CodeSignature, PreviewSession};
 use SocraNext\Statamic\ServiceProvider;
 use SocraNext\Statamic\Support\StateStore;
@@ -27,8 +27,9 @@ class PresentationController
         $faq = ['questions' => array_map(fn ($q) => ['question' => strip_tags($q['question']), 'answer' => $this->safe->html($q['answer'])], $data['questions']), 'custom_html' => $this->safe->html($data['custom_html'] ?? ''), 'custom_css' => $this->safe->css($data['custom_css'] ?? ''), 'updated_at' => now()->toIso8601String()];
         // Per-resource payloads have no platform signature. Never turn these into executable code.
         abort_if(($data['custom_js'] ?? '') !== '', 422, 'Per-resource JavaScript is unsupported; use signed site-wide styles.');
-        $this->store->transaction(function (array &$state) use ($id, $faq) { $state['faqs'][$id] = $faq + ['enabled' => $state['faqs'][$id]['enabled'] ?? false]; });
-        $this->invalidate();
+        $this->mutateFaq(function () use ($id, $faq) {
+            $this->store->transaction(function (array &$state) use ($id, $faq) { $state['faqs'][$id] = $faq + ['enabled' => $state['faqs'][$id]['enabled'] ?? false]; });
+        });
         return response()->json(['success' => true, 'page_id' => $id, 'questions' => $faq['questions']]);
     }
 
@@ -37,9 +38,27 @@ class PresentationController
         $data = $request->validate(['page_id' => 'required|integer|min:1', 'enabled' => 'required|boolean']);
         $id = $this->content->identity($this->content->resolve($type, $data['page_id'], $cpt));
         abort_if($data['enabled'] && ! app(\SocraNext\Statamic\Support\Readiness::class)->ready(), 409, 'The website developer must verify the FAQ template before activation.');
-        $this->store->transaction(function (array &$state) use ($id, $data) { $state['faqs'][$id] = array_replace($state['faqs'][$id] ?? ['questions' => [], 'custom_html' => '', 'custom_css' => ''], ['enabled' => (bool) $data['enabled']]); });
-        $this->invalidate();
+        $this->mutateFaq(function () use ($id, $data) {
+            $this->store->transaction(function (array &$state) use ($id, $data) { $state['faqs'][$id] = array_replace($state['faqs'][$id] ?? ['questions' => [], 'custom_html' => '', 'custom_css' => ''], ['enabled' => (bool) $data['enabled']]); });
+        });
         return response()->json(['success' => true, 'page_id' => $id, 'enabled' => (bool) $data['enabled']]);
+    }
+
+    public function offboardFaqs(MutationLock $lock)
+    {
+        return response()->json($lock->run(function () {
+            $deleted = $this->store->transaction(function (array &$state) {
+                $faqs = $state['faqs'] ?? [];
+                abort_unless(is_array($faqs), 409, 'FAQ storage is invalid; repair it before offboarding.');
+                // A previous completion marker cannot confirm this new cleanup attempt.
+                unset($state['faqs'], $state['last_offboarding']);
+                return count($faqs);
+            });
+            // Commit deletion before flushing public output. Retry this even when no records remain.
+            $this->invalidate();
+            $this->store->put('last_offboarding', ['mode' => 'faq_only', 'articles_preserved' => true]);
+            return ['success' => true, 'articles_preserved' => true, 'deleted_faqs' => $deleted];
+        }));
     }
 
     public function storeStyle(Request $request, string $slot)
@@ -104,6 +123,14 @@ class PresentationController
     {
         // These records are not Entry saves; clear native static output explicitly.
         if (config('statamic.static_caching.strategy')) \Statamic\Facades\StaticCache::flush();
+    }
+
+    private function mutateFaq(callable $callback): void
+    {
+        app(MutationLock::class)->run(function () use ($callback) {
+            $callback();
+            $this->invalidate();
+        });
     }
 
     public function cptStoreFaq(Request $request, string $cpt) { return $this->storeFaq($request, 'custom', $cpt); }
