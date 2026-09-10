@@ -4,6 +4,14 @@
 
 The addon is free. An active [SocraNext subscription](https://socranext.ai/prijzen/) is required and is billed directly by SocraNext. Statamic 6 Pro and hosting are separate requirements.
 
+![SocraNext connection in the Statamic Control Panel](docs/images/statamic-control-panel.png)
+
+*Example of a connected website in the Statamic Control Panel.*
+
+![SocraNext FAQ design on a Statamic page](docs/images/statamic-faq-example.png)
+
+*Example of SocraNext's FAQ design, displayed automatically on a Statamic page.*
+
 ## Installation
 
 Requirements: Statamic 6 Pro, PHP 8.3–8.5 with Sodium, cURL, DOM, Fileinfo and Mbstring, a public HTTPS website address (`APP_URL`), and persistent writable content, Laravel storage and image storage.
