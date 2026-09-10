@@ -1,0 +1,122 @@
+.socranext-frontend-block {
+  --sn-faq-container-width: 1170px;
+  --sn-faq-container-bg: transparent;
+  --sn-faq-container-radius: 0px;
+  --sn-faq-container-margin-top: 0rem;
+  --sn-faq-container-margin-bottom: 0rem;
+  --sn-faq-toggle-bg: #6d28d9;
+  --sn-faq-toggle-color: #ffffff;
+  --sn-faq-title-margin-bottom: 1.25rem;
+  --sn-faq-title-text-align: left;
+  --sn-faq-title-font-size: 2rem;
+  --sn-faq-item-radius: 10px;
+  --sn-faq-item-border-width: 1px;
+  --sn-faq-item-border-color: #eeeeee;
+  --sn-faq-item-bg: transparent;
+  --sn-faq-disclaimer-font-size: 0.75rem;
+  --sn-faq-question-font-size: 1.125rem;
+  --sn-faq-answer-font-size: 1rem;
+}
+html body .socranext-root.socranext-frontend-block {
+  max-width: 1170px !important;
+  background: transparent !important;
+  border-radius: 0px !important;
+  margin-top: 0rem !important;
+  margin-bottom: 0rem !important;
+}
+html body .socranext-root.socranext-frontend-block .socranext-qalist > h2, html body .socranext-root.socranext-frontend-block .socranext-qalist h2 {
+  font-size: 2rem !important;
+  text-align: left !important;
+  margin-bottom: 1.25rem !important;
+}
+html body .socranext-root.socranext-frontend-block .socranext-qa {
+  border-radius: 10px !important;
+  border-width: 1px !important;
+  border-color: #eeeeee !important;
+  border-style: solid !important;
+  background: transparent !important;
+}
+html body .socranext-root.socranext-frontend-block .socranext-toggle {
+  background: #6d28d9 !important;
+  color: #ffffff !important;
+  transition: opacity 160ms ease, transform 160ms ease, box-shadow 160ms ease, filter 160ms ease !important;
+}
+html body .socranext-root.socranext-frontend-block .socranext-toggle:hover {
+  opacity: 0.85 !important;
+}
+html body .socranext-root.socranext-frontend-block .socranext-q strong {
+  font-size: 1.125rem !important;
+}
+html body .socranext-root.socranext-frontend-block .socranext-a {
+  font-size: 1rem !important;
+}
+html body .socranext-root.socranext-frontend-block .socranext-disclaimer {
+  font-size: 0.75rem !important;
+}
+html body .socranext-root .socranext-toggle {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  border-radius: 50% !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  padding: 0 !important;
+}
+html body .socranext-root .socranext-toggle .socranext-icon-collapsed,
+html body .socranext-root .socranext-toggle .socranext-icon-expanded {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  width: 14px !important;
+  height: 14px !important;
+  transform: translate(-50%, -50%) !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  color: inherit !important;
+}
+html body .socranext-root .socranext-toggle .socranext-icon-collapsed::before,
+html body .socranext-root .socranext-toggle .socranext-icon-collapsed::after,
+html body .socranext-root .socranext-toggle .socranext-icon-expanded::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  background: currentColor !important;
+  border-radius: 999px !important;
+  transform: translate(-50%, -50%) !important;
+}
+html body .socranext-root .socranext-toggle .socranext-icon-collapsed::before,
+html body .socranext-root .socranext-toggle .socranext-icon-expanded::before {
+  width: 14px !important;
+  height: 3px !important;
+}
+html body .socranext-root .socranext-toggle .socranext-icon-collapsed::after {
+  width: 3px !important;
+  height: 14px !important;
+}
+html body .socranext-root .socranext-qa-list {
+  list-style: none !important;
+  padding: 0 !important;
+}
+html body .socranext-root .socranext-a {
+  /* No !important on max-height — JS sets inline max-height when opening. */
+  max-height: 0;
+  overflow: hidden;
+}
+html body .socranext-root .socranext-toggle .socranext-icon-collapsed {
+  display: block !important;
+}
+html body .socranext-root .socranext-toggle .socranext-icon-expanded {
+  display: none !important;
+}
+html body .socranext-root .socranext-qa.open .socranext-toggle .socranext-icon-collapsed {
+  display: none !important;
+}
+html body .socranext-root .socranext-qa.open .socranext-toggle .socranext-icon-expanded {
+  display: block !important;
+}

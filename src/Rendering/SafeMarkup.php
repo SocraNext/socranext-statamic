@@ -58,8 +58,8 @@ class SafeMarkup
 
     public function css(string $css): string
     {
-        // Keep generated selectors/variables intact; reject HTML breakout and legacy script CSS.
-        if (preg_match('/[<>]|expression\s*\(|javascript\s*:|vbscript\s*:|-moz-binding|behavior\s*:/i', $css)) {
+        // A less-than sign can start HTML breakout; greater-than signs are valid CSS combinators.
+        if (preg_match('/<|expression\s*\(|javascript\s*:|vbscript\s*:|-moz-binding|behavior\s*:/i', $css)) {
             throw \Illuminate\Validation\ValidationException::withMessages(['custom_css' => 'Unsafe CSS was rejected.']);
         }
         return $css;
