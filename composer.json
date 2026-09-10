@@ -1,6 +1,6 @@
 {
     "name": "socranext/statamic",
-    "description": "Connect Statamic websites to the SocraNext content platform.",
+    "description": "Get found in AI. Connect your Statamic website to SocraNext.",
     "type": "statamic-addon",
     "license": "proprietary",
     "homepage": "https://socranext.ai/",

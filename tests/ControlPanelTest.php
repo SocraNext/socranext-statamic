@@ -72,7 +72,7 @@ class ControlPanelTest extends TestCase
         $this->connected();
         $this->actingAs($this->admin())->get('/cp/socranext')->assertOk()
             ->assertViewHas('connected', true)->assertViewHas('ready', false)->assertViewHas('setupComplete', true)
-            ->assertSeeText('Your website. Connected.')->assertSeeText('Review needed')->assertSeeText('Open SocraNext');
+            ->assertSeeText('Grow your visibility in AI.')->assertSeeText('Review needed')->assertSeeText('Open SocraNext');
         $this->post('/cp/socranext/readiness', ['frontend_ready' => 1])->assertRedirect();
         $response = $this->get('/cp/socranext')->assertOk()->assertViewHas('connected', true)->assertViewHas('ready', true);
         $this->assertGreaterThan(0, $this->dom($response->getContent())->query('//*[not(self::script) and normalize-space(text())="Checked"]')->length);

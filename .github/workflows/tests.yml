@@ -22,6 +22,9 @@ jobs:
             phpunit: '^12.0'
     steps:
       - uses: actions/checkout@v4
+      - name: Test frontend interactions
+        if: matrix.php == '8.3' && matrix.laravel == '12'
+        run: node --test tests/JavaScript/*.test.mjs
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}

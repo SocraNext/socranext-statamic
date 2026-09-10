@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'eyebrow' => 'YOUR CONTENT WORKSPACE',
-    'intro' => 'Create, improve and publish your content from SocraNext. Right here on your Statamic website.',
+    'eyebrow' => 'GET FOUND IN AI',
+    'intro' => 'Make your website more visible in ChatGPT, Gemini and Google AI with SocraNext.',
     'preview' => 'Early access',
     'connected' => 'Connected',
     'not_connected' => 'Not connected yet',
@@ -17,9 +17,9 @@ return [
     'connect' => 'Connect with SocraNext',
     'open' => 'Open SocraNext',
     'visit' => 'View website',
-    'connected_title' => 'Your website. Connected.',
-    'connect_title' => 'A home for your next great article.',
-    'connected_intro' => 'Manage articles, FAQs, translations and styling in your SocraNext workspace.',
+    'connected_title' => 'Grow your visibility in AI.',
+    'connect_title' => 'Help AI find your website.',
+    'connected_intro' => 'Measure your visibility, improve your website and track your progress in SocraNext.',
     'connect_intro' => 'Create a Statamic project in SocraNext using this website address, then connect it here.',
     'setup' => 'Get your website ready',
     'setup_intro' => 'A short, one-time setup. After that, your daily work happens in SocraNext.',

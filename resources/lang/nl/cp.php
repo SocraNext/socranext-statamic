@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'eyebrow' => 'JOUW CONTENTWERKPLEK',
-    'intro' => 'Maak, verbeter en publiceer je content vanuit SocraNext. Direct op jouw Statamic-website.',
+    'eyebrow' => 'WORD VINDBAAR IN AI',
+    'intro' => 'Vergroot je zichtbaarheid in ChatGPT, Gemini en Google AI met SocraNext.',
     'preview' => 'Vroege toegang',
     'connected' => 'Verbonden',
     'not_connected' => 'Nog niet verbonden',
@@ -17,9 +17,9 @@ return [
     'connect' => 'Verbinden met SocraNext',
     'open' => 'Open SocraNext',
     'visit' => 'Bekijk website',
-    'connected_title' => 'Jouw website. Verbonden.',
-    'connect_title' => 'Een plek voor je volgende sterke artikel.',
-    'connected_intro' => 'Beheer artikelen, FAQ’s, vertalingen en vormgeving in je SocraNext-werkplek.',
+    'connected_title' => 'Vergroot je zichtbaarheid in AI.',
+    'connect_title' => 'Laat AI jouw website ontdekken.',
+    'connected_intro' => 'Meet je zichtbaarheid, verbeter je website en volg je voortgang in SocraNext.',
     'connect_intro' => 'Maak in SocraNext een Statamic-project met dit websiteadres en verbind het vervolgens hier.',
     'setup' => 'Maak je website klaar',
     'setup_intro' => 'Een korte, eenmalige inrichting. Daarna werk je dagelijks vanuit SocraNext.',

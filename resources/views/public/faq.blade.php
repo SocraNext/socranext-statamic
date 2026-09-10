@@ -22,7 +22,7 @@
 document.querySelectorAll('.socranext-qa .socranext-q:not([data-sn-bound])').forEach(function(head){
     head.dataset.snBound='1';
     head.parentElement.classList.remove('open');head.setAttribute('aria-expanded','false');head.parentElement.querySelector('.socranext-a').style.maxHeight='';
-    function toggle(){var item=head.parentElement,answer=item.querySelector('.socranext-a'),open=item.classList.toggle('open');head.setAttribute('aria-expanded',String(open));answer.style.maxHeight=open?answer.scrollHeight+'px':'';}
+    function toggle(){var item=head.parentElement,answer=item.querySelector('.socranext-a'),open=item.classList.toggle('open');head.setAttribute('aria-expanded',String(open));answer.style.maxHeight=open?'none':'';}
     head.addEventListener('click',toggle);
     head.addEventListener('keydown',function(event){if(event.key==='Enter'||event.key===' '){event.preventDefault();toggle();}});
 });
