@@ -189,6 +189,19 @@ class ContentRepository
         return $term;
     }
 
+    /** Optional FAQ precondition; native identities already include the site. */
+    public function assertFaqLanguage($resource, array $context): void
+    {
+        if (!array_key_exists('language', $context) && !array_key_exists('site_id', $context)) return;
+        $language = $context['language'] ?? null;
+        abort_unless(is_string($language) && $language !== '' && $language === trim($language) && strtolower($language) !== 'all', 422, 'An exact FAQ language is required.');
+        $site = $resource->locale();
+        abort_unless($language === $this->languageCode($site), 409, 'FAQ language does not match the selected resource.');
+        if (array_key_exists('site_id', $context)) {
+            abort_unless(is_string($context['site_id']) && $context['site_id'] === $site, 409, 'FAQ site does not match the selected resource.');
+        }
+    }
+
     public function describe($resource): array
     {
         $term = $this->isTerm($resource);

@@ -73,6 +73,17 @@ Global custom JavaScript must carry a valid SocraNext Ed25519 signature bound to
 
 `GET /status` advertises the contract version, addon version, readiness and supported capabilities. The platform must check those capabilities instead of assuming that every CMS supports every optional action. Native article translations and translated styling are supported, with distinct identities for each Statamic site. The platform worker enables them only after capability and website-readiness checks.
 
+The `faq_language` capability allows optional exact-language preconditions on
+FAQ reads, stores and toggles. Send `language` in the query string for reads or
+JSON body for writes, using the canonical code returned by content discovery.
+An optional `site_id` must match the native site handle returned as `site`.
+Wrong language or site values return HTTP 409 before FAQ state is read or
+changed; missing/empty/`all` language with a supplied scope returns HTTP 422.
+Requests without either field retain the native-ID contract. Numeric connector
+IDs already include the native resource and site, so this requires no FAQ
+storage migration. Translation lookups accept the same source precondition.
+
+
 The connector does not support category slug changes, generation requests initiated from the CMS, and bulk translated archive-slug maps. Category title and description edits, native entry slug changes, native multilingual articles and translated styling are supported. Each site can have its archive slug configured through the API. A rejected operation returns an error; it is never reported as a successful publication.
 
 ## Subscription and privacy

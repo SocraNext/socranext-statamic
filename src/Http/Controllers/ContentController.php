@@ -47,6 +47,7 @@ class ContentController
         $kind = $params['kind'] ?? 'post';
         $resourceType = $kind === 'term' ? 'categories' : (['page' => 'pages', 'post' => 'posts', 'product' => 'products'][$type] ?? 'custom');
         $resource = $this->content->resolve($resourceType, $params['id'], $resourceType === 'custom' ? $type : null);
+        $this->content->assertFaqLanguage($resource, $request->only(['language', 'site_id']));
         $root = $kind === 'term' ? $resource : $resource->root();
         $group = $this->content->identity($root);
         $items = [];
