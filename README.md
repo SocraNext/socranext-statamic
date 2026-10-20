@@ -83,6 +83,11 @@ Requests without either field retain the native-ID contract. Numeric connector
 IDs already include the native resource and site, so this requires no FAQ
 storage migration. Translation lookups accept the same source precondition.
 
+Content catalog and URL-search requests accept `lang=all` to discover all
+connected sites, with pagination over the combined result. Each row retains its
+actual canonical `language`, native `site` and distinct connector ID. An explicit
+`site` still restricts discovery to that connected site. Omitting `lang` retains
+the default-site behavior; `all` is never a valid FAQ mutation language.
 
 The connector does not support category slug changes, generation requests initiated from the CMS, and bulk translated archive-slug maps. Category title and description edits, native entry slug changes, native multilingual articles and translated styling are supported. Each site can have its archive slug configured through the API. A rejected operation returns an error; it is never reported as a successful publication.
 

@@ -89,8 +89,89 @@ class FaqLanguageTest extends TestCase
         Site::setSites(['default' => ['name' => 'UK', 'locale' => 'en_GB', 'url' => '/'], 'english' => ['name' => 'US', 'locale' => 'en_US', 'url' => '/us/']]);
         [$uk] = $this->ids('pages');
         $this->getJson('/api/socranext/v1/pages/'.$uk)->assertOk()->assertJsonPath('language', 'en-GB');
+        $this->getJson('/api/socranext/v1/pages?lang=all')->assertOk()->assertJsonCount(2)
+            ->assertJsonPath('0.language', 'en-GB')->assertJsonPath('1.language', 'en-US');
         $this->postJson('/api/socranext/v1/toggle', ['page_id' => $uk, 'language' => 'en-GB', 'site_id' => 'default', 'enabled' => false])->assertOk();
         foreach (['en', 'en-US'] as $wrong) $this->postJson('/api/socranext/v1/toggle', ['page_id' => $uk, 'language' => $wrong, 'enabled' => false])->assertConflict();
         $this->getJson('/api/socranext/v1/translations?id='.$uk.'&type=page&language=en-US')->assertConflict();
+    }
+
+    public static function catalogs(): array
+    {
+        return [['pages', 'pages'], ['news', 'posts'], ['products', 'products'],
+            ['guides', 'cpt/guides/posts'], ['socranext_articles', 'cpt/socranext_post/posts'], ['topics', 'categories']];
+    }
+
+    #[DataProvider('catalogs')]
+    public function test_all_language_discovery_paginates_actual_variants_without_changing_default_scope(string $collection, string $path): void
+    {
+        [$nl, $en] = $this->ids($collection);
+        $endpoint = '/api/socranext/v1/'.$path;
+        $this->getJson($endpoint)->assertOk()->assertJsonCount(1)->assertJsonPath('0.id', $nl);
+        $this->getJson($endpoint.'?lang=en')->assertOk()->assertJsonCount(1)->assertJsonPath('0.id', $en);
+        $this->getJson($endpoint.'?lang=all&site=english')->assertOk()->assertJsonCount(1)->assertJsonPath('0.id', $en);
+        $this->getJson($endpoint.'?lang=all&site=unknown')->assertUnprocessable();
+
+        $all = [];
+        foreach ([1, 2] as $page) {
+            $result = $this->getJson($endpoint.'?lang=all&per_page=1&page='.$page)->assertOk()
+                ->assertHeader('X-WP-Total', '2')->assertHeader('X-WP-TotalPages', '2')->assertJsonCount(1)->json();
+            $all[] = $result[0];
+        }
+        $this->assertSame([$nl, $en], array_column($all, 'id'));
+        $this->assertSame(['nl', 'en'], array_column($all, 'language'));
+        $this->assertSame(['default', 'english'], array_column($all, 'site'));
+        $this->getJson($endpoint.'?lang=all&per_page=1&page=3')->assertOk()->assertExactJson([])
+            ->assertHeader('X-WP-Total', '2')->assertHeader('X-WP-TotalPages', '2');
+        $this->getJson('/api/socranext/v1/search-url?lang=all&search='.rawurlencode($all[1]['url']))
+            ->assertOk()->assertJsonCount(1)->assertJsonPath('0.id', $en)->assertJsonPath('0.language', 'en');
+    }
+
+    public function test_all_language_search_excludes_disconnected_sites_drafts_and_missing_term_translations(): void
+    {
+        $this->ids('pages');
+        $this->ids('socranext_articles');
+        [$nlTerm] = $this->ids('topics');
+        // The term exists only in Dutch after removing the explicit English data.
+        Term::find('topics::topic')->in('english')->data([])->save();
+        Site::setSites(['default' => ['name' => 'Dutch', 'locale' => 'nl_NL', 'url' => '/'],
+            'english' => ['name' => 'English', 'locale' => 'en_GB', 'url' => '/en/'],
+            'german' => ['name' => 'German', 'locale' => 'de_DE', 'url' => '/de/']]);
+        Collection::find('pages')->sites(['default', 'english', 'german'])->save();
+        Entry::make()->id('disconnected')->collection('pages')->locale('german')->slug('disconnected')->published(true)->set('title', 'Foreign')->save();
+        Entry::make()->id('draft')->collection('pages')->locale('english')->slug('draft')->published(false)->set('title', 'Draft')->save();
+
+        $this->getJson('/api/socranext/v1/categories?lang=all')->assertOk()->assertJsonCount(1)->assertJsonPath('0.id', $nlTerm);
+        $rows = [];
+        foreach ([1, 2, 3] as $page) {
+            $part = $this->getJson('/api/socranext/v1/search-url?lang=all&per_page=2&page='.$page)->assertOk()
+                ->assertHeader('X-WP-Total', '5')->assertHeader('X-WP-TotalPages', '3')->json();
+            array_push($rows, ...$part);
+        }
+        $this->assertCount(5, array_unique(array_column($rows, 'id')));
+        $this->assertSame(['default', 'english'], array_values(array_unique(array_column($rows, 'site'))));
+        $this->assertNotContains('disconnected', array_column($rows, 'native_id'));
+        $this->assertNotContains('draft', array_column($rows, 'native_id'));
+        $this->getJson('/api/socranext/v1/search-url?lang=all&search=english')->assertOk()->assertJsonCount(2);
+        $this->getJson('/api/socranext/v1/search-url?lang=unknown')->assertUnprocessable();
+    }
+
+    public function test_all_language_search_reads_every_catalog_page_before_its_own_pagination(): void
+    {
+        $this->ids('pages');
+        for ($i = 0; $i < 103; $i++) {
+            $id = 'catalog-'.str_pad((string) $i, 3, '0', STR_PAD_LEFT);
+            Entry::make()->id($id)->collection('pages')->locale($i % 2 === 0 ? 'default' : 'english')
+                ->slug($id)->published(true)->set('title', $id)->save();
+        }
+        $rows = [];
+        foreach ([1, 2] as $page) {
+            $part = $this->getJson('/api/socranext/v1/search-url?lang=all&per_page=100&page='.$page)->assertOk()
+                ->assertHeader('X-WP-Total', '105')->assertHeader('X-WP-TotalPages', '2')->json();
+            $this->assertCount($page === 1 ? 100 : 5, $part);
+            array_push($rows, ...$part);
+        }
+        $this->assertCount(105, array_unique(array_column($rows, 'id')));
+        $this->assertEqualsCanonicalizing(['default', 'english'], array_values(array_unique(array_column($rows, 'site'))));
     }
 }

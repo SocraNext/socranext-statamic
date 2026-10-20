@@ -241,7 +241,10 @@ class ContentRepository
 
     public function listing(string $type, array $params = [], ?string $cpt = null): array
     {
-        $site = $this->site($params['site'] ?? null, $params['lang'] ?? null);
+        // Discovery may span sites; publication and FAQ preconditions still resolve one.
+        $sites = ($params['lang'] ?? null) === 'all' && ($params['site'] ?? '') === ''
+            ? $this->sites()
+            : [$this->site($params['site'] ?? null, $params['lang'] ?? null)];
         $search = mb_strtolower(trim((string) ($params['search'] ?? '')));
         $page = max(1, (int) ($params['page'] ?? 1));
         $perPage = min(100, max(1, (int) ($params['per_page'] ?? 100)));
@@ -249,11 +252,14 @@ class ContentRepository
             $items = collect();
             foreach ($this->taxonomies() as $handle) {
                 if (!Taxonomy::find($handle)) continue;
-                $items = $items->concat(Term::query()->where('taxonomy', $handle)->get()->map(fn ($term) => $term->in($site)));
+                // Native query indexes may include the same term for several locales.
+                $items = $items->concat(Term::query()->where('taxonomy', $handle)->get()
+                    ->unique(fn ($term) => $term->id())
+                    ->flatMap(fn ($term) => array_map(fn ($site) => $term->in($site), $sites)));
             }
         } else {
             $handles = array_values(array_filter($this->collections($type, $cpt), fn ($handle) => Collection::find($handle) !== null));
-            $items = $handles ? Entry::query()->whereIn('collection', $handles)->where('site', $site)->where('published', true)->get() : collect();
+            $items = $handles ? Entry::query()->whereIn('collection', $handles)->whereIn('site', $sites)->where('published', true)->get() : collect();
         }
         $items = $items->filter(fn ($item) => $this->publiclyDiscoverable($item));
         if ($search !== '') {
@@ -261,7 +267,7 @@ class ContentRepository
                 || str_contains(mb_strtolower((string) $item->slug()), $search)
                 || rtrim(mb_strtolower((string) $item->absoluteUrl()), '/') === rtrim($search, '/'));
         }
-        $items = $items->sortBy(fn ($item) => mb_strtolower((string) $item->get('title')).':'.$item->id())->values();
+        $items = $items->sortBy(fn ($item) => mb_strtolower((string) $item->get('title')).':'.$item->id().':'.$item->locale())->values();
         $total = $items->count();
         return ['items' => $items->slice(($page - 1) * $perPage, $perPage)->map(fn ($item) => $this->describe($item))->values()->all(),
             'total' => $total, 'totalPages' => (int) ceil($total / $perPage)];
