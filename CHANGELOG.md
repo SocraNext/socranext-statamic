@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.1 — 2026-10-20
+
+### Fixed
+
+- Reject FAQ reads, writes and visibility changes when an explicit language or site does not match the selected native content. Existing requests without language preconditions keep their behavior.
+- Discover all connected language variants through `lang=all`, including translated managed articles and categories, with correct pagination and native language/site identities.
+- Avoid duplicate localized categories while excluding missing translations, drafts and disconnected sites.
+
 ## 0.2.0 — 2026-09-10
 
 ### Added

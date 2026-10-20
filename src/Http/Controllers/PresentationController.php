@@ -14,15 +14,18 @@ class PresentationController
 
     public function getFaq(Request $request, int|string $id, string $type = 'pages', ?string $cpt = null)
     {
-        $id = $this->content->identity($this->content->resolve($type, $id, $cpt));
+        $resource = $this->content->resolve($type, $id, $cpt);
+        $this->content->assertFaqLanguage($resource, $request->only(['language', 'site_id']));
+        $id = $this->content->identity($resource);
         $faq = $this->store->get('faqs', [])[$id] ?? ['questions' => [], 'enabled' => false, 'custom_html' => '', 'custom_css' => ''];
-        return response()->json($faq + ['success' => true, 'page_id' => $id, 'custom_js' => '']);
+        return response()->json($faq + ['success' => true, 'page_id' => $id, 'custom_js' => '', 'language' => $this->content->languageCode($resource->locale()), 'site' => $resource->locale()]);
     }
 
     public function storeFaq(Request $request, string $type = 'pages', ?string $cpt = null)
     {
         $data = $request->validate(['page_id' => 'required|integer|min:1', 'questions' => 'present|array|max:100', 'questions.*.question' => 'required|string|max:2000', 'questions.*.answer' => 'required|string|max:50000', 'custom_html' => 'nullable|string|max:200000', 'custom_css' => 'nullable|string|max:200000', 'custom_js' => 'nullable|string|max:200000']);
         $resource = $this->content->resolve($type, $data['page_id'], $cpt);
+        $this->content->assertFaqLanguage($resource, $request->only(['language', 'site_id']));
         $id = $this->content->identity($resource);
         $faq = ['questions' => array_map(fn ($q) => ['question' => strip_tags($q['question']), 'answer' => $this->safe->html($q['answer'])], $data['questions']), 'custom_html' => $this->safe->html($data['custom_html'] ?? ''), 'custom_css' => $this->safe->css($data['custom_css'] ?? ''), 'updated_at' => now()->toIso8601String()];
         // Per-resource payloads have no platform signature. Never turn these into executable code.
@@ -36,7 +39,9 @@ class PresentationController
     public function toggleFaq(Request $request, string $type = 'pages', ?string $cpt = null)
     {
         $data = $request->validate(['page_id' => 'required|integer|min:1', 'enabled' => 'required|boolean']);
-        $id = $this->content->identity($this->content->resolve($type, $data['page_id'], $cpt));
+        $resource = $this->content->resolve($type, $data['page_id'], $cpt);
+        $this->content->assertFaqLanguage($resource, $request->only(['language', 'site_id']));
+        $id = $this->content->identity($resource);
         abort_if($data['enabled'] && ! app(\SocraNext\Statamic\Support\Readiness::class)->ready(), 409, 'The website developer must verify the FAQ template before activation.');
         $this->mutateFaq(function () use ($id, $data) {
             $this->store->transaction(function (array &$state) use ($id, $data) { $state['faqs'][$id] = array_replace($state['faqs'][$id] ?? ['questions' => [], 'custom_html' => '', 'custom_css' => ''], ['enabled' => (bool) $data['enabled']]); });
