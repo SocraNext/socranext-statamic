@@ -176,7 +176,7 @@ class RenderingTest extends TestCase
     public function test_native_term_faq_uses_current_site_in_renderer_and_antlers_tag(): void
     {
         \Statamic\Facades\Site::setSites(['default' => ['name' => 'Dutch', 'locale' => 'nl_NL', 'url' => '/'], 'english' => ['name' => 'English', 'locale' => 'en_GB', 'url' => '/en/']]);
-        \Statamic\Facades\Taxonomy::make('topics')->sites(['default', 'english'])->save();
+        $this->publicTaxonomy('topics', ['default', 'english']);
         $term = \Statamic\Facades\Term::make()->taxonomy('topics')->slug('topic')->data(['title' => 'Topic']);
         $term->save();
         $dutchId = app(ContentRepository::class)->identity($term->in('default'));
@@ -216,7 +216,7 @@ class RenderingTest extends TestCase
         $page->set('socranext_owned', false)->save();
         $pageId = app(ContentRepository::class)->identity($page);
         $this->assertSame('', app(Renderer::class)->metadata($page));
-        \Statamic\Facades\Taxonomy::make('topics')->sites(['default'])->save();
+        $this->publicTaxonomy('topics');
         $term = \Statamic\Facades\Term::make()->taxonomy('topics')->slug('testing')->data(['title' => 'Testing']);
         $term->save();
         $localized = $term->in('default');
@@ -237,7 +237,7 @@ class RenderingTest extends TestCase
     {
         $this->authenticate();
         \Statamic\Facades\Site::setSites(['default' => ['name' => 'Dutch', 'locale' => 'nl_NL', 'url' => '/'], 'english' => ['name' => 'English', 'locale' => 'en_GB', 'url' => '/en/']]);
-        \Statamic\Facades\Taxonomy::make('topics')->sites(['default', 'english'])->save();
+        $this->publicTaxonomy('topics', ['default', 'english']);
         $term = \Statamic\Facades\Term::make()->taxonomy('topics')->slug('topic')->data(['title' => 'Topic']);
         $term->save();
         $dutch = $term->in('default');

@@ -138,7 +138,7 @@ class AutomaticDiscoveryTest extends TestCase
     public function test_protected_and_unlocalized_taxonomy_content_is_not_discovered(): void
     {
         config(['socranext.content.taxonomies' => ['topics']]);
-        Taxonomy::make('topics')->save();
+        $this->publicTaxonomy('topics');
         $term = Term::make()->taxonomy('topics')->slug('secret')->data(['title' => 'Secret', 'protect' => 'password']);
         $term->save();
         $id = app(ContentRepository::class)->identity($term->in('default'));

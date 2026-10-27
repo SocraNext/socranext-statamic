@@ -35,6 +35,8 @@ Enabled FAQs are added to the native HTML response just before the end of `<main
 
 Native public collections are discovered automatically. Protected pages, unpublished entries and collections without public routes are excluded. Empty `content.sites` selects the default site; additional native sites remain an explicit configuration choice. Test the appearance through SocraNext's styling previews and publish a test article when setting up your project, as with your normal website deployment workflow.
 
+Taxonomy terms are offered as public FAQ pages only when their native template exists for the selected site. Internal article categories still organize articles without requiring a public category page.
+
 ### Optional customization
 
 Standard setup does not require a published configuration file or a separate install command. Developers can publish the configuration when choosing different collection handles, image storage, languages or a custom layout:

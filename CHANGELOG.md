@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.2 — 2026-10-27
+
+### Fixed
+
+- Exclude taxonomy terms without a public template from page discovery, URL search and FAQ targets, resolving templates in each native site's view paths. Internal article categories remain available for publication and metadata edits.
+
 ## 0.2.1 — 2026-10-20
 
 ### Fixed

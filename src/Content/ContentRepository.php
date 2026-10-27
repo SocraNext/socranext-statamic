@@ -3,6 +3,7 @@
 namespace SocraNext\Statamic\Content;
 
 use SocraNext\Statamic\Support\StateStore;
+use SocraNext\Statamic\Rendering\SiteViewFinder;
 use Statamic\Auth\Protect\Protection;
 use Statamic\Facades\{Collection, Entry, Site, Taxonomy, Term};
 
@@ -114,7 +115,14 @@ class ContentRepository
     /** A public date/status is distinct from Statamic password or member protection. */
     public function publiclyDiscoverable($resource): bool
     {
-        return $this->publicResource($resource);
+        if (!$this->publicResource($resource)) return false;
+        if ($this->isTerm($resource)) {
+            // Statamic computes term URLs even when its native response would 404.
+            // Match LocalizedTerm::toResponse's exact template lookup in this term's site.
+            try { SiteViewFinder::forSite($resource->locale())->find($resource->template()); }
+            catch (\InvalidArgumentException) { return false; }
+        }
+        return true;
     }
 
     private function publicResource($resource, bool $allowDraft = false): bool

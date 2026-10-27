@@ -76,7 +76,7 @@ class DiscoveryFaqContractTest extends TestCase
 
     public function test_native_taxonomy_uses_category_contract_and_round_trips_its_faq(): void
     {
-        Taxonomy::make('topics')->save();
+        $this->publicTaxonomy('topics');
         $term = Term::make()->taxonomy('topics')->slug('qa')->data(['title' => 'QA topic']);
         $term->save();
         $localized = $term->in('default');
