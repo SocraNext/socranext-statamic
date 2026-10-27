@@ -11,6 +11,17 @@ abstract class TestCase extends AddonTestCase
     protected string $addonServiceProvider = ServiceProvider::class;
     protected string $temporaryDirectory;
 
+    protected function publicTaxonomy(string $handle, array $sites = ['default']): void
+    {
+        $views = $this->temporaryDirectory.'/taxonomy-views';
+        if (!is_dir($views.'/'.$handle)) mkdir($views.'/'.$handle, 0755, true);
+        file_put_contents($views.'/layout.antlers.html', '{{ template_content }}');
+        file_put_contents($views.'/'.$handle.'/show.antlers.html',
+            '<!doctype html><html><head></head><body><main>{{ title }}{{ socranext:faq }}</main></body></html>');
+        view()->prependLocation($views);
+        \Statamic\Facades\Taxonomy::make($handle)->sites($sites)->save();
+    }
+
     protected function setUp(): void
     {
         parent::setUp();

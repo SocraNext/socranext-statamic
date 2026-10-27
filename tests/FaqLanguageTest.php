@@ -32,7 +32,7 @@ class FaqLanguageTest extends TestCase
     {
         $resources = [];
         if ($collection === 'topics') {
-            Taxonomy::make('topics')->sites(['default', 'english'])->save();
+            $this->publicTaxonomy('topics', ['default', 'english']);
             $term = Term::make()->taxonomy('topics')->slug('topic')->data(['title' => 'Topic']);
             $term->save();
             foreach (['default', 'english'] as $site) {

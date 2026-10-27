@@ -51,7 +51,7 @@ class MetadataTest extends TestCase
 
     public function test_category_metadata_preserves_identity_and_rejects_unsafe_slug_changes(): void
     {
-        Taxonomy::make('topics')->save();
+        $this->publicTaxonomy('topics');
         config(['socranext.content.taxonomies' => ['topics']]);
         $term = Term::make()->taxonomy('topics')->slug('news')->data(['title' => 'News']);
         $term->save();

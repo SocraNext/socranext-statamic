@@ -147,7 +147,7 @@ class AutomaticFrontendTest extends TestCase
     {
         Site::setSites(['default' => ['name' => 'Dutch', 'locale' => 'nl_NL', 'url' => '/'], 'english' => ['name' => 'English', 'locale' => 'en_GB', 'url' => '/en/']]);
         config(['statamic.system.multisite' => true, 'socranext.content.sites' => ['default', 'english']]);
-        Taxonomy::make('topics')->sites(['default', 'english'])->save();
+        $this->publicTaxonomy('topics', ['default', 'english']);
         $term = Term::make()->taxonomy('topics')->slug('automatic-topic')->data(['title' => 'Topic']);
         $term->save();
         $term->in('english')->data(['title' => 'English topic'])->save();
